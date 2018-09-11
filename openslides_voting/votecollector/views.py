@@ -1,6 +1,7 @@
 import json
 
 from django.db import transaction
+from django.conf import settings
 from django.http import HttpResponse, JsonResponse
 from django.utils.translation import ugettext as _
 
@@ -39,6 +40,8 @@ class ValidationView(utils_views.View):
     def decrypt_votecollector_message(self, message):
         # Use the SECRET_KEY to decrypt the message.
         # Raise a validationerror if the decryption fails!!
+        # FIXME
+        k = settings.SECRET_KEY
         return message
 
     def validate_input_data(self, data, voting_type, user):
