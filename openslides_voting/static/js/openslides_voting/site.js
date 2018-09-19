@@ -1330,12 +1330,13 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
 .controller('SharesImportCtrl', [
     '$scope',
     '$q',
+    '$http',
     'gettext',
     'VotingPrinciple',
     'VotingShare',
     'User',
     'osTablePagination',
-    function ($scope, $q, gettext, VotingPrinciple, VotingShare, User, osTablePagination) {
+    function ($scope, $q, $http, gettext, VotingPrinciple, VotingShare, User, osTablePagination) {
         // Set up pagination.
         $scope.pagination = osTablePagination.createInstance('SharesImportPagination', 100);
 
@@ -1435,14 +1436,16 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
 
             // Create principles if they do not exist.
             _.forEach($scope.principles, function (principle) {
-                var principles = VotingPrinciple.filter({name: principle});
+                var precision = parseInt(principle.split('.')[1]);
+                var name = precision > 0 ? principle.split('.')[0] : principle;
+                var principles = VotingPrinciple.filter({name: name});
                 if (principles.length >= 1) {
                     principlesMap[principle] = principles[0].id;
                 }
                 else {
                     promises.push(VotingPrinciple.create({
-                        name: principle,
-                        decimal_places: 0,
+                        name: name,
+                        decimal_places: precision > 0 ? precision: 0,
                     }).then(function (success) {
                         principlesMap[success.name] = success.id;
                     }));
@@ -1450,35 +1453,29 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
             });
 
             $q.all(promises).then(function () {
+                // Prepare a list of voting shares for mass import.
+                var data = {'shares': []};
                 _.forEach($scope.delegateShares, function (delegateShare) {
                     if (delegateShare.selected && !delegateShare.importerror) {
                         _.forEach($scope.principles, function (principle) {
-                            // Look for an existing voting share.
-                            var shares = VotingShare.filter({
-                                delegate_id: delegateShare.user_id,
-                                principle_id: principlesMap[principle],
-                            });
-                            if (shares.length === 1) {
-                                // Update voting share.
-                                var share = shares[0];
-                                share.shares = delegateShare[principle];
-                                VotingShare.save(share).then(function (success) {
-                                    delegateShare.imported = true;
-                                });
-                            }
-                            else {
-                                // Create voting share.
-                                VotingShare.create({
+                            if (delegateShare[principle]) {
+                                data.shares.push({
                                     delegate_id: delegateShare.user_id,
                                     principle_id: principlesMap[principle],
-                                    shares: delegateShare[principle],
-                                }).then(function (success) {
-                                    delegateShare.imported = true;
+                                    shares: delegateShare[principle]
                                 });
+                                delegateShare.imported = true;
                             }
                         });
                     }
                 });
+                // POST the list for bulk import.
+                $http.post('/rest/openslides_voting/voting-share/mass_import/', data).then(
+                    function (success) {
+                        $scope.delegateSharesImported = success.data.count;
+                        // $scope.csvImporting = false;
+                    }
+                );
             });
             $scope.csvImported = true;
         };
