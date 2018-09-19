@@ -1307,7 +1307,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
         $scope.$watch(function () {
             return VotingPrinciple.lastModified();
         }, function () {
-            $scope.principles = $filter('orderBy')(VotingPrinciple.getAll(), 'id');
+            $scope.principles = $filter('orderBy')(VotingPrinciple.getAll(), 'name');
         });
 
         $scope.getShare = function (delegate, principle) {
