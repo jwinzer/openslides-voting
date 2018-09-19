@@ -462,8 +462,8 @@ class SubmitSpeaker(ValidationView):
         if vc.voting_mode != 'Item' or item_id != vc.voting_target:
             return HttpResponse(_('Invalid voting  mode or target'))
 
-        # Authenticate request and get value.
-        value = self.decode_votecollector_message(request.POST.get('value'))
+        # Authenticate request.
+        self.decode_votecollector_message(request.POST.get('auth'))
 
         # Get keypad.
         try:
@@ -486,6 +486,7 @@ class SubmitSpeaker(ValidationView):
         except Item.DoesNotExist:
             return HttpResponse(_('Invalid agenda  item'))
 
+        value = request.POST.get('value')
         if value == 'Y':
             # Add keypad user to "next speakers" if not already on the list (begin_time=None).
             try:
