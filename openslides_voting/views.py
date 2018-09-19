@@ -621,51 +621,45 @@ class VotingShareViewSet(PrinciplesPermissionMixin, ModelViewSet):
         """
         Imports a list of VotingShare objects.
 
-        Updates existing objects and/or creates new ones. Any existing objects not matching the imported ones
-        are being deleted!
+        Updates existing objects and creates new ones. Deletes existing objects if shares are zero.
 
-        NOTE: No auto-updates are being sent. This would generate too much traffic. Instead cache keys are being
-        deleted. Clients need to refresh the store:
+        Clients are not being updated to avoid worker being overloaded. Clients need to refresh the store:
         >> VotingShare.ejectAll();
         >> VotingShare.findAll();
-
-        ATTENTION: Any existing voting shares not matching delegate/category are deleted!
-        :param request:
         :return: Number of delegates with voting shares
         """
         data = request.data.get('shares')
         if not isinstance(data, list):
             raise ValidationError({'detail': _('Shares has to be a list.')})
 
-        valid_ids = []
-        created_updated_shares = []
+        created_shares = []
+        deleted = []
         for d in data:
             vs = VotingShare(**d)
             try:
                 # Look for an existing object and update its shares.
                 existing = VotingShare.objects.get(delegate_id=vs.delegate_id, principle_id=vs.principle_id)
-                if vs.shares != float(existing.shares):
+                if vs.shares == 0:
+                    deleted.append(existing.id)
+                elif vs.shares != float(existing.shares):
                     vs.id = existing.id
                     vs.save(skip_autoupdate=True)
-                    created_updated_shares.append(vs)
-                valid_ids.append(existing.id)
             except VotingShare.DoesNotExist:
-                # Create a new share.
-                vs.save(skip_autoupdate=True)
-                created_updated_shares.append(vs)
-                valid_ids.append(vs.id)
+                # Append the data object for bulk create.
+                if vs.shares > 0:
+                    created_shares.append(vs)
 
-        # Delete all objects that do not match the objects to be imported.
-        deleted = []
-        collection_string = VotingShare.get_collection_string()
-        del_shares = VotingShare.objects.exclude(id__in=valid_ids)
-        for vs in del_shares:
-            deleted.append((collection_string, vs.pk))
+        # Delete shares.
+        del_shares = VotingShare.objects.filter(id__in=deleted)
         del_shares.delete()
 
-        # Inform all clients.
-        inform_deleted_data(deleted)
-        inform_changed_data(created_updated_shares)
+        # Bulk create new shares.
+        VotingShare.objects.bulk_create(created_shares)
+
+        # FIXME: Delete cache keys so clients will get fresh data from db wit VotingShare.findAll().
+        # from django.core import cache
+        # cache.delete_pattern('*voting-share*')  # This works only for redis.
+        # cache.delete()
 
         # Return number of delegates with shares.
         return Response({'count': User.objects.exclude(shares=None).count()})

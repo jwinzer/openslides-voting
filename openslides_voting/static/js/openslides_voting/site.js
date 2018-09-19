@@ -1257,6 +1257,12 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
     'ngDialog',
     'osTablePagination',
     function ($scope, $filter, User, VotingPrinciple, VotingShare, Delegate, PrincipleForm, ngDialog, osTablePagination) {
+
+        // Reload VotingShare data store whenever the view is loaded.
+        // The server does NOT update the clients on mass_import.
+        VotingShare.ejectAll();
+        VotingShare.findAll();
+
         // Shares table pagination.
         $scope.pagination = osTablePagination.createInstance('SharesListPagination', 100);
 
@@ -1286,14 +1292,15 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
 
         $scope.updateNewShares = function () {
             _.forEach($scope.shares, function (share) {
-                //share.newShares = share.shares;
                 if (!$scope.newShares[share.delegate_id]) {
                     $scope.newShares[share.delegate_id] = {};
                 }
-                // limit shares to length of decimal places
-                var shares = parseFloat(share.shares);
-                var decimalPlaces = share.principle.decimal_places;
-                $scope.newShares[share.delegate_id][share.principle_id] = shares.toFixed(decimalPlaces);
+                // Set shares decimal places.
+                if (share.principle !== undefined) {
+                    var shares = parseFloat(share.shares);
+                    var decimalPlaces = share.principle.decimal_places;
+                    $scope.newShares[share.delegate_id][share.principle_id] = shares.toFixed(decimalPlaces);
+                }
             });
         };
 
@@ -1337,6 +1344,12 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
     'User',
     'osTablePagination',
     function ($scope, $q, $http, gettext, VotingPrinciple, VotingShare, User, osTablePagination) {
+        var getPrincipleNamePrecision = function (principle) {
+            var precision = parseInt(principle.split('.')[1]);
+            var name = precision > 0 ? principle.split('.')[0] : principle;
+            return [name, precision > 0 ? precision : 0]
+        };
+
         // Set up pagination.
         $scope.pagination = osTablePagination.createInstance('SharesImportPagination', 100);
 
@@ -1447,7 +1460,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                         name: name,
                         decimal_places: precision > 0 ? precision: 0,
                     }).then(function (success) {
-                        principlesMap[success.name] = success.id;
+                        principlesMap[principle] = success.id;
                     }));
                 }
             });
@@ -1458,7 +1471,8 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                 _.forEach($scope.delegateShares, function (delegateShare) {
                     if (delegateShare.selected && !delegateShare.importerror) {
                         _.forEach($scope.principles, function (principle) {
-                            if (delegateShare[principle]) {
+                            if (delegateShare[principle] >= 0) {
+                                // Server deletes voting shares that have a shares value of 0.
                                 data.shares.push({
                                     delegate_id: delegateShare.user_id,
                                     principle_id: principlesMap[principle],
