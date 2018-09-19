@@ -1,6 +1,10 @@
+import base64
+import hmac
+import hashlib
 import json
 
 from django.db import transaction
+from django.conf import settings
 from django.http import HttpResponse, JsonResponse
 from django.utils.translation import ugettext as _
 
@@ -8,17 +12,14 @@ from openslides.agenda.models import Item, Speaker
 from openslides.assignments.models import AssignmentOption, AssignmentPoll
 from openslides.core.exceptions import OpenSlidesError
 from openslides.motions.models import MotionPoll
-from openslides.users.models import User
 from openslides.utils.auth import has_perm
 from openslides.utils import views as utils_views
 from openslides.utils.autoupdate import inform_changed_data
 
-from . import rpc
 from ..models import (
     AuthorizedVoters,
     Keypad,
     VotingController,
-    VotingShare,
     VotingToken,
 )
 from ..voting import AssignmentBallot, MotionBallot
@@ -36,10 +37,26 @@ class ValidationView(utils_views.View):
         except ValidationError as e:
             return JsonResponse(e.msg, status=400)
 
-    def decrypt_votecollector_message(self, message):
-        # Use the SECRET_KEY to decrypt the message.
-        # Raise a validationerror if the decryption fails!!
-        return message
+    def decode_votecollector_message(self, message):
+        """
+        Authenticates and decodes a votecollector message. Uses HMAC authentication.
+        :param message: json dictionary with keys 'message' and 'hmac'
+        :return: dictionary value of 'message'
+        """
+        if isinstance(message, bytes):
+            message = message.decode('utf-8')
+        try:
+            d = json.loads(message)
+            # Create HMAC hash of the message.
+            key = bytes(settings.SECRET_KEY, 'utf-8')
+            digest = hmac.new(key, bytes(d['message'], 'utf-8'), hashlib.sha256).digest()
+            hash = base64.b64encode(digest).decode('utf-8')
+            # hash must match the hmac value sent.
+            if hash != d['hmac']:
+                raise ValidationError({'detail': 'HMAC authentication failed.'})
+            return d['message']
+        except (ValueError, TypeError, KeyError):
+            raise ValidationError({'detail': 'The content is malformed.'})
 
     def validate_input_data(self, data, voting_type, user):
         """
@@ -61,8 +78,10 @@ class ValidationView(utils_views.View):
         Additional fields in the dict are not cleared.
         If the voting type is not votecollector, the length of the list has to be one.
         """
+        if isinstance(data, bytes):
+            data = data.decode('utf-8')
         try:
-            votes = json.loads(data.decode('utf-8'))
+            votes = json.loads(data)
         except ValueError:
             raise ValidationError({'detail': 'The content is malformed.'})
         if not isinstance(votes, list):
@@ -207,7 +226,7 @@ class SubmitVotes(ValidationView):
         # get request content
         body = request.body
         if votecollector:
-            body = self.decrypt_votecollector_message(body)
+            body = self.decode_votecollector_message(body)
         votes = self.validate_input_data(body, av.type, request.user)
         self.update_keypads_from_votes(votes, av.type)
 
@@ -385,7 +404,7 @@ class SubmitCandidates(ValidationView):
         # get request content
         body = request.body
         if votecollector:
-            body = self.decrypt_votecollector_message(body)
+            body = self.decode_votecollector_message(body)
         votes = self.validate_input_data(body, av.type, request.user)
         votes = self.validate_candidates_votes(votes, options, not votecollector, poll.assignment.open_posts)
         self.update_keypads_from_votes(votes, av.type)
@@ -443,6 +462,9 @@ class SubmitSpeaker(ValidationView):
         if vc.voting_mode != 'Item' or item_id != vc.voting_target:
             return HttpResponse(_('Invalid voting  mode or target'))
 
+        # Authenticate request and get value.
+        value = self.decode_votecollector_message(request.POST.get('value'))
+
         # Get keypad.
         try:
             keypad = Keypad.objects.get(number=keypad_number)
@@ -464,7 +486,6 @@ class SubmitSpeaker(ValidationView):
         except Item.DoesNotExist:
             return HttpResponse(_('Invalid agenda  item'))
 
-        value = request.POST.get('value')
         if value == 'Y':
             # Add keypad user to "next speakers" if not already on the list (begin_time=None).
             try:
@@ -504,7 +525,7 @@ class SubmitKeypads(ValidationView):
             raise ValidationError({'detail': 'Invalid voting mode.'})
 
         # Get request content.
-        body = self.decrypt_votecollector_message(request.body)
+        body = self.decode_votecollector_message(request.body)
 
         # Validate marks keypads as in range and updates battery levels.
         votes = self.validate_input_data(body, 'votecollector', request.user)
