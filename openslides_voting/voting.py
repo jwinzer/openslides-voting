@@ -6,12 +6,10 @@ from openslides.users.models import User
 from openslides.utils.autoupdate import inform_changed_data, inform_deleted_data
 
 from .models import (
-    AssignmentAbsenteeVote,
     MotionAbsenteeVote,
     AssignmentPollBallot,
     MotionPollBallot,
     VotingShare,
-    VotingPrinciple,
 )
 
 
@@ -115,6 +113,7 @@ class BaseBallot:
         self.poll = poll
         self.principle = principle
         self.admitted_delegates = self._query_admitted_delegates()
+        self.new_ballots = None
         self.created = 0
 
     def delete_ballots(self):
@@ -153,8 +152,13 @@ class BaseBallot:
         :return: Number of ballots created
         """
         self.created = 0
+        if self.new_ballots is None:
+            self.new_ballots = []
         self._register_vote_and_proxy_votes(vote, voter, device, result_token, is_authorized_voter=True)
         return self.created
+
+    def save(self):
+        raise  NotImplementedError()
 
     def count_votes(self):
         """
@@ -216,7 +220,8 @@ class BaseBallot:
         ballot.vote = vote
         ballot.device = device
         ballot.result_token = result_token
-        ballot.save()
+        # ballot.save()
+        self.new_ballots.append(ballot)
         if created and not ballot.is_dummy:  # do not count dummies..
             self.created += 1
 
@@ -286,6 +291,18 @@ class MotionBallot(BaseBallot):
         """
         used_tokens = MotionPollBallot.objects.filter(poll=self.poll).values_list('result_token', flat=True)
         return MotionPollBallot.get_next_result_token(used_tokens)
+
+    def save(self):
+        if self.new_ballots:
+            # Bulk create ballots.
+            MotionPollBallot.objects.bulk_create(self.new_ballots)
+
+            # Trigger auto-update.
+            delegate_ids = [b.delegate.id for b in self.new_ballots]
+            created_ballots = MotionPollBallot.objects.filter(poll=self.poll, delegate_id__in=delegate_ids)
+            inform_changed_data(created_ballots)
+
+            self.new_ballots = None
 
     def count_votes(self):
         """

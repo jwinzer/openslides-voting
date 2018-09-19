@@ -286,6 +286,7 @@ class SubmitVotes(ValidationView):
                 result_vote = vote['value']
 
             vc.votes_received += ballot.register_vote(vote['value'], voter=user, result_token=result_token)
+            ballot.save()
         else:  # a votecollector type
             for vote in votes:
                 keypad = vote['keypad']
@@ -300,6 +301,7 @@ class SubmitVotes(ValidationView):
 
                 # Write ballot.
                 vc.votes_received += ballot.register_vote(vote['value'], voter=user, device=vote['sn'])
+            ballot.save()
         vc.save()
 
         return JsonResponse({
@@ -426,6 +428,7 @@ class SubmitCandidates(ValidationView):
                 result_token = ballot.get_next_result_token()
                 result_vote = vote['value']
             vc.votes_received += ballot.register_vote(vote['value'], voter=user, result_token=result_token)
+            ballot.save()
         else:  # a votecollector type
             for vote in votes:
                 keypad = vote['keypad']
@@ -440,6 +443,7 @@ class SubmitCandidates(ValidationView):
 
                 # Write ballot.
                 vc.votes_received += ballot.register_vote(vote['value'], voter=user, device=vote['sn'])
+            ballot.save()
 
         vc.save()
         return JsonResponse({
