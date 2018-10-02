@@ -4,13 +4,16 @@
 <table class="table table-striped table-bordered">
   <tbody>
     <tr ng-repeat="option in poll.options | orderBy: 'weight'">
+      <td class="candidatename">
+        {{ $index + 1 }}
+      </td>
       <td class="candidatename"><strong>{{ option.candidate.short_name }}</strong><br>
         <span class="grey">
           {{ option.candidate.structure_level }}
           <span ng-if="option.candidate.structure_level && option.candidate.number">
             &middot;
           </span>
-          <span ng-if="option.candidate.number">
+          <span ng-if="option.candidate.number" class="hide">
             <translate>No.</translate> {{ option.candidate.number }}
           </span>
         </span>
@@ -18,14 +21,14 @@
       <td ng-click="votes[option.candidate.id] = 'Y'" class="vote-column">
           <button type="button" class="btn btn-default btn-voting"
             ng-class="votes[option.candidate.id] == 'Y' ? 'btn-yes' : 'btn-gray'">
-            <i class="fa fa-thumbs-o-up fa-2x"></i>
+            <i ng-if="votes[option.candidate.id] == 'Y'" class="fa fa-times fa-2x"></i>
           </button>
           <translate>Yes</translate>
       </td>
       <td ng-click="votes[option.candidate.id] = 'N'" class="vote-column">
           <button type="button" class="btn btn-default btn-voting"
             ng-class="votes[option.candidate.id] == 'N' ? 'btn-no' : 'btn-gray'">
-            <i class="fa fa-thumbs-o-down fa-2x"></i>
+            <i ng-if="votes[option.candidate.id] == 'N'" class="fa fa-times fa-2x"></i>
           </button>
           <translate>No</translate>
       </td>
@@ -33,7 +36,7 @@
         ng-if="poll.pollmethod === 'yna'">
           <button type="button" class="btn btn-default btn-voting"
             ng-class="votes[option.candidate.id] == 'A' ? 'btn-abstain' : 'btn-gray'">
-            <i class="fa fa-circle-o fa-2x"></i>
+            <i ng-if="votes[option.candidate.id] == 'A'" class="fa fa-times fa-2x"></i>
           </button>
           <translate>Abstain</translate>
       </td>
