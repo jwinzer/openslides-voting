@@ -9,6 +9,7 @@ from .models import (
     MotionAbsenteeVote,
     AssignmentPollBallot,
     MotionPollBallot,
+    VotingPrinciple,
     VotingShare,
 )
 
@@ -96,6 +97,49 @@ def query_admitted_delegates(principle=None):
         if principle:
             qs = qs.filter(shares__principle=principle)
     return qs
+
+    
+def get_total_shares():
+    """
+    Returns a list of total shares (all, attending, in person, represented) for all voting principles.
+    """
+    total_shares = {
+        'heads': [0, 0, 0, 0]  # [all, attending, in person, represented]
+    }
+    principle_ids = VotingPrinciple.objects.values_list('id', flat=True)
+    for principle_id in principle_ids:
+        total_shares[principle_id] = [Decimal(0), Decimal(0), Decimal(0), Decimal(0)]
+
+    # Query delegates.
+    delegates = User.objects.filter(groups=2).select_related('votingproxy', 'keypad').prefetch_related('shares')
+    shares_exists = VotingShare.objects.exists()
+    for delegate in delegates:
+        # Exclude delegates without shares -- who may only serve as proxies.
+        if shares_exists and delegate.shares.count() == 0:
+            continue
+
+        total_shares['heads'][0] += 1
+
+        # Find the authorized voter.
+        auth_voter = find_authorized_voter(delegate)
+
+        # If auth_voter is delegate himself set index to 2 (in person) else 3 (represented).
+        i = 2 if auth_voter == delegate else 3
+        attending = auth_voter is not None and auth_voter.is_present
+        if config['voting_enable_votecollector']:
+            attending = attending and hasattr(auth_voter, 'keypad')
+        if attending:
+            total_shares['heads'][i] += 1
+
+        # Add shares to total.
+        for share in delegate.shares.all():
+            total_shares[share.principle_id][0] += share.shares
+            if attending:
+                total_shares[share.principle_id][i] += share.shares
+
+    for k in total_shares.keys():
+        total_shares[k][1] = total_shares[k][2] + total_shares[k][3]
+    return total_shares
 
 
 class BaseBallot:
@@ -241,7 +285,8 @@ class MotionBallot(BaseBallot):
     def create_absentee_ballots(self):
         """
         Creates or updates motion poll ballots all voting delegates who have an absentee vote registered.
-        Objects are created even if the delegate is present or whether or not a proxy is present.
+        Objects are only created if the authorized voter (proxy) is present. (Keypad assignment is not required to
+        allow for non-votecollector voting modes.)
 
         :return: Number of ballots created or updated.
         """
@@ -255,18 +300,23 @@ class MotionBallot(BaseBallot):
         ballots = []
         delegate_ids = []
         for absentee_vote in qs_absentee_votes:
-            # Update or create ballot instance.
-            try:
-                mpb = MotionPollBallot.objects.get(poll=self.poll, delegate=absentee_vote.delegate)
-            except MotionPollBallot.DoesNotExist:
-                mpb = MotionPollBallot(poll=self.poll, delegate=absentee_vote.delegate)
-            mpb.vote = absentee_vote.vote
-            mpb.result_token = 0
-            if mpb.pk:
-                mpb.save(skip_autoupdate=True)
-            else:
-                ballots.append(mpb)
-            delegate_ids.append(mpb.delegate.id)
+            allowed = True
+            if config['voting_enable_proxies']:
+                auth_voter = find_authorized_voter(absentee_vote.delegate)
+                allowed = auth_voter != absentee_vote.delegate and auth_voter.is_present
+            if allowed:
+                # Update or create ballot instance.
+                try:
+                    mpb = MotionPollBallot.objects.get(poll=self.poll, delegate=absentee_vote.delegate)
+                except MotionPollBallot.DoesNotExist:
+                    mpb = MotionPollBallot(poll=self.poll, delegate=absentee_vote.delegate)
+                mpb.vote = absentee_vote.vote
+                mpb.result_token = 0
+                if mpb.pk:
+                    mpb.save(skip_autoupdate=True)
+                else:
+                    ballots.append(mpb)
+                delegate_ids.append(mpb.delegate.id)
             updated += 1
 
         # Bulk create ballots.
@@ -331,9 +381,18 @@ class MotionBallot(BaseBallot):
             result[vote][1] += delegate_share
             result['casted'][0] += 1
             result['casted'][1] += delegate_share
-        result['valid'] = result['casted']
 
-        # TODO NEXT: Add 'not voted abstains' option.
+        # Correct 'casted' and 'A' result for 'not voted abstains'.
+        if config['voting_not_voted_abstains']:
+            total_shares = get_total_shares()
+            k = self.principle.id if shares else 'heads'
+            result['casted'][0] = total_shares['heads'][1]
+            result['casted'][1] = total_shares[k][1]
+            result['A'][0] = result['casted'][0] - result['Y'][0] - result['N'][0]
+            result['A'][1] = result['casted'][1] - result['Y'][1] - result['N'][1]
+
+        # All 'casted' votes are 'valid' votes.
+        result['valid'] = result['casted']
         return result
 
     def pseudo_anonymize_votes(self):

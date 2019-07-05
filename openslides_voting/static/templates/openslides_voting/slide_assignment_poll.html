@@ -257,33 +257,33 @@
         <td class="chart">
           <uib-progressbar ng-if="votes[0].percentNumber" value="votes[0].percentNumber" type="success"></uib-progressbar>
 
-      <!-- abstain -->
+      <!-- abstain >
       <tr ng-if="poll.pollmethod === 'votes'">
         <td translate>Abstain
         <td class="text-right">{{ poll.votesabstain | number:votesPrecision }}
         <td>{{ poll.getVote('votesabstain').percentStr }}
         <td>
 
-      <!-- no -->
+      <!-- no >
       <tr  ng-if="poll.pollmethod === 'votes'">
         <td translate>No
         <td class="text-right">{{ poll.votesno | number:votesPrecision }}
         <td>{{ poll.getVote('votesno').percentStr }}
         <td>
 
-      <!-- valid votes -->
+      <!-- valid votes >
       <tr class="total">
         <td><strong translate>Valid votes</strong>
         <td class="bold">{{ poll.votesvalid | number:votesPrecision }}
         <td class="bold-left">{{ poll.getVote('votesvalid').percentStr }}
         <td>
 
-      <!-- invalid votes -->
+      <!-- invalid votes >
       <tr>
         <td><translate>Invalid votes</translate>
         <td class="text-right">{{ poll.votesinvalid | number:votesPrecision }}
         <td>{{ poll.getVote('votesinvalid').percentStr }}
-        <td>
+        <td-->
 
       </table>
   </div>

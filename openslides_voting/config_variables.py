@@ -40,6 +40,15 @@ def get_config_variables():
         subgroup='General'
     )
     yield ConfigVariable(
+        name='voting_not_voted_abstains',
+        default_value=False,
+        input_type='boolean',
+        label='Keine Stimmabgabe zählt als Enthaltung',
+        weight=625,
+        group='OpenSlides-Voting',
+        subgroup='General'
+    )
+    yield ConfigVariable(
         name='voting_auto_countdown',
         default_value=False,
         input_type='boolean',
@@ -116,8 +125,30 @@ def get_config_variables():
             {'value': 'short_name', 'display_name': 'Short name (e.g. "JoSm")'},
             {'value': 'last_name', 'display_name': 'Last name (e.g. "Smith")'},
             {'value': 'full_name', 'display_name': 'Full name (e.g. "John Smith")'},
+            {'value': 'no_name', 'display_name': 'Name wird nicht angezeigt.'},
         ),
         weight=680,
+        group='OpenSlides-Voting',
+        subgroup='Delegate board'
+    )
+    yield ConfigVariable(
+        name='voting_show_number',
+        default_value=True,
+        input_type='boolean',
+        label='Keypad-Nummer anzeigen',
+        weight=684,
+        group='OpenSlides-Voting',
+        subgroup='Delegate board'
+    )
+    yield ConfigVariable(
+        name='voting_sort_by_number',
+        default_value=False,
+        input_type='boolean',
+        # FIXME: Localize label='Sort by keypad number',
+        label='Nach Keypad-Nummer sortieren',
+        #FIXME: Localize help_text='Sort delegates by keypad number. If not set delegates are sorted by name.',
+        help_text='Delegierte nach Keypad-Nummer sortieren. Wenn nicht markiert, werden die Delegierten nach ihrem Namen sortiert.',
+        weight=685,
         group='OpenSlides-Voting',
         subgroup='Delegate board'
     )
