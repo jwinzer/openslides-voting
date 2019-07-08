@@ -2,7 +2,8 @@ from decimal import Decimal
 
 from openslides.assignments.models import AssignmentOption
 from openslides.core.config import config
-from openslides.users.models import User
+from openslides.core.models import Tag
+from openslides.users.models import Group, User
 from openslides.utils.autoupdate import inform_changed_data, inform_deleted_data
 
 from .models import (
@@ -348,7 +349,7 @@ class MotionBallot(BaseBallot):
         """
         # Convert the ballots into a list of (delegate_id, vote) tuples.
         # Example: [(1, 'Y'), (2, 'N')]
-        votes = MotionPollBallot.objects.filter(poll=self.poll).values_list('delegate', 'vote')
+        poll_ballots = MotionPollBallot.objects.filter(poll=self.poll).only('delegate', 'vote').select_related('delegate')
 
         shares = None
         if self.principle and config['voting_enable_principles']:
@@ -356,6 +357,20 @@ class MotionBallot(BaseBallot):
             # Example: {1: Decimal('1.000000'), 2: Decimal('45.120000')}
             voting_shares = VotingShare.objects.filter(principle=self.principle)
             shares = dict(voting_shares.values_list('delegate', 'shares'))
+
+        # Special feature: Double qualified.
+        # If motion has a tag named '**[group]' votes from delegates belonging to [group] will be processed
+        # separately and the results stored in the decimal places.
+        dq_group_id = 0
+        if self.principle and self.principle.decimal_places == 0:
+            try:
+                dq_group_tag = self.poll.motion.tags.get(name__startswith='**')
+                try:
+                    dq_group_id = Group.objects.get(name=dq_group_tag.name[2:]).id
+                except Group.DoesNotExist:
+                    pass
+            except Tag.DoesNotExist:
+                pass
 
         # Sum up the votes.
         result = {
@@ -366,19 +381,22 @@ class MotionBallot(BaseBallot):
             'valid': [0, Decimal(0)],
             'invalid': [0, Decimal(0)]
         }
-        for delegate_id, vote in votes:
-            if not delegate_id:
+        for pb in poll_ballots:
+            if not pb.delegate:
                 # This is for anonymous votes.
                 delegate_share = 1
             else:
                 try:
-                    delegate_share = shares[delegate_id] if shares else 1
+                    delegate_share = shares[pb.delegate_id] if shares else 1
+                    # If delegate belongs to the double qualified group 'hide' shares in the decimal place.
+                    if dq_group_id and pb.delegate.groups.filter(id=dq_group_id).exists():
+                        delegate_share = Decimal(delegate_share / 1000)
                 except KeyError:
                     # Occurs if voting share was removed after delegate cast a vote.
                     continue
 
-            result[vote][0] += 1
-            result[vote][1] += delegate_share
+            result[pb.vote][0] += 1
+            result[pb.vote][1] += delegate_share
             result['casted'][0] += 1
             result['casted'][1] += delegate_share
 

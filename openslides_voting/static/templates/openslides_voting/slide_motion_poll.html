@@ -13,11 +13,11 @@
       width: auto;
     }
     #resultTable td {
-      padding: 9px;
+      padding: 18px 25px;
     }
     #resultTable td.bold {
       font-weight: bold;
-      text-align: right;
+      text-align: center;
     }
     #resultTable td.vote {
       min-width: 30px;
@@ -68,7 +68,21 @@
   </div>
 
   <!-- Result table -->
-  <table ng-if="poll.has_votes" class="well pull-left" id="resultTable">
+  <table ng-if="poll.has_votes"
+         ng-init="
+         doubleQualified = votesPrecision == 0 && poll.votescast % 1 > 0;
+         yes2 = Math.round(poll.yes * 1000 % 1000);
+         no2 = Math.round(poll.no * 1000 % 1000);
+         abstain2 = Math.round(poll.abstain * 1000 % 1000);
+         valid2 = Math.round(poll.votesvalid * 1000 % 1000)"
+         class="well pull-left" id="resultTable">
+    <!-- header -->
+    <tr ng-if="doubleQualified">
+      <td>
+      <!-- TODO: Make header configurable. -->
+      <td>Expertengremium
+      <td>Bund und Länder
+
     <!-- yes -->
     <tr>
       <td>
@@ -77,14 +91,15 @@
         </button>
         <translate>Yes</translate>
       <td class="bold">{{ poll.yes | number:votesPrecision }}
-      <td class="bold nobr">
+      <td ng-if="!doubleQualified" class="bold nobr">
         <div ng-if="poll.getVote(poll.yes, 'yes').percentNumber">
           {{ poll.getVote(poll.yes, 'yes').percentStr || '&nbsp;' }}
         </div>
-      <td class="chart">
+      <td ng-if="!doubleQualified" class="chart">
         <div ng-if="poll.getVote(poll.yes, 'yes').percentNumber">
           <uib-progressbar value="poll.getVote(poll.yes, 'yes').percentNumber" type="success"></uib-progressbar>
         </div>
+      <td ng-if="doubleQualified" class="bold">{{ yes2 | number:votesPrecision }}
 
     <!-- no -->
     <tr>
@@ -94,14 +109,15 @@
         </button>
         <translate>No</translate>
       <td class="bold">{{ poll.no | number:votesPrecision }}
-      <td class="bold nobr">
+      <td ng-if="!doubleQualified" class="bold nobr">
         <div ng-if="poll.getVote(poll.no, 'no').percentNumber">
           {{ poll.getVote(poll.no, 'no').percentStr || '&nbsp;' }}
         </div>
-      <td class="chart">
+      <td ng-if="!doubleQualified" class="chart">
         <div ng-if="poll.getVote(poll.no, 'no').percentNumber">
           <uib-progressbar value="poll.getVote(poll.no, 'no').percentNumber" type="danger"></uib-progressbar>
         </div>
+      <td ng-if="doubleQualified" class="bold">{{ no2 | number:votesPrecision }}
 
     <!-- abstain -->
     <tr>
@@ -111,22 +127,36 @@
         </button>
         <translate>Abstain</translate>
       <td class="bold">{{ poll.abstain | number:votesPrecision }}
-      <td class="bold">
+      <td ng-if="!doubleQualified" class="bold">
         <div ng-if="poll.getVote(poll.abstain, 'abstain').percentNumber">
           {{ poll.getVote(poll.abstain, 'abstain').percentStr || '&nbsp;'}}
         </div>
-      <td class="chart">
+      <td ng-if="!doubleQualified" class="chart">
         <div ng-if="poll.getVote(poll.abstain, 'abstain').percentNumber">
           <uib-progressbar value="poll.getVote(poll.abstain, 'abstain').percentNumber" type="warning"></uib-progressbar>
         </div>
+      <td ng-if="doubleQualified" class="bold">{{ abstain2 | number:votesPrecision }}
 
     <!-- valid votes -->
     <tr class="total">
       <td><translate>Valid votes</translate>
       <td class="bold">{{ poll.votesvalid | number:votesPrecision }}
-      <td> {{ poll.getVote(poll.votesvalid, 'votesvalid').percentStr }}
-      <td>
-  </table>
+      <td ng-if="!doubleQualified"> {{ poll.getVote(poll.votesvalid, 'votesvalid').percentStr }}
+      <td ng-if="!doubleQualified">
+      <td ng-if="doubleQualified" class="bold">{{ valid2 | number:votesPrecision }}
+
+    <!-- quorum -->
+    <!-- TODO: Make quorum configurable. -->
+    <tr ng-if="doubleQualified"
+        ng-init="q1 = Math.round(poll.yes) > Math.round(poll.no); q2 = yes2 > 25">
+      <td>Quorum erreicht
+      <td class="bold">
+        <i ng-if="q1" class="fa fa-check"></i>
+        <i ng-if="!q1" class="fa fa-times"></i>
+      <td class="bold">
+        <i ng-if="q2" class="fa fa-check"></i>
+        <i ng-if="!q2" class="fa fa-times"></i>
+</table>
 
   <!-- Delegate board -->
   <div id="delegateBoard" ng-if="!poll.has_votes" ng-bind-html="delegateBoardHtml | trusted"></div>
