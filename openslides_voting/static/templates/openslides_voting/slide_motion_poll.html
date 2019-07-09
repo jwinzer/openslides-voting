@@ -148,7 +148,7 @@
     <!-- quorum -->
     <!-- TODO: Make quorum configurable. -->
     <tr ng-if="doubleQualified"
-        ng-init="q1 = Math.round(poll.yes) > Math.round(poll.no); q2 = yes2 > 25">
+        ng-init="q1 = Math.round(poll.yes) > Math.round(poll.no); q2 = yes2 >= 25">
       <td>Quorum erreicht
       <td class="bold">
         <i ng-if="q1" class="fa fa-check"></i>
