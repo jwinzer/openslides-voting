@@ -669,13 +669,14 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
 
 .factory('Voter', [
     '$rootScope',
+    '$timeout',
     'operator',
     'AuthorizedVoters',
     'MotionPollBallot',
     'AssignmentPollBallot',
     'Messaging',
     'gettextCatalog',
-    function ($rootScope, operator, AuthorizedVoters, MotionPollBallot,
+    function ($rootScope, $timeout, operator, AuthorizedVoters, MotionPollBallot,
         AssignmentPollBallot, Messaging, gettextCatalog) {
         var av;
         var messageId;
@@ -728,6 +729,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
             if (oldMotionPollId === av.motion_poll_id &&
                 oldAssignmentPollId === av.assignment_poll_id &&
                 oldIncluded === included &&
+                oldHasVoted !== undefined &&
                 oldHasVoted === hasVoted) {
                 return;
             }
@@ -742,14 +744,19 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
             if (av.type === 'named_electronic') {
                 var msg = gettextCatalog.getString('Vote now!');
                 if (av.motion_poll_id) {
-                    msg += '<a class="spacer-left" href="/motionpoll/submit/' +
+                    msg += '<a id="poll_submit" class="spacer-left" href="/motionpoll/submit/' +
                         av.motion_poll_id + '">' + av.motionPoll.motion.getTitle() + '</a>';
                 } else {
-                    msg += '<a class="spacer-left" href="/assignmentpoll/submit/' +
+                    msg += '<a id="poll_submit" class="spacer-left" href="/assignmentpoll/submit/' +
                         av.assignment_poll_id + '">' + av.assignmentPoll.assignment.getTitle() + '</a>';
                 }
 
                 messageId = Messaging.createOrEditMessage(messageId, msg, 'success', {});
+
+                // Open poll submit form immediately.
+                $timeout(function () {
+                    $('#poll_submit').click();
+                }, 1);
             }
         };
 
@@ -969,14 +976,17 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
     'DelegateForm',
     'Delegate',
     'User',
+    'Config',
     'ErrorMessage',
-    function ($scope, $q, $http, gettextCatalog, DelegateForm, Delegate, User, ErrorMessage) {
+    function ($scope, $q, $http, gettextCatalog, DelegateForm, Delegate, User, Config, ErrorMessage) {
         $scope.model.keypad_number = $scope.model.keypad ? $scope.model.keypad.number : null;
         $scope.model.proxy_id = $scope.model.proxy ? $scope.model.proxy.proxy_id : null;
         $scope.model.mandates_id = Delegate.getMandatesIds($scope.model);
-        Delegate.reloadShares($scope.model).then(function () {
-            $scope.model.shares = Delegate.getShares($scope.model);
-        });
+        if (Config.get('voting_enable_principles').value) {
+            Delegate.reloadShares($scope.model).then(function () {
+                $scope.model.shares = Delegate.getShares($scope.model);
+            });
+        }
         $scope.delegateFormFields = DelegateForm.getFormFields($scope.model);
 
         $scope.delegateSave = function (delegate) {

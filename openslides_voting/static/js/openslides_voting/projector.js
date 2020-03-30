@@ -295,7 +295,7 @@ angular.module('OpenSlidesApp.openslides_voting.projector', [
                 });
 
                 // Build table. Cells are ordered by number or name.
-                var table = '<table>',
+                var table = '<table class="zoomcontent">',
                     sortKey = (Config.get('voting_sort_by_number').value && showKey) ? 'number' : 'name',
                     i = 0;
                 _.forEach(_.sortBy(cells, sortKey), function (cell) {

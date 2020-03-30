@@ -755,29 +755,32 @@ angular.module('OpenSlidesApp.openslides_voting', [
             },
             // Returns a promise from the save or create call.
             updateKeypad: function (user, newNumber) {
-                if (newNumber) {
-                    if (user.keypad && user.keypad.id) {
-                        // Update keypad. Must get keypad from store!
-                        var keypad = Keypad.get(user.keypad.id);
-                        keypad.number = newNumber;
-                        return $q(function (resolve, reject) {
-                            Keypad.save(keypad).then(function (success) {
-                                resolve(success);
-                            }, function (error) {
-                                Keypad.refresh(user.keypad);
-                                reject(error);
+                if (Config.get('voting_enable_votecollector').value) {
+                    if (newNumber) {
+                        if (user.keypad && user.keypad.id) {
+                            // Update keypad. Must get keypad from store!
+                            var keypad = Keypad.get(user.keypad.id);
+                            keypad.number = newNumber;
+                            return $q(function (resolve, reject) {
+                                Keypad.save(keypad).then(function (success) {
+                                    resolve(success);
+                                }, function (error) {
+                                    Keypad.refresh(user.keypad);
+                                    reject(error);
+                                });
                             });
-                        });
-                    } else {
-                        // Create keypad.
-                        return Keypad.create({
-                            user_id: user.id,
-                            number: newNumber,
-                        });
+                        } else {
+                            // Create keypad.
+                            return Keypad.create({
+                                user_id: user.id,
+                                number: newNumber,
+                            });
+                        }
+                    } else if (user.keypad) {
+                        return Keypad.destroy(user.keypad);
                     }
-                } else if (user.keypad) {
-                    return Keypad.destroy(user.keypad);
                 }
+                return null;
             },
             updateProxy: function (user, proxyId) {
                 if (Config.get('voting_enable_proxies').value) {
@@ -846,9 +849,11 @@ angular.module('OpenSlidesApp.openslides_voting', [
                             }));
                         }
                         // Destroy keypad of mandate.
-                        var keypads = Keypad.filter({user_id: id});
-                        if (keypads.length > 0) {
-                            promises.push(Keypad.destroy(keypads[0]));
+                        if (Config.get('voting_enable_votecollector').value) {
+                            var keypads = Keypad.filter({user_id: id});
+                            if (keypads.length > 0) {
+                                promises.push(Keypad.destroy(keypads[0]));
+                            }
                         }
                         // Set mandate not present.
                         var mandate = User.get(id);
