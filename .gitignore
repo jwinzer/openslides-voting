@@ -32,3 +32,4 @@ debug/*
 
 # mypy
 .mypy_cache/
+/openslides_voting/readme.txt

@@ -167,7 +167,7 @@ class BaseBallot:
 
     def create_absentee_ballots(self):
         """
-        Creates or updates ballot objects for all voting delegates who have an absentee vote registered.
+        Creates or updates motion poll ballots for all proxy voters with registered absentee votes.
         Returns the number of absentee ballots created.
         """
         raise NotImplementedError()
@@ -284,6 +284,46 @@ class MotionBallot(BaseBallot):
 
     def create_absentee_ballots(self):
         """
+        Creates or updates motion poll ballots for all proxy voters with registered absentee votes.
+        Objects are only created if the authorized voter (proxy) is present. (Keypad assignment is not required to
+        allow for non-votecollector voting modes.)
+
+        :return: Number of ballots created or updated.
+        """
+        updated = 0
+        ballots = []
+        delegate_ids = []
+        proxy_voters = query_admitted_delegates(self.principle).filter(votingproxy__isnull=False)
+        for proxy_voter in proxy_voters:
+            auth_voter = find_authorized_voter(proxy_voter)
+            if auth_voter.is_present:
+                absentee_vote = self._get_absentee_vote(proxy_voter)
+                if absentee_vote:
+                    # Update or create ballot instance.
+                    try:
+                        mpb = MotionPollBallot.objects.get(poll=self.poll, delegate=proxy_voter)
+                    except MotionPollBallot.DoesNotExist:
+                        mpb = MotionPollBallot(poll=self.poll, delegate=proxy_voter)
+                    mpb.vote = absentee_vote.vote
+                    mpb.result_token = 0
+                    if mpb.pk:
+                        mpb.save(skip_autoupdate=True)
+                    else:
+                        ballots.append(mpb)
+                    delegate_ids.append(mpb.delegate.id)
+                    updated += 1
+
+        # Bulk create ballots.
+        MotionPollBallot.objects.bulk_create(ballots)
+
+        # Trigger auto-update.
+        created_ballots = MotionPollBallot.objects.filter(poll=self.poll, delegate_id__in=delegate_ids)
+        inform_changed_data(created_ballots)
+
+        return updated
+
+    def create_absentee_ballots_obsolete(self):
+        """
         Creates or updates motion poll ballots all voting delegates who have an absentee vote registered.
         Objects are only created if the authorized voter (proxy) is present. (Keypad assignment is not required to
         allow for non-votecollector voting modes.)
@@ -317,7 +357,7 @@ class MotionBallot(BaseBallot):
                 else:
                     ballots.append(mpb)
                 delegate_ids.append(mpb.delegate.id)
-            updated += 1
+                updated += 1
 
         # Bulk create ballots.
         MotionPollBallot.objects.bulk_create(ballots)
@@ -407,13 +447,19 @@ class MotionBallot(BaseBallot):
             mpb.save(skip_autoupdate=True)
         inform_changed_data(ballots)
 
+    def _get_absentee_vote(self, delegate):
+        if hasattr(delegate, 'votingproxy'):
+            try:
+                return MotionAbsenteeVote.objects.get(delegate=delegate, motion=self.poll.motion)
+            except MotionAbsenteeVote.DoesNotExist:
+                return self._get_absentee_vote(delegate.votingproxy.proxy)
+
     def _query_admitted_delegates(self):
         """
-        Returns a query set of admitted delegate ids. Excludes delegates who cast an absentee vote.
+        Returns a query set of admitted delegate ids. Excludes delegates who have already cast a vote.
         """
         qs = query_admitted_delegates(self.principle)
-        if config['voting_enable_proxies']:
-            qs = qs.exclude(motionabsenteevote__motion=self.poll.motion)
+        qs = qs.exclude(motionpollballot__poll=self.poll)
         return qs.values_list('id', flat=True)
 
     def _create_ballot(self, vote, delegate=None, device=None, result_token=0, is_authorized_voter=False):
