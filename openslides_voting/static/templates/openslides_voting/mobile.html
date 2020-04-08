@@ -1,0 +1,175 @@
+<style type="text/css">
+  @media only screen and (max-width: 767px) {
+    h1 {
+      font-size: 20px;
+      padding: 0;
+      margin: 5px 0;
+    }
+    #content .col1.sidebar-min {
+      width: 100%;
+    }
+    #content .col2.sidebar-min {
+      width: 0;
+    }
+    #content .col1 .title {
+      padding: 0 5px;
+    }
+    #content .col1 .details {
+      padding: 5px;
+      margin-top: 7px;
+    }
+    #sidebar {
+      display: none !important;
+    }
+    .navbar-toggle {
+      display: none !important;
+    }
+  }
+  /* Hide all messages and sidebar. */
+  #messaging {
+    display: none !important;
+  }
+</style>
+
+<div class="header">
+  <div class="title">
+    <h1>{{ title | translate }}</h1>
+  </div>
+</div>
+
+<div class="details">
+  <!-- Detail view 1: Motion or topic text. -->
+  <div ng-if="!vote && !canVote && (!poll || !poll.has_votes)" ng-bind-html="text | translate"></div>
+
+  <!-- Detail view 2: Vote casted. -->
+  <div ng-if="vote && poll && !poll.has_votes">
+    Ihre Stimme wurde gezählt.<br/>Sie haben mit </translate><strong> {{ vote | translate }} </strong>gestimmt.
+  </div>
+
+  <ng-include src="'static/templates/openslides_voting/submit-buttons-css.html'"></ng-include>
+
+  <!-- Detail view 3: Vote submit form. -->
+  <div ng-if="canVote && !vote">
+    <style type="text/css">
+      .option {
+        font-size: 16px;
+      }
+    </style>
+
+    <div class="pointer option" ng-click="select('Yes');">
+      <button type="button" class="btn btn-default btn-voting btn-voting-xs btn-yes">
+        <i class="fa fa-thumbs-o-up fa-2x"></i>
+      </button>
+      <translate>Yes</translate>
+    </div>
+
+    <div class="pointer option spacer-top" ng-click="select('No');">
+      <button type="button" class="btn btn-default btn-voting-xs btn-no">
+        <i class="fa fa-thumbs-o-down fa-2x"></i>
+      </button>
+      <translate>No</translate>
+    </div>
+
+    <div class="pointer option spacer-top" ng-click="select('Abstain');">
+      <button type="button" class="btn btn-default btn-voting-xs btn-abstain">
+        <i class="fa fa-circle-o fa-2x"></i>
+      </button>
+      <translate>Abstain</translate>
+    </div>
+
+    <div class="spacer-top bold">
+      <translate>Your current choice:</translate> {{ selection.display | translate }}
+    </div>
+
+    <button type="button" class="btn btn-primary spacer-top" ng-click="submitVote()"
+      ng-disabled="selection.value === ''" translate>
+      Submit
+    </button>
+  </div>
+
+  <!-- Detail view 4: Voting result. -->
+  <table ng-if="poll.has_votes">
+    <style type="text/css">
+      td {
+        padding: 4px;
+      }
+      td.bold {
+        font-weight: bold;
+        text-align: right;
+      }
+      td.chart {
+        min-width: 100px;
+      }
+    </style>
+
+    <tr>
+      <td>
+        <button type="button" class="btn btn-default btn-voting-xs btn-yes">
+          <i class="fa fa-thumbs-o-up fa-2x"></i>
+        </button>
+        <translate>Yes</translate>
+      <td class="bold">{{ poll.yes | number:votesPrecision }}
+      <td class="bold nobr">
+        <div ng-if="poll.getVote(poll.yes, 'yes').percentNumber">
+          {{ poll.getVote(poll.yes, 'yes').percentStr || '&nbsp;' }}
+        </div>
+      <td class="chart">
+        <div ng-if="poll.getVote(poll.yes, 'yes').percentNumber">
+          <uib-progressbar value="poll.getVote(poll.yes, 'yes').percentNumber" type="success"></uib-progressbar>
+        </div>
+
+    <tr>
+      <td>
+        <button type="button" class="btn btn-default btn-voting-xs btn-no">
+          <i class="fa fa-thumbs-o-down fa-2x"></i>
+        </button>
+        <translate>No</translate>
+      <td class="bold">{{ poll.no | number:votesPrecision }}
+      <td class="bold nobr">
+        <div ng-if="poll.getVote(poll.no, 'no').percentNumber">
+          {{ poll.getVote(poll.no, 'no').percentStr || '&nbsp;' }}
+        </div>
+      <td class="chart">
+        <div ng-if="poll.getVote(poll.no, 'no').percentNumber">
+          <uib-progressbar value="poll.getVote(poll.no, 'no').percentNumber" type="danger"></uib-progressbar>
+        </div>
+
+    <tr>
+      <td>
+        <button type="button" class="btn btn-default btn-voting-xs btn-abstain">
+          <i class="fa fa-circle-o fa-2x"></i>
+        </button>
+        <translate>Abstain</translate>
+      <td class="bold">{{ poll.abstain | number:votesPrecision }}
+      <td class="bold">
+        <div ng-if="poll.getVote(poll.abstain, 'abstain').percentNumber">
+          {{ poll.getVote(poll.abstain, 'abstain').percentStr || '&nbsp;'}}
+        </div>
+      <td class="chart">
+        <div ng-if="poll.getVote(poll.abstain, 'abstain').percentNumber">
+          <uib-progressbar value="poll.getVote(poll.abstain, 'abstain').percentNumber" type="warning"></uib-progressbar>
+        </div>
+
+    <tr>
+      <td><translate>Valid votes</translate>
+      <td class="bold">{{ poll.votesvalid | number:votesPrecision }}
+      <td> {{ poll.getVote(poll.votesvalid, 'votesvalid').percentStr }}
+      <td>
+  </table>
+</div>
+
+<div os-perms="agenda.can_be_speaker" class="spacer-top">
+  <button ng-if="!speakerPos && speakerListOpen" ng-click="addSpeaker()"
+    type="button" class="btn btn-default btn-sm">
+    <i class="fa fa-microphone fa-lg"></i>
+    <translate>Wortmeldung</translate>
+  </button>
+
+  <span ng-if="speakerPos">{{ speakerPos }}. <translate>Sprecher</translate></span>
+
+  <button ng-if="speakerPos" ng-click="removeSpeaker()"
+    type="button" class="btn btn-default btn-sm">
+    <i class="fa fa-microphone-slash fa-lg"></i>
+    <translate>Wortmeldung zurückziehen</translate>
+  </button>
+</div>

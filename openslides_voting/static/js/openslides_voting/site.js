@@ -121,6 +121,16 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
             data: {
                 basePerm: 'openslides_voting.can_see_token_voting',
             },
+        })
+
+        // mobile page
+        .state('mobile', {
+            url: '/mobile',
+            templateUrl: '/static/templates/openslides_voting/mobile.html',
+            controller: 'MobileCtrl',
+            data: {
+                title: gettext('Mobile')
+            },
         });
     }
 ])
@@ -754,9 +764,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                 messageId = Messaging.createOrEditMessage(messageId, msg, 'success', {});
 
                 // Open poll submit form immediately.
-                $timeout(function () {
-                    $('#poll_submit').click();
-                }, 1);
+                // $timeout(function () { $('#poll_submit').click(); }, 1);
             }
         };
 
@@ -2969,6 +2977,177 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
 
         $scope.anonymizeVotes = function () {
             $http.post('/rest/openslides_voting/assignment-poll-ballot/pseudo_anonymize_votes/', {poll_id: pollId});
+        };
+    }
+])
+
+.controller('MobileCtrl', [
+    '$scope',
+    '$http',
+    '$filter',
+    'operator',
+    'Agenda',
+    'Motion',
+    'MotionPoll',
+    'MotionPollBallot',
+    'Topic',
+    'AuthorizedVoters',
+    'Projector',
+    'Config',
+    function ($scope, $http, $filter, operator, Agenda, Motion, MotionPoll, MotionPollBallot, Topic,
+              AuthorizedVoters, Projector, Config) {
+        var pollId = 0,
+            agenda_item = null,
+            speakers = [];
+
+        var updateVote = function() {
+            var mpb = _.find(MotionPollBallot.getAll(), function (mpb) {
+                return mpb.delegate_id === operator.user.id &&
+                    mpb.poll_id === pollId;
+            });
+            $scope.vote = mpb ? mpb.getVote() : null;
+        };
+
+        $scope.$watch(function () {
+            return agenda_item ? Agenda.lastModified(agenda_item.id) : void 0;
+        }, function () {
+            $scope.speakerListOpen = false;
+            $scope.speakerPos = null;
+            if (agenda_item) {
+                $scope.speakerListOpen = !agenda_item.speaker_list_closed;
+                speakers = $filter('orderBy')(agenda_item.speakers, 'weight');
+                $scope.speakerPos = _.findIndex(speakers, function (speaker) {
+                    return speaker.user_id === operator.user.id &&
+                        speaker.weight !== null;
+                }) + 1;
+            }
+        });
+
+        $scope.$watch(function () {
+            return pollId ? MotionPoll.lastModified(pollId) : void 0;
+        }, function () {
+            $scope.poll = MotionPoll.get(pollId);
+        });
+
+        $scope.$watch(function () {
+            return MotionPollBallot.lastModified();
+        }, function () {
+            // TODO: Only update if necessary.
+            if ($scope.poll) {
+                updateVote();
+            }
+         });
+
+        $scope.$watch(function () {
+            return AuthorizedVoters.lastModified(1);
+        }, function () {
+            var av = AuthorizedVoters.get(1);
+            if (av.type === 'named_electronic') {
+                var motion = av.motionPoll.motion;
+                agenda_item = motion.agenda_item;
+                $scope.title = motion.getTitle();
+                $scope.text = motion.getText();
+                $scope.poll = av.motionPoll;
+                pollId = av.motionPoll.id;
+                $scope.canVote = operator.user &&
+                    _.includes(_.keys(av.authorized_voters), operator.user.id.toString());
+                updateVote();
+            } else {
+                $scope.canVote = false;
+                // $scope.vote = null;
+            }
+        });
+
+        $scope.$watch(function () {
+            return Projector.lastModified(1);
+        }, function () {
+            // Ignore if voting is active.
+            if ( AuthorizedVoters.get(1).type !== '') {
+                return;
+            }
+            var projector = Projector.get(1);
+            if (projector) {
+                var element = _.find(projector.elements, function (element) {
+                    return element.name === 'motions/motion' ||
+                        element.name === 'voting/motion-poll' ||
+                        element.name === 'topics/topic';
+                });
+                if (element !== undefined) {
+                    var model;
+                    if (element.name === 'motions/motion') {
+                        model = Motion.get(element.id);
+                        if (model) {
+                            agenda_item = model.agenda_item;
+                            $scope.title = model.getTitle();
+                            $scope.text = model.getText();
+                            // Show poll if only one is available.
+                            if (model.polls.length === 1) {
+                                $scope.poll = model.polls[0];
+                                pollId = $scope.poll.id;
+                            } else {
+                                $scope.poll = null;
+                                pollId = 0;
+                            }
+                        }
+                    } else if (element.name === 'voting/motion-poll') {
+                        model = MotionPoll.get(element.id);
+                        if (model) {
+                            agenda_item = model.motion.agenda_item;
+                            $scope.title = model.motion.getTitle();
+                            $scope.text = model.motion.getText();
+                            $scope.poll = model;
+                            pollId = model.id;
+                        }
+                    } else {
+                        model = Topic.get(element.id);
+                        if (model) {
+                            agenda_item = model.agenda_item;
+                            $scope.title = model.title;
+                            $scope.text = model.text;
+                            $scope.poll = null;
+                            pollId = 0;
+                        }
+                    }
+                }
+            }
+            // Show the start page if we have nothing else to show.
+            // No permission required.
+            if ($scope.title === undefined) {
+                $scope.title = Config.get('general_event_welcome_title').value;
+                // FIXME: Show general_event_mobile_welcome_text
+                $scope.text = Config.get('general_event_welcome_text').value;
+            }
+        });
+
+        $scope.selection = {
+            value: '',
+            display: '-'
+        };
+
+        $scope.select = function (option) {
+            $scope.selection.value = option.substr(0, 1);
+            $scope.selection.display = option;
+        };
+
+        $scope.submitVote = function () {
+            $http.post('/votingcontroller/vote/' + pollId + '/', $scope.selection).then(function (success) {
+            }, function (error) {
+                // $scope.alert = ErrorMessage.forAlert(error);
+            });
+        };
+
+        $scope.addSpeaker = function () {
+            $http.post('/rest/agenda/item/' + agenda_item.id + '/manage_speaker/').then(function (success) {
+            }, function (error) {
+                // $scope.alert = ErrorMessage.forAlert(error);
+            });
+        };
+
+        $scope.removeSpeaker = function () {
+            $http.delete('/rest/agenda/item/' + agenda_item.id + '/manage_speaker/').then(function (success) {
+            }, function (error) {
+                // $scope.alert = ErrorMessage.forAlert(error);
+            });
         };
     }
 ])
