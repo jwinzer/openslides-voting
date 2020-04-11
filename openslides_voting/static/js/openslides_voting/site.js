@@ -3003,7 +3003,8 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
         var clearSelection = function () {
             $scope.selection = {
                 value: '',
-                display: '-'
+                display: '-',
+                submitted: false
             };
         };
         clearSelection();
@@ -3013,7 +3014,12 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                 return mpb.delegate_id === operator.user.id &&
                     mpb.poll_id === pollId;
             });
-            $scope.vote = mpb ? mpb.getVote() : null;
+            if (mpb) {
+                $scope.vote = mpb.getVote();
+                clearSelection();
+            } else {
+                $scope.vote = null;
+            }
         };
 
         $scope.$watch(function () {
@@ -3062,6 +3068,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                 updateVote();
             } else {
                 $scope.canVote = false;
+                clearSelection();
                 // $scope.vote = null;
             }
         });
@@ -3134,7 +3141,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
 
         $scope.submitVote = function () {
             $http.post('/votingcontroller/vote/' + pollId + '/', $scope.selection).then(function (success) {
-                clearSelection();
+                $scope.selection.submitted = true;
             }, function (error) {
                 // $scope.alert = ErrorMessage.forAlert(error);
             });

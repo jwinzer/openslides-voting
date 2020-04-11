@@ -1,7 +1,6 @@
 import random
 
-from decimal import Decimal
-
+from django.conf import settings
 from django.db import transaction
 from django.http.response import HttpResponse, JsonResponse
 from django.utils.decorators import method_decorator
@@ -280,6 +279,14 @@ class VotingControllerViewSet(PermissionMixin, ModelViewSet):
         else:  # 'token_based_electronic'
             admitted_delegates = None
             vc.votes_count = 0  # We do not know, how many votes will come..
+
+        # Raise error if number of voters exceeds a maximum.
+        if hasattr(settings, 'MAX_VOTERS') and vc.votes_count > settings.MAX_VOTERS:
+            raise ValidationError({
+                'detail': 'Voting is licensed for up to {} participants. You have {} voters registered.'.format(
+                    settings.MAX_VOTERS, vc.votes_count
+                )
+            })
 
         vc.voting_mode = model.__name__
         vc.voting_target = poll_id

@@ -41,13 +41,11 @@ class VotingAppConfig(AppConfig):
         # Import all required stuff.
         from openslides.core.config import config
         from openslides.core.signals import post_permission_creation
-        from openslides.users.models import Group, User
         from openslides.utils.rest_api import router
         from .config_variables import get_config_variables
         from .projector import get_projector_elements
         from .signals import (
             add_permissions_to_builtin_groups,
-            update_authorized_voters,
             inform_keypad_deleted,
         )
         from .urls import urlpatterns
