@@ -1,9 +1,18 @@
 <style type="text/css">
   @media only screen and (max-width: 767px) {
+    body {
+      font-size: 16px;
+    }
     h1 {
       font-size: 20px;
       padding: 0;
       margin: 5px 0;
+    }
+    #nav .containerOS, #content .containerOS {
+      padding: 0 10px;
+    }
+    #content {
+      margin-top: 10px;
     }
     #content .col1.sidebar-min {
       width: 100%;
@@ -23,6 +32,18 @@
     }
     .navbar-toggle {
       display: none !important;
+    }
+    .title span {
+      display: none !important;
+    }
+    .header {
+      max-height: 34px;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .details {
+      height: calc(100vh - 250px);  /* 210 */
+      overflow: hidden;
     }
   }
   /* Hide all messages and sidebar. */
@@ -52,7 +73,6 @@
   <div ng-if="canVote && !vote">
     <style type="text/css">
       .option {
-        font-size: 16px;
         padding: 8px 6px;
       }
       .bold {
@@ -107,10 +127,15 @@
         text-align: left;
       }
       td.chart {
-        min-width: 400px;
+        width: 400px;
       }
       td.chart .progress {
         margin-bottom: 4px;
+      }
+      @media only screen and (max-width: 767px) {
+        td.chart {
+          width: 200px;
+        }
       }
     </style>
     <tr>
@@ -164,7 +189,7 @@
 
 <div os-perms="agenda.can_be_speaker" class="spacer-top">
   <button ng-if="!speakerPos && speakerListOpen" ng-click="addSpeaker()"
-    type="button" class="btn btn-default btn-sm">
+    type="button" class="btn btn-default pull-right">
     <i class="fa fa-microphone fa-lg"></i>
     <translate>Wortmeldung</translate>
   </button>
@@ -172,7 +197,7 @@
   <span ng-if="speakerPos">{{ speakerPos }}. <translate>Sprecher</translate></span>
 
   <button ng-if="speakerPos" ng-click="removeSpeaker()"
-    type="button" class="btn btn-default btn-sm">
+    type="button" class="btn btn-default pull-right">
     <i class="fa fa-microphone-slash fa-lg"></i>
     <translate>Wortmeldung zurückziehen</translate>
   </button>

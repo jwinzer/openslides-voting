@@ -2997,6 +2997,8 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
     function ($scope, $http, $filter, operator, Agenda, Motion, MotionPoll, MotionPollBallot, Topic,
               AuthorizedVoters, Projector, Config) {
         var pollId = 0,
+            motionId = 0,
+            topicId = 0,
             agenda_item = null,
             speakers = [];
 
@@ -3038,6 +3040,16 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
         });
 
         $scope.$watch(function () {
+            return motionId ? Motion.lastModified(motionId) : void 0;
+        }, function () {
+            var model = Motion.get (motionId);
+            if (model) {
+                $scope.title = model.getTitle();
+                $scope.text = model.getText();
+            }
+        });
+
+        $scope.$watch(function () {
             return pollId ? MotionPoll.lastModified(pollId) : void 0;
         }, function () {
             $scope.poll = MotionPoll.get(pollId);
@@ -3053,11 +3065,23 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
          });
 
         $scope.$watch(function () {
+            return topicId ? Topic.lastModified(topicId) : void 0;
+        }, function () {
+            var model = Topic.get(topicId);
+            if (model) {
+                $scope.title = model.title;
+                $scope.text = model.text;
+            }
+        });
+
+        $scope.$watch(function () {
             return AuthorizedVoters.lastModified(1);
         }, function () {
             var av = AuthorizedVoters.get(1);
             if (av.type === 'named_electronic') {
                 var motion = av.motionPoll.motion;
+                motionId = motion.id;
+                topicId = 0;
                 agenda_item = motion.agenda_item;
                 $scope.title = motion.getTitle();
                 $scope.text = motion.getText();
@@ -3092,6 +3116,8 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                     if (element.name === 'motions/motion') {
                         model = Motion.get(element.id);
                         if (model) {
+                            motionId = model.id;
+                            topicId = 0;
                             agenda_item = model.agenda_item;
                             $scope.title = model.getTitle();
                             $scope.text = model.getText();
@@ -3107,6 +3133,8 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                     } else if (element.name === 'voting/motion-poll') {
                         model = MotionPoll.get(element.id);
                         if (model) {
+                            motionId = model.motion.id;
+                            topicId = 0;
                             agenda_item = model.motion.agenda_item;
                             $scope.title = model.motion.getTitle();
                             $scope.text = model.motion.getText();
@@ -3116,6 +3144,8 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                     } else {
                         model = Topic.get(element.id);
                         if (model) {
+                            motionId = 0;
+                            topicId = model.id;
                             agenda_item = model.agenda_item;
                             $scope.title = model.title;
                             $scope.text = model.text;

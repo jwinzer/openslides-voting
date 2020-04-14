@@ -1,5 +1,7 @@
 from django.contrib.auth.models import Permission
+from django.contrib.auth.signals import user_logged_in
 from django.contrib.contenttypes.models import ContentType
+from django.dispatch import receiver
 from openslides.users.models import Group
 from openslides.utils.autoupdate import inform_deleted_data
 
@@ -12,7 +14,6 @@ def add_permissions_to_builtin_groups(**kwargs):
     Adds the permissions openslides_voting.can_manage to the group staff.
     """
     content_type = ContentType.objects.get(app_label='openslides_voting', model='votingcontroller')
-
 
     # Add 'can_manage' to the staff group
     try:
@@ -55,3 +56,11 @@ def update_authorized_voters(sender, instance, **kwargs):
 def inform_keypad_deleted(sender, instance, **kwargs):
     keypad = (Keypad.get_collection_string(), instance.pk)
     inform_deleted_data([keypad])
+
+
+@receiver(user_logged_in)
+def set_user_present(sender, **kwargs):
+    user = kwargs.get('user')
+    if user:
+        user.is_present = True
+        user.save(skip_autoupdate=False)
