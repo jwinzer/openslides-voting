@@ -111,7 +111,7 @@ class AuthorizedVoters(RESTModelMixin, models.Model):
 
     motion_poll = models.OneToOneField(MotionPoll, on_delete=models.SET_NULL, null=True, blank=True)
     assignment_poll = models.OneToOneField(AssignmentPoll, on_delete=models.SET_NULL, null=True, blank=True)
-    type = models.CharField(max_length=128, default='analog')
+    type = models.CharField(max_length=128, default='')
 
     class Meta:
         default_permissions = ()

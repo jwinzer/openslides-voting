@@ -98,7 +98,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('authorized_voters', jsonfield.fields.JSONField(default=[])),
-                ('type', models.CharField(default='analog', max_length=128)),
+                ('type', models.CharField(default='', max_length=128)),
                 ('assignment_poll', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='assignments.AssignmentPoll')),
                 ('motion_poll', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='motions.MotionPoll')),
             ],
