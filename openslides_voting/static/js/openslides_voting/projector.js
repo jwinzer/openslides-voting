@@ -108,7 +108,8 @@ angular.module('OpenSlidesApp.openslides_voting.projector', [
                 // Create delegate board table cells.
                 // console.log("Draw delegate board. Votes: " + MotionPollBallot.filter({poll_id: pollId}).length);
                 var colCount = Config.get('voting_delegate_board_columns').value,
-                    anonymous = Config.get('voting_anonymous').value || av.type === 'votecollector_pseudo_secret',
+                    anonymous = Config.get('voting_anonymous').value || av.type === 'secret_electronic' ||
+                        av.type === 'votecollector_pseudo_secret',
                     cells = [];
                 _.forEach(voters, function (delegates, voterId) {
                     _.forEach(delegates, function (id) {
@@ -238,7 +239,8 @@ angular.module('OpenSlidesApp.openslides_voting.projector', [
                 // Create delegate board table cells.
                 // console.log("Draw delegate board. Votes: " + AssignmentPollBallot.filter({poll_id: pollId}).length);
                 var colCount = Config.get('voting_delegate_board_columns').value,
-                    anonymous = Config.get('voting_anonymous').value || $scope.av.type === 'votecollector_pseudo_secret',
+                    anonymous = Config.get('voting_anonymous').value || $scope.av.type === 'secret_electronic' ||
+                        $scope.av.type === 'votecollector_pseudo_secret',
                     cells = [];
                 var options = $filter('orderBy')($scope.poll.options, 'weight');
 

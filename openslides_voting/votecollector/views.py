@@ -270,20 +270,20 @@ class SubmitVotes(ValidationView):
         # encapsulated in the ballot objects
         result_token = 0
         result_vote = None
-        if av.type in ('named_electronic', 'token_based_electronic'):
+        if av.type in ('named_electronic', 'secret_electronic', 'token_based_electronic'):
             vote = votes[0]
             user = None
-            if av.type == 'named_electronic':
-                user = request.user
-                if str(user.id) not in av.authorized_voters:
-                    raise ValidationError({'detail': 'The user is not authorized to vote.'})
-            else:
+            if av.type == 'token_based_electronic':
                 token_instance = vote['token_instance']
                 token_instance.delete()
 
                 # Generate resultToken
                 result_token = ballot.get_next_result_token()
                 result_vote = vote['value']
+            else:
+                user = request.user
+                if str(user.id) not in av.authorized_voters:
+                    raise ValidationError({'detail': 'The user is not authorized to vote.'})
 
             vc.votes_received += ballot.register_vote(vote['value'], voter=user, result_token=result_token)
         else:  # a votecollector type
@@ -413,20 +413,21 @@ class SubmitCandidates(ValidationView):
 
         result_token = 0
         result_vote = None
-        if av.type in ('named_electronic', 'token_based_electronic'):
+        if av.type in ('named_electronic', 'secret_electronic', 'token_based_electronic'):
             vote = votes[0]
             user = None
-            if av.type == 'named_electronic':
-                user = request.user
-                if str(user.id) not in av.authorized_voters:
-                    raise ValidationError({'detail': 'The user is not authorized to vote.'})
-            else:
+            if av.type == 'token_based_electronic':
                 token_instance = vote['token_instance']
                 token_instance.delete()
 
                 # Generate resultToken
                 result_token = ballot.get_next_result_token()
                 result_vote = vote['value']
+            else:
+                user = request.user
+                if str(user.id) not in av.authorized_voters:
+                    raise ValidationError({'detail': 'The user is not authorized to vote.'})
+
             vc.votes_received += ballot.register_vote(vote['value'], voter=user, result_token=result_token)
         else:  # a votecollector type
             for vote in votes:

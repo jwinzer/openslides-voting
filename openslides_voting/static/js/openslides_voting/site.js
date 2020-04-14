@@ -3078,7 +3078,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
             return AuthorizedVoters.lastModified(1);
         }, function () {
             var av = AuthorizedVoters.get(1);
-            if (av.type === 'named_electronic') {
+            if (av.type === 'named_electronic' || av.type === 'secret_electronic') {
                 var motion = av.motionPoll.motion;
                 motionId = motion.id;
                 topicId = 0;
@@ -3159,8 +3159,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
             // No permission required.
             if ($scope.title === undefined) {
                 $scope.title = Config.get('general_event_welcome_title').value;
-                // FIXME: Show general_event_mobile_welcome_text
-                $scope.text = Config.get('general_event_welcome_text').value;
+                $scope.text = Config.get('general_event_mobile_welcome_text').value;
             }
         });
 
@@ -3198,12 +3197,13 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
     'gettext',
     function (gettext) {
         // Config strings
-        gettext('');
+        gettext('Mobile page text');
         gettext('Enable proxies and absentee votes');
         gettext('Enable voting shares');
         gettext('Default voting type');
         gettext('Analog voting');
         gettext('Named electronic voting');
+        gettext('Secret electronic voting');
         gettext('Token-based electronic voting');
         gettext('VoteCollector default (personalized and active keypads only, with single votes)');
         gettext('VoteCollector secret (no single votes and delegate board)');

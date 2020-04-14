@@ -64,7 +64,8 @@
 
   <!-- Detail view 2: Vote casted. -->
   <div ng-if="vote && poll && !poll.has_votes">
-    Ihre Stimme wurde gezählt.<br/>Sie haben mit </translate><strong> {{ vote | translate }} </strong>gestimmt.
+    <translate>Your vote has been counted.<br/>You have voted</translate>
+    <strong> {{ vote | translate }}</strong>.
   </div>
 
   <ng-include src="'static/templates/openslides_voting/submit-buttons-css.html'"></ng-include>
@@ -188,17 +189,18 @@
 </div>
 
 <div os-perms="agenda.can_be_speaker" class="spacer-top">
-  <button ng-if="!speakerPos && speakerListOpen" ng-click="addSpeaker()"
+  <button ng-if="!speakerPos" ng-disabled="!speakerListOpen" ng-click="addSpeaker()"
     type="button" class="btn btn-default pull-right">
     <i class="fa fa-microphone fa-lg"></i>
-    <translate>Wortmeldung</translate>
+    <translate>Add me to speakers</translate>
   </button>
 
-  <span ng-if="speakerPos">{{ speakerPos }}. <translate>Sprecher</translate></span>
+  <span ng-if="speakerPos">{{ speakerPos }}. <translate>Speaker</translate></span>
+  <span ng-if="!speakerPos">--</span>
 
-  <button ng-if="speakerPos" ng-click="removeSpeaker()"
+  <button ng-if="speakerPos" ng-disabled="!speakerListOpen" ng-click="removeSpeaker()"
     type="button" class="btn btn-default pull-right">
     <i class="fa fa-microphone-slash fa-lg"></i>
-    <translate>Wortmeldung zurückziehen</translate>
+    <translate>Remove me from speakers</translate>
   </button>
 </div>

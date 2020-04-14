@@ -292,6 +292,7 @@ class AssignmentPollBallot(RESTModelMixin, models.Model, PollBallot):
 POLLTYPES = [
     ('analog', 'Analog voting'),
     ('named_electronic', 'Named electronic voting'),
+    ('secret_electronic', 'Secret electronic voting'),
     ('token_based_electronic', 'Token-based electronic voting'),
     ('votecollector', 'VoteCollector default (personalized and active keypads only, with single votes)'),
     ('votecollector_secret', 'VoteCollector secret (no single votes and delegate board)'),

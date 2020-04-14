@@ -11,6 +11,15 @@ def get_config_variables():
     """
     # General
     yield ConfigVariable(
+        name='general_event_mobile_welcome_text',
+        default_value='[Space for your welcome text.]',
+        input_type='markupText',
+        label='Mobile page text',
+        weight=136,
+        group='General',
+        subgroup='Event'
+    )
+    yield ConfigVariable(
         name='voting_enable_proxies',
         default_value=False,
         input_type='boolean',

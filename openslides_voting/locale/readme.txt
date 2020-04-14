@@ -12,8 +12,7 @@ Instruction to update translations for OpenSlides-Voting-Plugin (JavaScipt and D
       $ django-admin.py makemessages -l en
       -> updates 'openslides_voting/locale/en/LC_MESSAGES/django.po'
 
-2. Upload and translate both files in transifex into desired languages.
-   https://www.transifex.com/openslides/openslides-voting
+2. Use Poedit to generate translations *.po, *.mo
 
 3. Download translated po files for each language.
    a) openslides_voting/locale/angular-gettext/{LANG-CODE}.po

@@ -45,7 +45,7 @@ def update_authorized_voters(sender, instance, **kwargs):
     admitted_delegates = None
     if av.type == 'votecollector':
         vc.votes_count, admitted_delegates = get_admitted_delegates(vc.principle, keypad=True)
-    elif av.type == 'named_electronic':
+    elif av.type in ('named_electronic', 'secret_electronic'):
         vc.votes_count, admitted_delegates = get_admitted_delegates(vc.principle)
 
     if admitted_delegates:  # Something changed
