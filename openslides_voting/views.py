@@ -272,7 +272,7 @@ class VotingControllerViewSet(PermissionMixin, ModelViewSet):
             if not voting_type == 'votecollector_anonymous':
                 vc.votes_count = admitted_count
 
-        elif voting_type in ('named_electronic', 'secret_electronic'):
+        elif voting_type in ('named_electronic', 'secret_electronic', 'secret_electronic_board'):
             # Limit voters count to length of admitted delegates list.
             vc.votes_count, admitted_delegates = get_admitted_delegates(principle)
 
@@ -423,7 +423,8 @@ class VotingControllerViewSet(PermissionMixin, ModelViewSet):
 
         # Destroy the ballots for secret voting types.
         voting_type = getattr(poll, poll_type_str).type
-        if voting_type in ('secret_electronic', 'votecollector_secret', 'votecollector_pseudo_secret'):
+        if voting_type in ('secret_electronic', 'secret_electronic_board',
+                           'votecollector_secret', 'votecollector_pseudo_secret'):
             ballot.delete_ballots()
 
         return Response(result)

@@ -103,12 +103,12 @@ angular.module('OpenSlidesApp.openslides_voting.projector', [
             var av = AuthorizedVoters.get(1);
             var voters = av.authorized_voters;
             var showKey = av.type.indexOf('votecollector') === 0 && Config.get('voting_show_number').value;
-            if (_.keys(voters).length > 0 &&
+            if (_.keys(voters).length > 0 && av.type !== 'secret_electronic' &&
                 av.type !== 'votecollector_anonymous' && av.type !== 'votecollector_secret') {
                 // Create delegate board table cells.
                 // console.log("Draw delegate board. Votes: " + MotionPollBallot.filter({poll_id: pollId}).length);
                 var colCount = Config.get('voting_delegate_board_columns').value,
-                    anonymous = Config.get('voting_anonymous').value || av.type === 'secret_electronic' ||
+                    anonymous = Config.get('voting_anonymous').value || av.type === 'secret_electronic_board' ||
                         av.type === 'votecollector_pseudo_secret',
                     cells = [];
                 _.forEach(voters, function (delegates, voterId) {
@@ -234,12 +234,12 @@ angular.module('OpenSlidesApp.openslides_voting.projector', [
             // Get authorized voters.
             var voters = $scope.av.authorized_voters;
             var showKey = $scope.av.type.indexOf('votecollector') === 0 && Config.get('voting_show_number').value;
-            if (_.keys(voters).length > 0 &&
+            if (_.keys(voters).length > 0 && $scope.av.type !== 'secret_electronic_board' &&
                 $scope.av.type !== 'votecollector_anonymous' && $scope.av.type !== 'votecollector_secret') {
                 // Create delegate board table cells.
                 // console.log("Draw delegate board. Votes: " + AssignmentPollBallot.filter({poll_id: pollId}).length);
                 var colCount = Config.get('voting_delegate_board_columns').value,
-                    anonymous = Config.get('voting_anonymous').value || $scope.av.type === 'secret_electronic' ||
+                    anonymous = Config.get('voting_anonymous').value || $scope.av.type === 'secret_electronic_board' ||
                         $scope.av.type === 'votecollector_pseudo_secret',
                     cells = [];
                 var options = $filter('orderBy')($scope.poll.options, 'weight');

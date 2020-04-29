@@ -25,7 +25,7 @@ def get_config_variables():
         input_type='boolean',
         label='Enable proxies and absentee votes',
         weight=615,
-        group='OpenSlides-Voting',
+        group='Voting',
         subgroup='General'
     )
     yield ConfigVariable(
@@ -34,7 +34,7 @@ def get_config_variables():
         input_type='boolean',
         label='Enable voting shares',
         weight=617,
-        group='OpenSlides-Voting',
+        group='Voting',
         subgroup='General'
     )
     choices = [{'value': c[0], 'display_name': c[1]} for c in POLLTYPES]
@@ -45,7 +45,7 @@ def get_config_variables():
         label='Default voting type',
         choices=choices,
         weight=620,
-        group='OpenSlides-Voting',
+        group='Voting',
         subgroup='General'
     )
     yield ConfigVariable(
@@ -54,7 +54,7 @@ def get_config_variables():
         input_type='boolean',
         label='No vote counted as abstention',
         weight=625,
-        group='OpenSlides-Voting',
+        group='Voting',
         subgroup='General'
     )
     yield ConfigVariable(
@@ -64,7 +64,7 @@ def get_config_variables():
         label='Use countdown timer',
         help_text='Auto-start and stop a countdown timer when voting starts and stops.',
         weight=630,
-        group='OpenSlides-Voting',
+        group='Voting',
         subgroup='General'
     )
     yield ConfigVariable(
@@ -72,7 +72,7 @@ def get_config_variables():
         default_value=ugettext_noop('Please vote now!'),
         label='Projector message for running motion voting',
         weight=635,
-        group='OpenSlides-Voting',
+        group='Voting',
         subgroup='General'
     )
     yield ConfigVariable(
@@ -80,7 +80,7 @@ def get_config_variables():
         default_value=ugettext_noop('Please vote now!'),
         label='Projector message for running election',
         weight=640,
-        group='OpenSlides-Voting',
+        group='Voting',
         subgroup='General'
     )
 
@@ -91,7 +91,7 @@ def get_config_variables():
         input_type='boolean',
         label='Enable VoteCollector',
         weight=650,
-        group='OpenSlides-Voting',
+        group='Voting',
         subgroup='VoteCollector'
     )
     yield ConfigVariable(
@@ -101,7 +101,7 @@ def get_config_variables():
         label='VoteCollector URL',
         help_text='Example: http://localhost:8030',
         weight=655,
-        group='OpenSlides-Voting',
+        group='Voting',
         subgroup='VoteCollector'
     )
 
@@ -113,7 +113,7 @@ def get_config_variables():
         label='Show delegate board',
         help_text='Show incoming votes in a table on projector.',
         weight=660,
-        group='OpenSlides-Voting',
+        group='Voting',
         subgroup='Delegate board'
     )
     yield ConfigVariable(
@@ -122,7 +122,7 @@ def get_config_variables():
         input_type='integer',
         label='Number of columns of delegate board',
         weight=670,
-        group='OpenSlides-Voting',
+        group='Voting',
         subgroup='Delegate board'
     )
     yield ConfigVariable(
@@ -137,7 +137,7 @@ def get_config_variables():
             {'value': 'no_name', 'display_name': 'Name is not displayed.'},
         ),
         weight=680,
-        group='OpenSlides-Voting',
+        group='Voting',
         subgroup='Delegate board'
     )
     yield ConfigVariable(
@@ -146,7 +146,7 @@ def get_config_variables():
         input_type='boolean',
         label='Show keypad number',
         weight=684,
-        group='OpenSlides-Voting',
+        group='Voting',
         subgroup='Delegate board'
     )
     yield ConfigVariable(
@@ -156,7 +156,7 @@ def get_config_variables():
         label='Sort by keypad number',
         help_text='Sort delegates by keypad number. If not set delegates are sorted by name.',
         weight=685,
-        group='OpenSlides-Voting',
+        group='Voting',
         subgroup='Delegate board'
     )
     yield ConfigVariable(
@@ -166,6 +166,6 @@ def get_config_variables():
         label='Vote anonymously',
         help_text='Keep individual voting behaviour secret on delegate board by using a single colour.',
         weight=690,
-        group='OpenSlides-Voting',
+        group='Voting',
         subgroup='Delegate board'
     )

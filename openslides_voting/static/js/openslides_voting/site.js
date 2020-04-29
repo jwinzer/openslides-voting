@@ -101,7 +101,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
             abstract: true,
             template: '<ui-view/>',
             data: {
-                title: 'OpenSlides-Voting',
+                title: 'Voting',
             },
         })
         .state('submit_votes.motionPoll', {
@@ -751,14 +751,15 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
 
             // something has changed. Either the user was added to the voting
             // or one poll has changed. Display a notification!
-            if (av.type === 'named_electronic') {
-                var msg = gettextCatalog.getString('Vote now!');
+            if (av.type === 'named_electronic' || av.type === 'secret_electronic' ||
+                av.type === 'secret_electronic_board') {
+                var text = gettextCatalog.getString('Vote now!');
                 if (av.motion_poll_id) {
-                    msg += '<a id="poll_submit" class="spacer-left" href="/motionpoll/submit/' +
-                        av.motion_poll_id + '">' + av.motionPoll.motion.getTitle() + '</a>';
+                    var msg = '<a id="poll_submit" class="spacer-left" href="/motionpoll/submit/' +
+                        av.motion_poll_id + '">' + text + " " + av.motionPoll.motion.getTitle() + '</a>';
                 } else {
-                    msg += '<a id="poll_submit" class="spacer-left" href="/assignmentpoll/submit/' +
-                        av.assignment_poll_id + '">' + av.assignmentPoll.assignment.getTitle() + '</a>';
+                    var msg = '<a id="poll_submit" class="spacer-left" href="/assignmentpoll/submit/' +
+                        av.assignment_poll_id + '">' + text + " " + av.assignmentPoll.assignment.getTitle() + '</a>';
                 }
 
                 messageId = Messaging.createOrEditMessage(messageId, msg, 'success', {});
@@ -2990,12 +2991,13 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
     'Motion',
     'MotionPoll',
     'MotionPollBallot',
+    'MotionPollDecimalPlaces',
     'Topic',
     'AuthorizedVoters',
     'Projector',
     'Config',
-    function ($scope, $http, $filter, operator, Agenda, Motion, MotionPoll, MotionPollBallot, Topic,
-              AuthorizedVoters, Projector, Config) {
+    function ($scope, $http, $filter, operator, Agenda, Motion, MotionPoll, MotionPollBallot, MotionPollDecimalPlaces,
+              Topic, AuthorizedVoters, Projector, Config) {
         var pollId = 0,
             motionId = 0,
             topicId = 0,
@@ -3046,6 +3048,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
             if (model) {
                 $scope.title = model.getTitle();
                 $scope.text = model.getText();
+                $scope.isStartPage = false;
             }
         });
 
@@ -3053,6 +3056,10 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
             return pollId ? MotionPoll.lastModified(pollId) : void 0;
         }, function () {
             $scope.poll = MotionPoll.get(pollId);
+            if ($scope.poll !== undefined) {
+                $scope.votesPrecision = MotionPollDecimalPlaces.getPlaces($scope.poll);
+                $scope.quorum = $scope.poll.isReached(Config.get('motions_poll_default_majority_method').value)
+            }
         });
 
         $scope.$watch(function () {
@@ -3071,6 +3078,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
             if (model) {
                 $scope.title = model.title;
                 $scope.text = model.text;
+                $scope.isStartPage = false;
             }
         });
 
@@ -3078,13 +3086,15 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
             return AuthorizedVoters.lastModified(1);
         }, function () {
             var av = AuthorizedVoters.get(1);
-            if (av.type === 'named_electronic' || av.type === 'secret_electronic') {
+            if (av.type === 'named_electronic' || av.type === 'secret_electronic' ||
+                av.type === 'secret_electronic_board') {
                 var motion = av.motionPoll.motion;
                 motionId = motion.id;
                 topicId = 0;
                 agenda_item = motion.agenda_item;
                 $scope.title = motion.getTitle();
                 $scope.text = motion.getText();
+                $scope.isStartPage = false;
                 $scope.poll = av.motionPoll;
                 pollId = av.motionPoll.id;
                 $scope.canVote = operator.user &&
@@ -3104,6 +3114,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
             if ( AuthorizedVoters.get(1).type !== '') {
                 return;
             }
+            $scope.isStartPage = false;
             var projector = Projector.get(1);
             if (projector) {
                 var element = _.find(projector.elements, function (element) {
@@ -3160,6 +3171,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
             if ($scope.title === undefined) {
                 $scope.title = Config.get('general_event_welcome_title').value;
                 $scope.text = Config.get('general_event_mobile_welcome_text').value;
+                $scope.isStartPage = true;
             }
         });
 
@@ -3203,7 +3215,8 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
         gettext('Default voting type');
         gettext('Analog voting');
         gettext('Named electronic voting');
-        gettext('Secret electronic voting');
+        gettext('Secret electronic voting - no delegate board');
+        gettext('Secret electronic voting - grey seats on delegate board');
         gettext('Token-based electronic voting');
         gettext('VoteCollector default (personalized and active keypads only, with single votes)');
         gettext('VoteCollector secret (no single votes and delegate board)');

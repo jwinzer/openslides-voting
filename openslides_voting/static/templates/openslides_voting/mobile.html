@@ -1,4 +1,11 @@
 <style type="text/css">
+  #nav, #sidebar, #messaging, .title span {
+    /* Hide nav, sidebar, messaging, title */
+    display: none !important;
+  }
+  #content .col1.sidebar-min {
+    width: 100%;
+  }
   @media only screen and (max-width: 767px) {
     body {
       font-size: 16px;
@@ -14,12 +21,6 @@
     #content {
       margin-top: 10px;
     }
-    #content .col1.sidebar-min {
-      width: 100%;
-    }
-    #content .col2.sidebar-min {
-      width: 0;
-    }
     #content .col1 .title {
       padding: 0 5px;
     }
@@ -27,14 +28,8 @@
       padding: 5px;
       margin-top: 7px;
     }
-    #sidebar {
-      display: none !important;
-    }
-    .navbar-toggle {
-      display: none !important;
-    }
-    .title span {
-      display: none !important;
+    #chatbox {
+      width: 80%;
     }
     .header {
       max-height: 34px;
@@ -46,10 +41,6 @@
       overflow-y: scroll;
     }
   }
-  /* Hide all messages and sidebar. */
-  #messaging {
-    display: none !important;
-  }
 </style>
 
 <div class="header">
@@ -59,28 +50,42 @@
 </div>
 
 <div class="details">
+    <style type="text/css">
+      .option {
+        padding: 8px 6px;
+      }
+      @media only screen and (max-width: 767px) {
+        .center {
+          margin: auto;
+          width: 80%;
+          text-align: center;
+        }
+        .center-block {
+          padding: 30px 0;
+          text-align: center;
+        }
+      }
+      .spacer-top {
+        margin-top: 15px;
+      }
+      .spacer-bottom {
+        margin-bottom: 35px;
+      }
+    </style>
+
   <!-- Detail view 1: Motion or topic text. -->
   <div ng-if="!vote && !canVote && (!poll || !poll.has_votes)" ng-bind-html="text | translate"></div>
 
   <!-- Detail view 2: Vote casted. -->
-  <div ng-if="vote && poll && !poll.has_votes">
+  <div ng-if="vote && poll && !poll.has_votes" class="center-block">
     <translate>Your vote has been counted.<br/>You have voted</translate>
-    <strong> {{ vote | translate }}</strong>.
+    <h2 class="spacer-top"><strong>{{ vote | translate }}</strong></h2>
   </div>
 
   <ng-include src="'static/templates/openslides_voting/submit-buttons-css.html'"></ng-include>
 
   <!-- Detail view 3: Vote submit form. -->
   <div ng-if="canVote && !vote">
-    <style type="text/css">
-      .option {
-        padding: 8px 6px;
-      }
-      .bold {
-        margin: 8px;
-      }
-    </style>
-
     <div class="pointer option" ng-click="select('Yes');">
       <button type="button" class="btn btn-default btn-voting btn-voting-xs btn-yes">
         <i class="fa fa-thumbs-o-up fa-2x"></i>
@@ -95,20 +100,20 @@
       <translate>No</translate>
     </div>
 
-    <div class="pointer option" ng-click="select('Abstain');">
+    <div class="pointer option spacer-bottom" ng-click="select('Abstain');">
       <button type="button" class="btn btn-default btn-voting-xs btn-abstain">
         <i class="fa fa-circle-o fa-2x"></i>
       </button>
       <translate>Abstain</translate>
     </div>
 
-    <div ng-if="!selection.value" class="bold" translate>
+    <div ng-if="!selection.value" class="sp center bold text-danger" translate>
       Please vote now!
     </div>
 
-    <div ng-if="selection.value" class="bold">
+    <div ng-if="selection.value" class="center bold">
       <translate>Your current choice:</translate> {{ selection.display | translate }}
-      <div>
+      <div class="center">
         <button ng-disabled="selection.submitted"
           type="button" class="btn btn-primary spacer-top" ng-click="submitVote()" translate>
           Submit
@@ -135,7 +140,7 @@
       }
       @media only screen and (max-width: 767px) {
         td.chart {
-          width: 200px;
+          width: 100%;
         }
       }
     </style>
@@ -185,12 +190,23 @@
         <td colspan="2" class="bold">
           <translate>Valid votes</translate>: {{ poll.votesvalid | number:votesPrecision }}
           {{ poll.getVote(poll.votesvalid, 'votesvalid').percentStr }}
+
+      <tr>
+        <td colspan="2">
+          <span class="text-success" ng-if="quorum >= 0" translate>
+            Quorum ({{ (poll.yes - quorum) | number:votesPrecision }}) reached.
+          </span>
+          <span class="text-danger" ng-if="quorum < 0" translate>
+            Quorum ({{ (poll.yes - quorum) | number:votesPrecision }}) not reached.
+         </span>
+
+
     </table>
 </div>
 
-<div os-perms="agenda.can_be_speaker" class="spacer-top">
+<div os-perms="agenda.can_be_speaker" ng-show="!isStartPage" class="spacer-top">
   <button ng-if="!speakerPos" ng-disabled="!speakerListOpen" ng-click="addSpeaker()"
-    type="button" class="btn btn-default pull-right">
+    type="button" class="btn btn-success pull-right">
     <i class="fa fa-microphone fa-lg"></i>
     <translate>Add me to speakers</translate>
   </button>
@@ -199,7 +215,7 @@
   <span ng-if="!speakerPos">--</span>
 
   <button ng-if="speakerPos" ng-disabled="!speakerListOpen" ng-click="removeSpeaker()"
-    type="button" class="btn btn-default pull-right">
+    type="button" class="btn btn-danger pull-right">
     <i class="fa fa-microphone-slash fa-lg"></i>
     <translate>Remove me from speakers</translate>
   </button>

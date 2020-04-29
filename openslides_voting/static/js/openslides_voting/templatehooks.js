@@ -88,6 +88,7 @@ angular.module('OpenSlidesApp.openslides_voting.templatehooks', [
                     scope.showSingleVotes = pollTypes.length >= 1 &&
                         pollTypes[0].type !== 'analog' &&
                         pollTypes[0].type !== 'secret_electronic' &&
+                        pollTypes[0].type !== 'secret_electronic_board' &&
                         pollTypes[0].type !== 'votecollector_secret' &&
                         pollTypes[0].type !== 'votecollector_pseudo_secret';
                 });
@@ -173,6 +174,7 @@ angular.module('OpenSlidesApp.openslides_voting.templatehooks', [
                     scope.showSingleVotes = pollTypes.length >= 1 &&
                         pollTypes[0].type !== 'analog' &&
                         pollTypes[0].type !== 'secret_electronic' &&
+                        pollTypes[0].type !== 'secret_electronic_board' &&
                         pollTypes[0].type !== 'votecollector_secret' &&
                         pollTypes[0].type !== 'votecollector_pseudo_secret';
                 });

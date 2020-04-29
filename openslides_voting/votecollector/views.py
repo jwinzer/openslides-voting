@@ -270,7 +270,7 @@ class SubmitVotes(ValidationView):
         # encapsulated in the ballot objects
         result_token = 0
         result_vote = None
-        if av.type in ('named_electronic', 'secret_electronic', 'token_based_electronic'):
+        if av.type in ('named_electronic', 'secret_electronic', 'secret_electronic_board', 'token_based_electronic'):
             vote = votes[0]
             user = None
             if av.type == 'token_based_electronic':
@@ -413,7 +413,7 @@ class SubmitCandidates(ValidationView):
 
         result_token = 0
         result_vote = None
-        if av.type in ('named_electronic', 'secret_electronic', 'token_based_electronic'):
+        if av.type in ('named_electronic', 'secret_electronic', 'secret_electronic_board', 'token_based_electronic'):
             vote = votes[0]
             user = None
             if av.type == 'token_based_electronic':
