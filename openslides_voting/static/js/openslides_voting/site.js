@@ -3086,6 +3086,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
             return AuthorizedVoters.lastModified(1);
         }, function () {
             var av = AuthorizedVoters.get(1);
+            if (av.motion_poll_id === null) return;
             if (av.type === 'named_electronic' || av.type === 'secret_electronic' ||
                 av.type === 'secret_electronic_board') {
                 var motion = av.motionPoll.motion;
@@ -3122,6 +3123,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                         element.name === 'voting/motion-poll' ||
                         element.name === 'topics/topic';
                 });
+                $scope.title = undefined;
                 if (element !== undefined) {
                     var model;
                     if (element.name === 'motions/motion') {
@@ -3172,6 +3174,8 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                 $scope.title = Config.get('general_event_welcome_title').value;
                 $scope.text = Config.get('general_event_mobile_welcome_text').value;
                 $scope.isStartPage = true;
+                motionId = topicId = pollId = 0;
+                agenda_item = null;
             }
         });
 

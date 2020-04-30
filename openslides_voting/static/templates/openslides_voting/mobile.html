@@ -32,12 +32,11 @@
       width: 80%;
     }
     .header {
-      max-height: 34px;
-      white-space: nowrap;
-      overflow: hidden;
+      height: 56px;
+      overflow-y: scroll;
     }
     .details {
-      height: calc(100vh - 250px);  /* 210 */
+      height: calc(100vh - 274px);
       overflow-y: scroll;
     }
   }
@@ -53,6 +52,7 @@
     <style type="text/css">
       .option {
         padding: 8px 6px;
+        font-weight: bold;
       }
       @media only screen and (max-width: 767px) {
         .center {
@@ -63,6 +63,9 @@
         .center-block {
           padding: 30px 0;
           text-align: center;
+        }
+        .larger {
+          font-size: larger;
         }
       }
       .spacer-top {
@@ -79,7 +82,7 @@
   <!-- Detail view 2: Vote casted. -->
   <div ng-if="vote && poll && !poll.has_votes" class="center-block">
     <translate>Your vote has been counted.<br/>You have voted</translate>
-    <h2 class="spacer-top"><strong>{{ vote | translate }}</strong></h2>
+    <p class="spacer-top larger bold">{{ vote | translate }}</p>
   </div>
 
   <ng-include src="'static/templates/openslides_voting/submit-buttons-css.html'"></ng-include>
@@ -107,11 +110,11 @@
       <translate>Abstain</translate>
     </div>
 
-    <div ng-if="!selection.value" class="sp center bold text-danger" translate>
+    <div ng-if="!selection.value" class="center bold larger text-danger translate">
       Please vote now!
     </div>
 
-    <div ng-if="selection.value" class="center bold">
+    <div ng-if="selection.value" class="center bold larger">
       <translate>Your current choice:</translate> {{ selection.display | translate }}
       <div class="center">
         <button ng-disabled="selection.submitted"
@@ -199,22 +202,24 @@
           <span class="text-danger" ng-if="quorum < 0" translate>
             Quorum ({{ (poll.yes - quorum) | number:votesPrecision }}) not reached.
          </span>
-
-
     </table>
 </div>
 
 <div os-perms="agenda.can_be_speaker" ng-show="!isStartPage" class="spacer-top">
-  <button ng-if="!speakerPos" ng-disabled="!speakerListOpen" ng-click="addSpeaker()"
+  <span ng-if="speakerPos">{{ speakerPos }}. <translate>Speaker</translate></span>
+  <span ng-if="!speakerPos">--</span>
+
+  <button ng-if="!speakerPos && !speakerListOpen"
+    type="button" class="btn btn-default pull-right disabled">
+    <i class="fa fa-microphone fa-lg"></i>
+    <translate>Add me to speakers</translate>
+  </button>
+  <button ng-if="!speakerPos && speakerListOpen" ng-click="addSpeaker()"
     type="button" class="btn btn-success pull-right">
     <i class="fa fa-microphone fa-lg"></i>
     <translate>Add me to speakers</translate>
   </button>
-
-  <span ng-if="speakerPos">{{ speakerPos }}. <translate>Speaker</translate></span>
-  <span ng-if="!speakerPos">--</span>
-
-  <button ng-if="speakerPos" ng-disabled="!speakerListOpen" ng-click="removeSpeaker()"
+  <button ng-if="speakerPos" ng-click="removeSpeaker()"
     type="button" class="btn btn-danger pull-right">
     <i class="fa fa-microphone-slash fa-lg"></i>
     <translate>Remove me from speakers</translate>
