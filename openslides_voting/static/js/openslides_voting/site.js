@@ -764,8 +764,12 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
 
                 messageId = Messaging.createOrEditMessage(messageId, msg, 'success', {});
 
-                // Open poll submit form immediately.
-                // $timeout(function () { $('#poll_submit').click(); }, 1);
+                // Open poll submit form a second later but only if messaging is visible (not for mobile view).
+                $timeout(function () {
+                    if ($('#messaging').is(":visible")) {
+                        $('#poll_submit').click();
+                    }
+                }, 1);
             }
         };
 
@@ -3004,6 +3008,16 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
             agenda_item = null,
             speakers = [];
 
+        var showStartPage = function () {
+            // No permission required.
+            $scope.title = Config.get('general_event_welcome_title').value;
+            $scope.text = Config.get('general_event_mobile_welcome_text').value;
+            $scope.isStartPage = true;
+            motionId = topicId = pollId = 0;
+            agenda_item = null;
+        };
+        showStartPage();
+
         var clearSelection = function () {
             $scope.selection = {
                 value: '',
@@ -3086,21 +3100,22 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
             return AuthorizedVoters.lastModified(1);
         }, function () {
             var av = AuthorizedVoters.get(1);
-            if (av.motion_poll_id === null) return;
             if (av.type === 'named_electronic' || av.type === 'secret_electronic' ||
                 av.type === 'secret_electronic_board') {
-                var motion = av.motionPoll.motion;
-                motionId = motion.id;
-                topicId = 0;
-                agenda_item = motion.agenda_item;
-                $scope.title = motion.getTitle();
-                $scope.text = motion.getText();
-                $scope.isStartPage = false;
-                $scope.poll = av.motionPoll;
-                pollId = av.motionPoll.id;
-                $scope.canVote = operator.user &&
-                    _.includes(_.keys(av.authorized_voters), operator.user.id.toString());
-                updateVote();
+                if (av.motion_poll_id !== null) {
+                    var motion = av.motionPoll.motion;
+                    motionId = motion.id;
+                    topicId = 0;
+                    agenda_item = motion.agenda_item;
+                    $scope.title = motion.getTitle();
+                    $scope.text = motion.getText();
+                    $scope.isStartPage = false;
+                    $scope.poll = av.motionPoll;
+                    pollId = av.motionPoll.id;
+                    $scope.canVote = operator.user &&
+                        _.includes(_.keys(av.authorized_voters), operator.user.id.toString());
+                    updateVote();
+                }
             } else {
                 $scope.canVote = false;
                 clearSelection();
@@ -3169,13 +3184,8 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                 }
             }
             // Show the start page if we have nothing else to show.
-            // No permission required.
             if ($scope.title === undefined) {
-                $scope.title = Config.get('general_event_welcome_title').value;
-                $scope.text = Config.get('general_event_mobile_welcome_text').value;
-                $scope.isStartPage = true;
-                motionId = topicId = pollId = 0;
-                agenda_item = null;
+                showStartPage();
             }
         });
 
