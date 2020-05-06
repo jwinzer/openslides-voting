@@ -12,7 +12,9 @@ def get_config_variables():
     # General
     yield ConfigVariable(
         name='general_event_mobile_welcome_text',
-        default_value='[Space for your welcome text.]',
+        default_value='<h1><strong>Vote@Home Mobile</strong></h1><p><strong>Die virtuelle Versammlung '
+                      'auf einem mobilen Endgerät präsentiert von:</strong></p>'
+                      '<p><img alt="/media/file/VoteWorks75003.png" src="/media/file/VoteWorks75003.png"></p>',
         input_type='markupText',
         label='Mobile page text',
         weight=136,
