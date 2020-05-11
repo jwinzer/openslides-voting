@@ -1065,7 +1065,7 @@ msgstr "Ihre persönliche Ergebniszahl zum Prüfen Ihrer Stimmabgabe:"
 
 #: openslides_voting\mobile.html:81
 msgid "Your vote has been counted.<br>You have voted"
-msgstr "Ihre Stimme wurde gezählt.<br/>Sie haben gestimmt mit"
+msgstr "Ihre Stimme wurde gezählt.<br/>Sie haben gestimmt für"
 
 #: openslides_voting\user-list-table-stats-hook.html:5
 msgid "absent"

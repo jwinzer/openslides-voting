@@ -2996,24 +2996,32 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
     'MotionPoll',
     'MotionPollBallot',
     'MotionPollDecimalPlaces',
+    'Assignment',
+    'AssignmentPoll',
+    'AssignmentPollBallot',
+    'AssignmentPollDecimalPlaces',
+    'AssignmentButtonsCtrlBase',
     'Topic',
+    'User',
     'AuthorizedVoters',
     'Projector',
     'Config',
-    function ($scope, $http, $filter, operator, Agenda, Motion, MotionPoll, MotionPollBallot, MotionPollDecimalPlaces,
-              Topic, AuthorizedVoters, Projector, Config) {
+    function ($scope, $http, $filter, operator, Agenda,
+              Motion, MotionPoll, MotionPollBallot, MotionPollDecimalPlaces,
+              Assignment, AssignmentPoll, AssignmentPollBallot, AssignmentPollDecimalPlaces, AssignmentButtonsCtrlBase,
+              Topic, User, AuthorizedVoters, Projector, Config) {
         var pollId = 0,
-            motionId = 0,
-            topicId = 0,
+            modelId = 0,
             agenda_item = null,
             speakers = [];
 
         var showStartPage = function () {
             // No permission required.
+            $scope.mode = 0;
             $scope.title = Config.get('general_event_welcome_title').value;
             $scope.text = Config.get('general_event_mobile_welcome_text').value;
             $scope.isStartPage = true;
-            motionId = topicId = pollId = 0;
+            modelId = 0;
             agenda_item = null;
         };
         showStartPage();
@@ -3028,17 +3036,38 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
         clearSelection();
 
         var updateVote = function() {
-            var mpb = _.find(MotionPollBallot.getAll(), function (mpb) {
-                return mpb.delegate_id === operator.user.id &&
-                    mpb.poll_id === pollId;
-            });
-            if (mpb) {
-                $scope.vote = mpb.getVote();
-                clearSelection();
-            } else {
-                $scope.vote = null;
+            $scope.vote = null;
+            if ($scope.mode === 1) {
+                var mpb = _.find(MotionPollBallot.getAll(), function (mpb) {
+                    return mpb.delegate_id === operator.user.id &&
+                        mpb.poll_id === pollId;
+                });
+                if (mpb) {
+                    $scope.vote = mpb.getVote();
+                    clearSelection();
+                }
+            } else if ($scope.mode === 2) {
+                var apb = _.find(AssignmentPollBallot.getAll(), function (apb) {
+                    return apb.delegate_id === operator.user.id &&
+                        apb.poll_id === pollId;
+                });
+                if (apb) {
+                    if (apb.vote === 'N') {
+                        $scope.vote = 'No';
+                    } else if (apb.vote === 'A') {
+                        $scope.vote = 'Abstain';
+                    } else {
+                        var users = _.map(apb.vote, function (userId) {
+                            return User.get(parseInt(userId)).full_name;
+                        });
+                        $scope.vote = users.join(', ');
+                    }
+                    clearSelection();
+                }
             }
         };
+
+        AssignmentButtonsCtrlBase.populateScope($scope);
 
         $scope.$watch(function () {
             return agenda_item ? Agenda.lastModified(agenda_item.id) : void 0;
@@ -3055,41 +3084,78 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
             }
         });
 
+        // Watch Motion and its polls.
         $scope.$watch(function () {
-            return motionId ? Motion.lastModified(motionId) : void 0;
+            return modelId ? Motion.lastModified(modelId) : void 0;
         }, function () {
-            var model = Motion.get (motionId);
-            if (model) {
-                $scope.title = model.getTitle();
-                $scope.text = model.getText();
-                $scope.isStartPage = false;
+            if ($scope.mode === 1) {
+                var model = Motion.get(modelId);
+                if (model) {
+                    $scope.title = model.getTitle();
+                    $scope.text = model.getText();
+                    $scope.isStartPage = false;
+                }
             }
         });
-
         $scope.$watch(function () {
             return pollId ? MotionPoll.lastModified(pollId) : void 0;
         }, function () {
-            $scope.poll = MotionPoll.get(pollId);
-            if ($scope.poll !== undefined) {
-                $scope.votesPrecision = MotionPollDecimalPlaces.getPlaces($scope.poll);
-                $scope.quorum = $scope.poll.isReached(Config.get('motions_poll_default_majority_method').value)
+            if ($scope.mode === 1) {
+                $scope.poll = MotionPoll.get(pollId);
+                if ($scope.poll !== undefined) {
+                    $scope.votesPrecision = MotionPollDecimalPlaces.getPlaces($scope.poll);
+                    $scope.quorum = $scope.poll.isReached(Config.get('motions_poll_default_majority_method').value)
+                }
             }
         });
-
         $scope.$watch(function () {
             return MotionPollBallot.lastModified();
         }, function () {
             // TODO: Only update if necessary.
-            if ($scope.poll) {
+            if ($scope.mode === 1 && $scope.poll) {
+                updateVote();
+            }
+         });
+
+        // Watch Assignment and its polls.
+        $scope.$watch(function () {
+            return modelId ? Assignment.lastModified(modelId) : void 0;
+        }, function () {
+            if ($scope.mode === 2) {
+                var model = Assignment.get(modelId);
+                if (model) {
+                    $scope.title = model.getTitle();
+                    $scope.text = null;
+                    $scope.isStartPage = false;
+                }
+            }
+        });
+        $scope.$watch(function () {
+            return pollId ? AssignmentPoll.lastModified(pollId) : void 0;
+        }, function () {
+            if ($scope.mode === 2) {
+                $scope.setAssignmentPoll(pollId);
+                if ($scope.poll !== undefined) {
+                    $scope.votesPrecision = AssignmentPollDecimalPlaces.getPlaces($scope.poll);
+                    // FIXME: $scope.quorum = $scope.poll.isReached(Config.get('assignments_poll_default_majority_method').value)
+                }
+            }
+        });
+        $scope.$watch(function () {
+            return AssignmentPollBallot.lastModified();
+        }, function () {
+            // TODO: Only update if necessary.
+            if ($scope.mode === 2 && $scope.poll) {
                 updateVote();
             }
          });
 
         $scope.$watch(function () {
-            return topicId ? Topic.lastModified(topicId) : void 0;
+            return $scope.mode === 3 ? Topic.lastModified(modelId) : void 0;
         }, function () {
-            var model = Topic.get(topicId);
+            var model = Topic.get(modelId);
             if (model) {
+                $scope.mode = 0;
                 $scope.title = model.title;
                 $scope.text = model.text;
                 $scope.isStartPage = false;
@@ -3102,16 +3168,28 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
             var av = AuthorizedVoters.get(1);
             if (av.type === 'named_electronic' || av.type === 'secret_electronic' ||
                 av.type === 'secret_electronic_board') {
+                var model;
                 if (av.motion_poll_id !== null) {
-                    var motion = av.motionPoll.motion;
-                    motionId = motion.id;
-                    topicId = 0;
-                    agenda_item = motion.agenda_item;
-                    $scope.title = motion.getTitle();
-                    $scope.text = motion.getText();
+                    model = av.motionPoll.motion;
+                    modelId = model.id;
+                    agenda_item = model.agenda_item;
+                    $scope.mode = 1;
+                    $scope.title = model.getTitle();
+                    $scope.text = model.getText();
                     $scope.isStartPage = false;
                     $scope.poll = av.motionPoll;
                     pollId = av.motionPoll.id;
+                    $scope.canVote = operator.user &&
+                        _.includes(_.keys(av.authorized_voters), operator.user.id.toString());
+                    updateVote();
+                } else if (av.assignment_poll_id != null) {
+                    model = av.assignmentPoll.assignment;
+                    modelId = model.id;
+                    agenda_item = model.agenda_item;
+                    $scope.mode = 2;
+                    $scope.title = null;
+                    pollId = av.assignmentPoll.id;
+                    $scope.setAssignmentPoll(pollId);
                     $scope.canVote = operator.user &&
                         _.includes(_.keys(av.authorized_voters), operator.user.id.toString());
                     updateVote();
@@ -3136,6 +3214,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                 var element = _.find(projector.elements, function (element) {
                     return element.name === 'motions/motion' ||
                         element.name === 'voting/motion-poll' ||
+                        element.name === 'assignments/assignment' ||
                         element.name === 'topics/topic';
                 });
                 $scope.title = undefined;
@@ -3144,9 +3223,9 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                     if (element.name === 'motions/motion') {
                         model = Motion.get(element.id);
                         if (model) {
-                            motionId = model.id;
-                            topicId = 0;
+                            modelId = model.id;
                             agenda_item = model.agenda_item;
+                            $scope.mode = 1;
                             $scope.title = model.getTitle();
                             $scope.text = model.getText();
                             // Show poll if only one is available.
@@ -3161,20 +3240,37 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                     } else if (element.name === 'voting/motion-poll') {
                         model = MotionPoll.get(element.id);
                         if (model) {
-                            motionId = model.motion.id;
-                            topicId = 0;
+                            modelId = model.motion.id;
                             agenda_item = model.motion.agenda_item;
+                            $scope.mode = 1;
                             $scope.title = model.motion.getTitle();
                             $scope.text = model.motion.getText();
                             $scope.poll = model;
                             pollId = model.id;
                         }
+                    } else if (element.name === 'assignments/assignment') {
+                        model = Assignment.get(element.id);
+                        if (model) {
+                            modelId = model.id;
+                            agenda_item = model.agenda_item;
+                            $scope.mode = 2;
+                            $scope.title = model.getTitle();
+                            $scope.text = null;
+                            // Show poll if projected.
+                            if (element.poll !== undefined) {
+                                pollId = element.poll;
+                                $scope.setAssignmentPoll(pollId);
+                            } else {
+                                $scope.poll = null;
+                                pollId = 0;
+                            }
+                        }
                     } else {
                         model = Topic.get(element.id);
                         if (model) {
-                            motionId = 0;
-                            topicId = model.id;
+                            modelId = 3;
                             agenda_item = model.agenda_item;
+                            $scope.mode = 0;
                             $scope.title = model.title;
                             $scope.text = model.text;
                             $scope.poll = null;
@@ -3195,7 +3291,21 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
         };
 
         $scope.submitVote = function () {
-            $http.post('/votingcontroller/vote/' + pollId + '/', $scope.selection).then(function (success) {
+            var route = 'vote/';
+            if ($scope.mode === 2)  {
+                if ($scope.poll.pollmethod === 'votes') {
+                    route = 'candidate/';
+                    if ($scope.votes.no) {
+                        $scope.selection.value = 'N';
+                    } else {
+                        var selected = $scope.candidatesSelected();
+                        $scope.selection.value = selected.length > 0 ? selected : 'A';
+                    }
+                } else {
+                    $scope.selection.value = $scope.votes;
+                }
+            }
+            $http.post('/votingcontroller/' + route + pollId + '/', $scope.selection).then(function (success) {
                 $scope.selection.submitted = true;
             }, function (error) {
                 // $scope.alert = ErrorMessage.forAlert(error);

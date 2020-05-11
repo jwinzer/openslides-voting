@@ -1,0 +1,127 @@
+<!-- Detail view 1: Motion text. -->
+<div ng-if="!vote && !canVote && (!poll || !poll.has_votes)" ng-bind-html="text | translate"></div>
+
+<!-- Detail view 2: Vote casted. -->
+<div ng-if="vote && poll && !poll.has_votes" class="center-block">
+  <translate>Your vote has been counted.<br/>You have voted</translate>
+  <p class="spacer-top larger bold">{{ vote | translate }}</p>
+</div>
+
+<ng-include src="'static/templates/openslides_voting/submit-buttons-css.html'"></ng-include>
+
+<!-- Detail view 3: Vote submit form. -->
+<div ng-if="canVote && !vote">
+  <div class="pointer option" ng-click="select('Yes');">
+    <button type="button" class="btn btn-default btn-voting btn-voting-xs btn-yes">
+      <i class="fa fa-thumbs-o-up fa-2x"></i>
+    </button>
+    <translate>Yes</translate>
+  </div>
+
+  <div class="pointer option" ng-click="select('No');">
+    <button type="button" class="btn btn-default btn-voting-xs btn-no">
+      <i class="fa fa-thumbs-o-down fa-2x"></i>
+    </button>
+    <translate>No</translate>
+  </div>
+
+  <div class="pointer option spacer-bottom" ng-click="select('Abstain');">
+    <button type="button" class="btn btn-default btn-voting-xs btn-abstain">
+      <i class="fa fa-circle-o fa-2x"></i>
+    </button>
+    <translate>Abstain</translate>
+  </div>
+
+  <div ng-if="!selection.value" class="center bold larger text-danger" translate>
+    Please vote now!
+  </div>
+
+  <div ng-if="selection.value" class="center bold larger">
+    <translate>Your current choice:</translate> {{ selection.display | translate }}
+    <div class="center">
+      <button ng-disabled="selection.submitted"
+        type="button" class="btn btn-primary spacer-top" ng-click="submitVote()" translate>
+        Submit
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Detail view 4: Voting result. -->
+<table ng-if="poll.has_votes">
+  <style type="text/css">
+    td {
+      padding: 6px;
+    }
+    td.bold {
+      font-weight: bold;
+      text-align: left;
+    }
+    td.chart {
+      width: 400px;
+    }
+    td.chart .progress {
+      margin-bottom: 4px;
+    }
+    @media only screen and (max-width: 767px) {
+      td.chart {
+        width: 100%;
+      }
+    }
+  </style>
+  <tr>
+    <td>
+      <button type="button" class="btn btn-default btn-voting-xs btn-yes">
+        <i class="fa fa-thumbs-o-up fa-2x"></i>
+      </button>
+    <td class="bold chart">
+      <translate>Yes</translate>: {{ poll.yes | number:votesPrecision }}
+      <span ng-if="poll.getVote(poll.yes, 'yes').percentNumber">
+        {{ poll.getVote(poll.yes, 'yes').percentStr || '&nbsp;' }}
+      </span>
+      <div ng-if="poll.getVote(poll.yes, 'yes').percentNumber">
+        <uib-progressbar value="poll.getVote(poll.yes, 'yes').percentNumber" type="success"></uib-progressbar>
+      </div>
+
+  <tr>
+    <td>
+      <button type="button" class="btn btn-default btn-voting-xs btn-no">
+        <i class="fa fa-thumbs-o-down fa-2x"></i>
+      </button>
+    <td class="bold chart">
+      <translate>No</translate>: {{ poll.no | number:votesPrecision }}
+      <span ng-if="poll.getVote(poll.no, 'no').percentNumber">
+        {{ poll.getVote(poll.no, 'no').percentStr || '&nbsp;' }}
+      </span>
+      <div ng-if="poll.getVote(poll.no, 'no').percentNumber">
+        <uib-progressbar value="poll.getVote(poll.no, 'no').percentNumber" type="danger"></uib-progressbar>
+      </div>
+
+  <tr>
+    <td>
+      <button type="button" class="btn btn-default btn-voting-xs btn-abstain">
+        <i class="fa fa-circle-o fa-2x"></i>
+      </button>
+    <td class="bold chart">
+      <translate>Abstain</translate>: {{ poll.abstain | number:votesPrecision }}
+      <span ng-if="poll.getVote(poll.abstain, 'abstain').percentNumber">
+        {{ poll.getVote(poll.abstain, 'abstain').percentStr || '&nbsp;' }}
+      </span>
+      <div ng-if="poll.getVote(poll.abstain, 'abstain').percentNumber">
+        <uib-progressbar value="poll.getVote(poll.abstain, 'abstain').percentNumber" type="warning"></uib-progressbar>
+      </div>
+
+    <tr>
+      <td colspan="2" class="bold">
+        <translate>Valid votes</translate>: {{ poll.votesvalid | number:votesPrecision }}
+        {{ poll.getVote(poll.votesvalid, 'votesvalid').percentStr }}
+
+    <tr>
+      <td colspan="2">
+        <span class="text-success" ng-if="quorum >= 0" translate>
+          Quorum ({{ (poll.yes - quorum) | number:votesPrecision }}) reached.
+        </span>
+        <span class="text-danger" ng-if="quorum < 0" translate>
+          Quorum ({{ (poll.yes - quorum) | number:votesPrecision }}) not reached.
+       </span>
+  </table>
