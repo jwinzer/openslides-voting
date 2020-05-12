@@ -198,7 +198,6 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
             $scope.setAssignmentPoll = function (pollId) {
                 $scope.poll = AssignmentPoll.get(pollId);
 
-                // prepare the options for the ui
                 var options = $filter('orderBy')($scope.poll.options, 'weight');
                 _.forEach(options, function (option, index) {
                     option.index = index;
@@ -3052,15 +3051,24 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                         apb.poll_id === pollId;
                 });
                 if (apb) {
-                    if (apb.vote === 'N') {
-                        $scope.vote = 'No';
-                    } else if (apb.vote === 'A') {
-                        $scope.vote = 'Abstain';
+                    // TODO: Review vote generation.
+                    var values = _.values(apb.vote);
+                    if (values.length === 1) {
+                        switch (values[0]) {
+                            case 'Y':
+                                $scope.vote = 'Yes';
+                                break;
+                            case 'N':
+                                $scope.vote = 'No';
+                                break;
+                            case 'A':
+                                $scope.vote = 'Abstain';
+                                break;
+                            default:
+                                $scope.vote = User.get(parseInt(values[0])).full_name;
+                        }
                     } else {
-                        var users = _.map(apb.vote, function (userId) {
-                            return User.get(parseInt(userId)).full_name;
-                        });
-                        $scope.vote = users.join(', ');
+                        $scope.vote = 'multiple votes';
                     }
                     clearSelection();
                 }
@@ -3111,7 +3119,6 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
         $scope.$watch(function () {
             return MotionPollBallot.lastModified();
         }, function () {
-            // TODO: Only update if necessary.
             if ($scope.mode === 1 && $scope.poll) {
                 updateVote();
             }
@@ -3134,31 +3141,32 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
             return pollId ? AssignmentPoll.lastModified(pollId) : void 0;
         }, function () {
             if ($scope.mode === 2) {
-                $scope.setAssignmentPoll(pollId);
-                if ($scope.poll !== undefined) {
+                if (AssignmentPoll.get(pollId) !== undefined) {
+                    $scope.setAssignmentPoll(pollId);
                     $scope.votesPrecision = AssignmentPollDecimalPlaces.getPlaces($scope.poll);
-                    // FIXME: $scope.quorum = $scope.poll.isReached(Config.get('assignments_poll_default_majority_method').value)
+                    // FIXME: Show quorum. Config.get('assignments_poll_default_majority_method').value
                 }
             }
         });
         $scope.$watch(function () {
             return AssignmentPollBallot.lastModified();
         }, function () {
-            // TODO: Only update if necessary.
             if ($scope.mode === 2 && $scope.poll) {
                 updateVote();
             }
          });
 
         $scope.$watch(function () {
-            return $scope.mode === 3 ? Topic.lastModified(modelId) : void 0;
+            return modelId ? Topic.lastModified(modelId) : void 0;
         }, function () {
-            var model = Topic.get(modelId);
-            if (model) {
-                $scope.mode = 0;
-                $scope.title = model.title;
-                $scope.text = model.text;
-                $scope.isStartPage = false;
+            if ($scope.mode === 3) {
+                var model = Topic.get(modelId);
+                if (model) {
+                    $scope.mode = 0;
+                    $scope.title = model.title;
+                    $scope.text = model.text;
+                    $scope.isStartPage = false;
+                }
             }
         });
 
@@ -3215,6 +3223,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                     return element.name === 'motions/motion' ||
                         element.name === 'voting/motion-poll' ||
                         element.name === 'assignments/assignment' ||
+                        element.name === 'voting/assignment-poll' ||
                         element.name === 'topics/topic';
                 });
                 $scope.title = undefined;
@@ -3264,6 +3273,17 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                                 $scope.poll = null;
                                 pollId = 0;
                             }
+                        }
+                    } else if (element.name === 'voting/assignment-poll') {
+                        model = AssignmentPoll.get(element.id);
+                        if (model) {
+                            modelId = model.assignment.id;
+                            agenda_item = model.assignment.agenda_item;
+                            $scope.mode = 2;
+                            $scope.title = model.assignment.getTitle();
+                            $scope.text = null;
+                            $scope.poll = model;
+                            pollId = model.id;
                         }
                     } else {
                         model = Topic.get(element.id);

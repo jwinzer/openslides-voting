@@ -119,7 +119,8 @@
   </div>
 
   <!-- Result table for Yes/No/Abstain (for one candidate only! = same as motion poll result table) -->
-  <table ng-if="poll.has_votes && poll.options.length == 1" class="well pull-left" id="resultTable">
+  <table ng-if="(poll.pollmethod === 'yna' || poll.pollmethod === 'yn') && poll.has_votes && poll.options.length == 1"
+    class="well pull-left" id="resultTable">
     <tbody ng-init="option = poll.options[0]">
     <!-- yes -->
     <tr>
@@ -184,8 +185,7 @@
 
 
   <!-- Result table for Yes/No/Abstain (>1 candidates), with votecollector not possible -->
-  <table ng-if="(poll.pollmethod === 'yna' || poll.pollmethod ===
-'yn') && poll.has_votes && poll.options.length > 1"
+  <table ng-if="(poll.pollmethod === 'yna' || poll.pollmethod === 'yn') && poll.has_votes && poll.options.length > 1"
          class="well pull-left width100" id="resultTable">
     <thead>
       <td>
@@ -230,8 +230,8 @@
     <!-- valid votes -->
     <tr class="total">
       <td translate>Valid votes
-      <td class="bold-left" colspan="2">{{ poll.votesvalid | number:votesPrecision }}
-      {{ poll.votesvalid | number:votesPrecision }}
+      <td class="bold">{{ poll.votesvalid | number:votesPrecision }}
+      <td>
       <td>
       <td>
       <td ng-if="poll.pollmethod === 'yna'">
@@ -239,7 +239,7 @@
   </table>
 
   <!-- Result table for yes votes (1..n candidates) -->
-  <div ng-if="poll.pollmethod == 'votes' && poll.has_votes">
+  <div ng-if="poll.pollmethod === 'votes' && poll.has_votes">
     <!-- total votes -->
     <table class="well table-striped width100" id="resultTable">
       <tr ng-repeat="option in poll.options" ng-init="votes = option.getVotes()">
