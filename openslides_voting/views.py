@@ -1,6 +1,7 @@
 import random
 
 from django.conf import settings
+from django.core.cache import cache
 from django.db import transaction
 from django.http.response import HttpResponse, JsonResponse
 from django.utils.decorators import method_decorator
@@ -679,10 +680,12 @@ class VotingShareViewSet(PrinciplesPermissionMixin, ModelViewSet):
         # Bulk create new shares.
         VotingShare.objects.bulk_create(created_shares)
 
-        # FIXME: Delete cache keys so clients will get fresh data from db wit VotingShare.findAll().
-        # from django.core import cache
-        # cache.delete_pattern('*voting-share*')  # This works only for redis.
-        # cache.delete()
+        # Delete cache keys so clients will get fresh data from db wit VotingShare.findAll().
+        if hasattr(cache, 'delete_pattern'):
+            # Pattern delete only works for redis.
+            cache.delete_pattern('*voting-share*')
+        else:
+            cache.delete('voting-share')
 
         # Return number of delegates with shares.
         return Response({'count': User.objects.exclude(shares=None).count()})
