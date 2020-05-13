@@ -13,7 +13,7 @@
   <div ng-if="poll.pollmethod === 'votes'">
     <table>
       <tr ng-repeat="options in optionsForTable">
-        <td class="pointer option" ng-repeat="option in options"
+        <td class="option" ng-repeat="option in options"
           ng-click="clickCandidate(option.index + 1)" ng-class="{'col-md-6': columns === 2}">
           <button type="button" class="btn btn-default btn-voting btn-voting-xs"
             ng-class="votes[(option.index + 1)] ? 'btn-yes' : 'btn-gray'">
@@ -22,13 +22,14 @@
           {{ option.candidate.short_name }}<br>
 
       <tr>
-        <td class="pointer option">
+        <td class="option">
           <button type="button" class="btn btn-default btn-voting btn-voting-xs" ng-click="clickNo()"
             ng-class="votes.no ? 'btn-no' : 'btn-gray'">
             <i class="fa fa-thumbs-o-down fa-2x"></i>
           </button>
           <translate>No</translate>
 
+        <td class="option">
           <button type="button" class="btn btn-default btn-voting btn-voting-xs" ng-click="clickAbstain()"
             ng-class="votes.abstain ? 'btn-abstain' : 'btn-gray'">
             <i class="fa fa-circle-o fa-2x"></i>
@@ -61,24 +62,31 @@
 
   <div ng-if="poll.pollmethod !== 'votes'">
     <table>
+      <style type="text/css">
+        @media only screen and (max-width: 767px) {
+          .vote {
+            width: 10%;
+          }
+        }
+      </style>
       <tr ng-repeat="option in poll.options | orderBy: 'weight'">
         <td class="option">{{ option.candidate.short_name }}
 
-        <td ng-click="votes[option.candidate.id] = 'Y'" class="vote-column option">
+        <td ng-click="votes[option.candidate.id] = 'Y'" class="option vote">
           <button type="button" class="btn btn-default btn-voting btn-voting-xs"
             ng-class="votes[option.candidate.id] == 'Y' ? 'btn-yes' : 'btn-gray'">
             <i class="fa fa-thumbs-o-up fa-2x"></i>
           </button>
           <translate>Yes</translate>
 
-        <td ng-click="votes[option.candidate.id] = 'N'" class="vote-column option">
+        <td ng-click="votes[option.candidate.id] = 'N'" class="option vote">
           <button type="button" class="btn btn-default btn-voting btn-voting-xs"
             ng-class="votes[option.candidate.id] == 'N' ? 'btn-no' : 'btn-gray'">
             <i class="fa fa-thumbs-o-down fa-2x"></i>
           </button>
           <translate>No</translate>
 
-        <td ng-click="votes[option.candidate.id] = 'A'" ng-if="poll.pollmethod === 'yna'" class="vote-column option">
+        <td ng-click="votes[option.candidate.id] = 'A'" ng-if="poll.pollmethod === 'yna'" class="option vote">
           <button type="button" class="btn btn-default btn-voting btn-voting-xs"
             ng-class="votes[option.candidate.id] == 'A' ? 'btn-abstain' : 'btn-gray'">
             <i class="fa fa-circle-o fa-2x"></i>

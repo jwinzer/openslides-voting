@@ -3195,7 +3195,8 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                     modelId = model.id;
                     agenda_item = model.agenda_item;
                     $scope.mode = 2;
-                    $scope.title = null;
+                    $scope.title = model.getTitle();
+                    $scope.text = null;
                     pollId = av.assignmentPoll.id;
                     $scope.setAssignmentPoll(pollId);
                     $scope.canVote = operator.user &&

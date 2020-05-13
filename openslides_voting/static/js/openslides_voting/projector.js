@@ -234,7 +234,7 @@ angular.module('OpenSlidesApp.openslides_voting.projector', [
             // Get authorized voters.
             var voters = $scope.av.authorized_voters;
             var showKey = $scope.av.type.indexOf('votecollector') === 0 && Config.get('voting_show_number').value;
-            if (_.keys(voters).length > 0 && $scope.av.type !== 'secret_electronic_board' &&
+            if (_.keys(voters).length > 0 && $scope.av.type !== 'secret_electronic' &&
                 $scope.av.type !== 'votecollector_anonymous' && $scope.av.type !== 'votecollector_secret') {
                 // Create delegate board table cells.
                 // console.log("Draw delegate board. Votes: " + AssignmentPollBallot.filter({poll_id: pollId}).length);
