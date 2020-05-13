@@ -90,11 +90,10 @@
       {{ sharesWillBeImported }}
       <translate>voting shares will be imported.</translate>
     </div>
-    <div ng-repeat="share in delegateSharesImported = (delegateShares | filter:{imported:true})"></div>
-    <div ng-if="delegateSharesImported.length" class="text-success">
+    <div ng-if="delegateSharesImported" class="text-success">
       <hr class="smallhr">
       <i class="fa fa-check-circle fa-lg"></i>
-      {{ delegateSharesImported.length }}
+      {{ delegateSharesImported }}
       <translate>voting shares were successfully imported.</translate>
     </div>
 

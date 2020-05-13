@@ -1514,7 +1514,10 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                 // POST the list for bulk import.
                 $http.post('/rest/openslides_voting/voting-share/mass_import/', data).then(
                     function (success) {
-                        $scope.delegateSharesImported = success.data.count;
+                        $scope.delegateSharesImported =
+                            _.filter($scope.delegateShares, function (ds) {
+                                return ds.imported;
+                            }).length;
                         // $scope.csvImporting = false;
 
                         // Reload VotingShare data store
