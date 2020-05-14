@@ -2,41 +2,43 @@
 <div ng-if="!vote && !canVote && (!poll || !poll.has_votes)" ng-bind-html="text | translate"></div>
 
 <!-- Detail view 2: Vote casted. -->
-<div ng-if="vote && poll && !poll.has_votes" class="center-block">
+<div ng-if="vote && poll && !poll.has_votes" class="center-block larger">
   <translate>Your vote has been counted.<br/>You have voted</translate>
-  <p class="spacer-top larger bold">{{ vote | translate }}</p>
+  <p class="spacer-top bold">{{ vote | translate }}</p>
 </div>
 
 <ng-include src="'static/templates/openslides_voting/submit-buttons-css.html'"></ng-include>
 
 <!-- Detail view 3: Vote submit form. -->
 <div ng-if="canVote && !vote">
-  <div class="pointer option" ng-click="select('Yes');">
-    <button type="button" class="btn btn-default btn-voting btn-voting-xs btn-yes">
-      <i class="fa fa-thumbs-o-up fa-2x"></i>
-    </button>
-    <translate>Yes</translate>
-  </div>
+  <table>
+    <tr>
+      <td class="pointer option" ng-click="select('Yes')">
+        <button type="button" class="btn btn-default btn-voting btn-voting-xs btn-yes">
+          <i class="fa fa-thumbs-o-up fa-2x"></i>
+        </button>
+        <translate>Yes</translate>
 
-  <div class="pointer option" ng-click="select('No');">
-    <button type="button" class="btn btn-default btn-voting-xs btn-no">
-      <i class="fa fa-thumbs-o-down fa-2x"></i>
-    </button>
-    <translate>No</translate>
-  </div>
+    <tr>
+      <td class="pointer option" ng-click="select('No')">
+      <button type="button" class="btn btn-default btn-voting-xs btn-no">
+        <i class="fa fa-thumbs-o-down fa-2x"></i>
+      </button>
+      <translate>No</translate>
 
-  <div class="pointer option spacer-bottom" ng-click="select('Abstain');">
-    <button type="button" class="btn btn-default btn-voting-xs btn-abstain">
-      <i class="fa fa-circle-o fa-2x"></i>
-    </button>
-    <translate>Abstain</translate>
-  </div>
+    <tr>
+      <td class="pointer option" ng-click="select('Abstain')">
+        <button type="button" class="btn btn-default btn-voting-xs btn-abstain">
+          <i class="fa fa-circle-o fa-2x"></i>
+        </button>
+        <translate>Abstain</translate>
+  </table>
 
-  <div ng-if="!selection.value" class="center bold larger text-danger" translate>
+  <div ng-if="!selection.value" class="spacer-top-lg center bold larger text-danger" translate>
     Please vote now!
   </div>
 
-  <div ng-if="selection.value" class="center bold larger">
+  <div ng-if="selection.value" class="spacer-top-lg center bold larger">
     <translate>Your current choice:</translate> {{ selection.display | translate }}
     <div class="center">
       <button ng-disabled="selection.submitted"

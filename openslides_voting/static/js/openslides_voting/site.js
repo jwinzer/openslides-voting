@@ -241,6 +241,11 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                     }
                 }));
             };
+            $scope.getCandidate = function (index) {
+                return _.find($scope.poll.options, function (option) {
+                    return option.index === index;
+                }).candidate;
+            };
             // When a candidate is clicked in assignment 'votes' mode. Index is 1-based.
             $scope.clickCandidate = function (index) {
                 $scope.votes.no = false;
@@ -3147,7 +3152,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                 if (AssignmentPoll.get(pollId) !== undefined) {
                     $scope.setAssignmentPoll(pollId);
                     $scope.votesPrecision = AssignmentPollDecimalPlaces.getPlaces($scope.poll);
-                    // FIXME: Show quorum. Config.get('assignments_poll_default_majority_method').value
+                    // TODO: Show quorum. Config.get('assignments_poll_default_majority_method').value
                 }
             }
         });

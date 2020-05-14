@@ -95,7 +95,7 @@
   <div class="spacer-top-lg bold">
     <translate>Your current choice:</translate>
     <span ng-if="candidatesSelected().length == 1">
-      {{ poll.options[candidatesSelected()[0]-1].candidate.short_name }}
+      {{ getCandidate(candidatesSelected()[0]-1).short_name }}
     </span>
     <span ng-if="candidatesSelected().length > 1">
       {{ candidatesSelected().length }} / {{ poll.assignment.open_posts }} <translate>candidates</translate>

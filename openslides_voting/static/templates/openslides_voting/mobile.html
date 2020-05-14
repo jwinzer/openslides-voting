@@ -33,11 +33,11 @@
     }
     .header {
       height: 56px;
-      overflow-y: scroll;
+      overflow-y: auto;
     }
     .details {
       height: calc(100vh - 274px);
-      overflow-y: scroll;
+      overflow-y: auto;
     }
   }
 </style>
@@ -53,14 +53,15 @@
       .option {
         padding: 8px 6px;
         font-weight: bold;
+
       }
       @media only screen and (max-width: 767px) {
-        table {
+        .fill {
           width: 100%;
         }
         .center {
           margin: auto;
-          width: 80%;
+          width: 100%;
           text-align: center;
         }
         .center-block {
@@ -72,10 +73,10 @@
         }
       }
       .spacer-top {
-        margin-top: 15px;
+        margin-top: 7px;
       }
-      .spacer-bottom {
-        margin-bottom: 35px;
+      .spacer-top-lg {
+        margin-top: 15px;
       }
     </style>
 

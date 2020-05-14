@@ -1,8 +1,8 @@
-<!-- FIXME: Detail view 1: Candidates. -->
+<!-- Detail view 1: Text. -->
 <div ng-if="!vote && !canVote && (!poll || !poll.has_votes)" ng-bind-html="text | translate"></div>
 
 <!-- Detail view 2: Vote casted. -->
-<div ng-if="vote && poll && !poll.has_votes" class="center-block">
+<div ng-if="vote && poll && !poll.has_votes" class="center-block larger bold">
   <translate>You have voted.</translate>
 </div>
 
@@ -10,119 +10,136 @@
 
 <!-- Detail view 3: Vote submit form. -->
 <div ng-if="canVote && !vote">
+  <style type="text/css">
+    @media only screen and (max-width: 767px) {
+      .options {
+        height: calc(100vh - 324px);
+        overflow-y: auto;
+      }
+      .truncate {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  </style>
+
   <div ng-if="poll.pollmethod === 'votes'">
-    <table>
-      <tr ng-repeat="options in optionsForTable">
-        <td class="option" ng-repeat="option in options"
-          ng-click="clickCandidate(option.index + 1)" ng-class="{'col-md-6': columns === 2}">
-          <button type="button" class="btn btn-default btn-voting btn-voting-xs"
-            ng-class="votes[(option.index + 1)] ? 'btn-yes' : 'btn-gray'">
-            <i class="fa fa-thumbs-o-up fa-2x"></i>
-          </button>
-          {{ option.candidate.short_name }}<br>
+    <div ng-if="!somethingSelected()" class="center bold text-danger" translate>
+      Please elect now!
+    </div>
+    <div ng-if="somethingSelected()" class="center bold text-danger truncate">
+      <translate>Your current choice:</translate>
+      <span ng-if="candidatesSelected().length && poll.assignment.open_posts === 1">
+        {{ getCandidate(candidatesSelected()[0]-1).short_name }}
+      </span>
+      <span ng-if="candidatesSelected().length && poll.assignment.open_posts > 1">
+        {{ candidatesSelected().length }} / {{ poll.assignment.open_posts }}
+      </span>
+      <span ng-if="votes.no" translate>No</span>
+      <span ng-if="votes.abstain" translate>Abstain</span>
+    </div>
 
-      <tr>
-        <td class="option">
-          <button type="button" class="btn btn-default btn-voting btn-voting-xs" ng-click="clickNo()"
-            ng-class="votes.no ? 'btn-no' : 'btn-gray'">
-            <i class="fa fa-thumbs-o-down fa-2x"></i>
-          </button>
-          <translate>No</translate>
+    <div class="spacer-top options">
+      <table class="fill">
+        <tr ng-repeat="option in poll.options | orderBy: 'weight'">
+          <td colspan="2" class="pointer option" ng-click="clickCandidate(option.index + 1)">
+            <button type="button" class="btn btn-default btn-voting btn-voting-xs pull-left"
+              ng-class="votes[(option.index + 1)] ? 'btn-yes' : 'btn-gray'">
+              <i class="fa fa-thumbs-o-up fa-2x"></i>
+            </button>
+            {{ option.candidate.short_name }}
 
-        <td class="option">
-          <button type="button" class="btn btn-default btn-voting btn-voting-xs" ng-click="clickAbstain()"
-            ng-class="votes.abstain ? 'btn-abstain' : 'btn-gray'">
-            <i class="fa fa-circle-o fa-2x"></i>
-          </button>
-          <translate>Abstain</translate>
-    </table>
+        <tr>
+          <td class="pointer option" ng-click="clickNo()">
+            <button type="button" class="btn btn-default btn-voting btn-voting-xs"
+              ng-class="votes.no ? 'btn-no' : 'btn-gray'">
+              <i class="fa fa-thumbs-o-down fa-2x"></i>
+            </button>
+            <translate>No</translate>
 
-    <div class="spacer-top center bold larger">
-      <span ng-if="!somethingSelected()" class="text-danger" translate>Please vote now!</span>
+          <td class="pointer option" ng-click="clickAbstain()">
+            <button type="button" class="btn btn-default btn-voting btn-voting-xs"
+              ng-class="votes.abstain ? 'btn-abstain' : 'btn-gray'">
+              <i class="fa fa-circle-o fa-2x"></i>
+            </button>
+            <translate>Abstain</translate>
+      </table>
 
-      <div ng-if="somethingSelected()" class="center">
-        <translate>Your current choice:</translate>
-        <span ng-if="candidatesSelected().length == 1">
-          {{ poll.options[candidatesSelected()[0]-1].candidate.short_name }}
-        </span>
-        <span ng-if="candidatesSelected().length > 1">
-          {{ candidatesSelected().length }} / {{ poll.assignment.open_posts }} <translate>candidates</translate>
-        </span>
-        <span ng-if="votes.no" translate>No</span>
-        <span ng-if="votes.abstain" translate>Abstain</span>
-        <div class="center">
-          <button ng-disabled="!canSubmitAssignmentPoll()"
-            type="button" class="btn btn-primary spacer-top" ng-click="submitVote()" translate>
-            Submit
-          </button>
-        </div>
+      <div class="spacer-top center">
+        <button ng-disabled="!canSubmitAssignmentPoll()"
+          type="button" class="btn btn-primary spacer-top" ng-click="submitVote()" translate>
+          Submit
+        </button>
       </div>
     </div>
   </div>
 
   <div ng-if="poll.pollmethod !== 'votes'">
-    <table>
-      <style type="text/css">
-        @media only screen and (max-width: 767px) {
-          .vote {
-            width: 10%;
+    <div ng-if="!somethingSelected() || poll.options.length > 1" class="center bold text-danger" translate>
+      Please elect now!
+    </div>
+    <div ng-if="somethingSelected() && poll.options.length === 1" class="center bold text-danger">
+      <translate>Your current choice:</translate>
+      <span ng-if="votes[candidatesSelected()[0]] === 'Y'" translate>Yes</span>
+      <span ng-if="votes[candidatesSelected()[0]] === 'N'" translate>No</span>
+      <span ng-if="votes[candidatesSelected()[0]] === 'A'" translate>Abstain</span>
+    </div>
+
+    <div class="spacer-top options">
+      <table class="fill">
+        <style type="text/css">
+          @media only screen and (max-width: 767px) {
+            .vote {
+              width: 10%;
+            }
           }
-        }
-      </style>
-      <tr ng-repeat="option in poll.options | orderBy: 'weight'">
-        <td class="option">{{ option.candidate.short_name }}
+        </style>
+        <tr ng-repeat="option in poll.options | orderBy: 'weight'">
+          <td class="option">{{ option.candidate.short_name }}
 
-        <td ng-click="votes[option.candidate.id] = 'Y'" class="option vote">
-          <button type="button" class="btn btn-default btn-voting btn-voting-xs"
-            ng-class="votes[option.candidate.id] == 'Y' ? 'btn-yes' : 'btn-gray'">
-            <i class="fa fa-thumbs-o-up fa-2x"></i>
-          </button>
-          <translate>Yes</translate>
+          <td ng-click="votes[option.candidate.id] = 'Y'" class="pointer option vote">
+            <button type="button" class="btn btn-default btn-voting btn-voting-xs"
+              ng-class="votes[option.candidate.id] == 'Y' ? 'btn-yes' : 'btn-gray'">
+              <i class="fa fa-thumbs-o-up fa-2x"></i>
+            </button>
+            <translate>Yes</translate>
 
-        <td ng-click="votes[option.candidate.id] = 'N'" class="option vote">
-          <button type="button" class="btn btn-default btn-voting btn-voting-xs"
-            ng-class="votes[option.candidate.id] == 'N' ? 'btn-no' : 'btn-gray'">
-            <i class="fa fa-thumbs-o-down fa-2x"></i>
-          </button>
-          <translate>No</translate>
+          <td ng-click="votes[option.candidate.id] = 'N'" class="pointer option vote">
+            <button type="button" class="btn btn-default btn-voting btn-voting-xs"
+              ng-class="votes[option.candidate.id] == 'N' ? 'btn-no' : 'btn-gray'">
+              <i class="fa fa-thumbs-o-down fa-2x"></i>
+            </button>
+            <translate>No</translate>
 
-        <td ng-click="votes[option.candidate.id] = 'A'" ng-if="poll.pollmethod === 'yna'" class="option vote">
-          <button type="button" class="btn btn-default btn-voting btn-voting-xs"
-            ng-class="votes[option.candidate.id] == 'A' ? 'btn-abstain' : 'btn-gray'">
-            <i class="fa fa-circle-o fa-2x"></i>
-          </button>
-          <translate>Abstain</translate>
-    </table>
+          <td ng-if="poll.pollmethod === 'yna'"
+            ng-click="votes[option.candidate.id] = 'A'" class="pointer option vote">
+            <button type="button" class="btn btn-default btn-voting btn-voting-xs"
+              ng-class="votes[option.candidate.id] == 'A' ? 'btn-abstain' : 'btn-gray'">
+              <i class="fa fa-circle-o fa-2x"></i>
+            </button>
+            <translate>Abstn</translate>
+      </table>
 
-    <div class="spacer-top center bold larger">
-      <span ng-if="!somethingSelected()" class="text-danger" translate>Please vote now!</span>
-
-      <div ng-if="somethingSelected()">
-        <div ng-if="poll.options.length === 1" class="center">
-          <translate>Your current choice:</translate>
-          <span ng-if="votes[candidatesSelected()[0]] === 'Y'" translate>Yes</span>
-          <span ng-if="votes[candidatesSelected()[0]] === 'N'" translate>No</span>
-          <span ng-if="votes[candidatesSelected()[0]] === 'A'" translate>Abstain</span>
-        </div>
-        <div class="center">
-          <button ng-disabled="!canSubmitAssignmentPoll()"
-            type="button" class="btn btn-primary spacer-top" ng-click="submitVote()" translate>
-            Submit
-          </button>
-        </div>
+      <div class="spacer-top center">
+        <button ng-disabled="!canSubmitAssignmentPoll()"
+          type="button" class="btn btn-primary spacer-top" ng-click="submitVote()" translate>
+          Submit
+        </button>
       </div>
     </div>
   </div>
 </div>
 
 <!-- Detail view 4: Voting result. -->
-<table ng-if="poll.has_votes">
+<table ng-if="poll.has_votes" class="fill">
   <style type="text/css">
     th {
       text-transform: uppercase;
     }
     td, th {
       padding: 6px;
+      vertical-align: top;
     }
     td.bold {
       font-weight: bold;
@@ -131,22 +148,22 @@
   </style>
 
   <!-- Candidates and their votes. -->
-  <tr>
-    <th translate>Candidates
-    <th ng-if="poll.pollmethod === 'votes'" translate>Votes
-    <th ng-if="poll.pollmethod !== 'votes'" translate>Yes
-    <th ng-if="poll.pollmethod !== 'votes'" translate>No
-    <th ng-if="poll.pollmethod === 'yna'" translate>Abstain
   <tr ng-repeat="option in poll.options | orderBy:'weight'" ng-init="votes = option.getVotes()">
     <td class="bold">
       <i ng-if="option.is_elected" class="fa fa-star" title="{{ 'is elected' | translate }}"></i>
       {{ option.candidate.short_name }}
-    <td class="bold vote-column">
+    <td ng-if="poll.pollmethod === 'votes'" class="bold vote-column">
       {{ votes[0].value | number:votesPrecision }} {{ votes[0].percentStr }}
     <td ng-if="poll.pollmethod !== 'votes'" class="bold vote-column">
-      {{ votes[1].value | number:votesPrecision }} {{ votes[1].percentStr }}
-    <td ng-if="poll.pollmethod === 'yna'" class="bold vote-column">
-      {{ votes[2].value | number:votesPrecision }} {{ votes[2].percentStr }}
+      <span>
+        {{ votes[0].label | translate }}: {{ votes[0].value | number:votesPrecision }} {{ votes[0].percentStr }}
+        <br>
+        {{ votes[1].label | translate }}: {{ votes[1].value | number:votesPrecision }} {{ votes[1].percentStr }}
+      </span>
+      <span ng-if="poll.pollmethod === 'yna'">
+        <br>
+        {{ votes[2].label | translate }}: {{ votes[2].value | number:votesPrecision }} {{ votes[2].percentStr }}
+      </span>
 
   <!-- Abstain, No, Valid votes. -->
   <tr ng-if="poll.pollmethod === 'votes' && poll.getVote('votesabstain').value !== null">
