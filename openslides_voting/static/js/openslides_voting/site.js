@@ -3081,6 +3081,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                     clearSelection();
                 }
             }
+            // console.log('Updated vote: ' + $scope.vote)
         };
 
         AssignmentButtonsCtrlBase.populateScope($scope);
@@ -3421,6 +3422,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
         gettext('Can see the token voting interface');
         gettext('Can manage voting');
         gettext('Can vote');
+        gettext('Start with Mobile View');
 
         // misc
         gettext('invalid');

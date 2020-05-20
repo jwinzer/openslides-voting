@@ -1,9 +1,28 @@
-<!-- Detail view 1: Text. -->
-<div ng-if="!vote && !canVote && (!poll || !poll.has_votes)" ng-bind-html="text | translate"></div>
+<!-- Detail view 1: Candidates. -->
+<table ng-if="!vote && !canVote && poll && !poll.has_votes">
+  <style type="text/css">
+    th {
+      text-transform: uppercase;
+    }
+    td, th {
+      padding: 6px;
+      vertical-align: top;
+    }
+    td.bold {
+      font-weight: bold;
+      text-align: left;
+    }
+  </style>
+  <tr>
+    <th translate>Candidates
+  <tr ng-repeat="option in poll.options | orderBy:'weight'" ng-init="votes = option.getVotes()">
+    <td class="bold">
+      {{ option.candidate.short_name }}
+</table>
 
 <!-- Detail view 2: Vote casted. -->
 <div ng-if="vote && poll && !poll.has_votes" class="center-block larger bold">
-  <translate>You have voted.</translate>
+  <translate>Your ballot has been registered.</translate>
 </div>
 
 <ng-include src="'static/templates/openslides_voting/submit-buttons-css.html'"></ng-include>
@@ -13,7 +32,7 @@
   <style type="text/css">
     @media only screen and (max-width: 767px) {
       .options {
-        height: calc(100vh - 324px);
+        height: calc(100vh - 266px);
         overflow-y: auto;
       }
       .truncate {

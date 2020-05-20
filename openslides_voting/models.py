@@ -163,6 +163,7 @@ class VotingController(RESTModelMixin, models.Model):
             ('can_manage', 'Can manage voting'),
             ('can_see_token_voting', 'Can see the token voting interface'),
             ('can_vote', 'Can vote'),
+            ('go_mobile', 'Start with Mobile View'),
         )
 
     def delete(self, *args, **kwargs):
