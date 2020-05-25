@@ -3025,6 +3025,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
         var showStartPage = function () {
             // No permission required.
             $scope.mode = 0;
+            $scope.identifier = null;
             $scope.title = Config.get('general_event_welcome_title').value;
             $scope.text = Config.get('general_event_mobile_welcome_text').value;
             $scope.isStartPage = true;
@@ -3108,6 +3109,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
             if ($scope.mode === 1) {
                 var model = Motion.get(modelId);
                 if (model) {
+                    $scope.identifier = model.identifier;
                     $scope.title = model.getTitle();
                     $scope.text = model.getText();
                     $scope.isStartPage = false;
@@ -3140,6 +3142,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
             if ($scope.mode === 2) {
                 var model = Assignment.get(modelId);
                 if (model) {
+                    $scope.identifier = null;
                     $scope.title = model.getTitle();
                     $scope.text = null;
                     $scope.isStartPage = false;
@@ -3172,6 +3175,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                 var model = Topic.get(modelId);
                 if (model) {
                     $scope.mode = 0;
+                    $scope.identifier = null;
                     $scope.title = model.title;
                     $scope.text = model.text;
                     $scope.isStartPage = false;
@@ -3191,6 +3195,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                     modelId = model.id;
                     agenda_item = model.agenda_item;
                     $scope.mode = 1;
+                    $scope.identifier = model.identifier;
                     $scope.title = model.getTitle();
                     $scope.text = model.getText();
                     $scope.isStartPage = false;
@@ -3204,6 +3209,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                     modelId = model.id;
                     agenda_item = model.agenda_item;
                     $scope.mode = 2;
+                    $scope.identifier = null;
                     $scope.title = model.getTitle();
                     $scope.text = null;
                     pollId = av.assignmentPoll.id;
@@ -3236,6 +3242,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                         element.name === 'voting/assignment-poll' ||
                         element.name === 'topics/topic';
                 });
+                $scope.identifier = null;
                 $scope.title = undefined;
                 if (element !== undefined) {
                     var model;
@@ -3245,6 +3252,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                             modelId = model.id;
                             agenda_item = model.agenda_item;
                             $scope.mode = 1;
+                            $scope.identifier = model.identifier;
                             $scope.title = model.getTitle();
                             $scope.text = model.getText();
                             // Show poll if only one is available.
@@ -3262,6 +3270,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                             modelId = model.motion.id;
                             agenda_item = model.motion.agenda_item;
                             $scope.mode = 1;
+                            $scope.identifier = model.motion.identifier;
                             $scope.title = model.motion.getTitle();
                             $scope.text = model.motion.getText();
                             $scope.poll = model;
