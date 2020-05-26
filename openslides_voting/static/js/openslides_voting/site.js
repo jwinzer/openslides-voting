@@ -3389,6 +3389,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
         gettext('Projector message for running motion voting');
         gettext('Projector message for running election');
         gettext('Please vote now!');
+        gettext('Please elect now!');
 
         gettext('VoteCollector');
         gettext('Enable VoteCollector');
@@ -3407,9 +3408,9 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
         gettext('Last name (e.g. "Smith")');
         gettext('Full name (e.g. "John Smith")');
         gettext('Name is not displayed.');
-        gettext('Show keypad number');
-        gettext('Sort by keypad number');
-        gettext('Sort delegates by keypad number. If not set delegates are sorted by name.');
+        gettext('Show participant or keypad number');
+        gettext('Sort by participant or keypad number');
+        gettext('If not set delegates are sorted by name.');
         gettext('Vote anonymously');
         gettext('Keep individual voting behaviour secret on delegate board by using a single colour.');
 

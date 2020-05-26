@@ -45,7 +45,7 @@
 
   <div ng-if="poll.pollmethod === 'votes'">
     <div ng-if="!somethingSelected()" class="center bold text-danger" translate>
-      Please elect now!
+      {{ config('voting_start_prompt_assignments') | translate }}
     </div>
     <div ng-if="somethingSelected()" class="center bold text-danger truncate">
       <translate>Your current choice:</translate>
@@ -96,7 +96,7 @@
 
   <div ng-if="poll.pollmethod !== 'votes'">
     <div ng-if="!somethingSelected() || poll.options.length > 1" class="center bold text-danger" translate>
-      Please elect now!
+      {{ config('voting_start_prompt_assignments') | translate }}
     </div>
     <div ng-if="somethingSelected() && poll.options.length === 1" class="center bold text-danger">
       <translate>Your current choice:</translate>

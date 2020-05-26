@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-28 11:50+0200\n"
+"POT-Creation-Date: 2020-05-26 12:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,146 +17,151 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: config_variables.py:54 config_variables.py:62
+#: .\config_variables.py:74
 msgid "Please vote now!"
 msgstr ""
 
-#: models.py:188
+#: .\config_variables.py:82
+msgid "Please elect now!"
+msgstr ""
+
+#: .\models.py:189
 #, python-format
 msgid "Keypad %(kp)d (%(user)s)"
 msgstr ""
 
-#: models.py:190
+#: .\models.py:191
 #, python-format
 msgid "Keypad %d"
 msgstr ""
 
-#: views.py:177 views.py:216
+#: .\views.py:180 .\views.py:221
 msgid "Yes"
 msgstr ""
 
-#: views.py:178 views.py:217
+#: .\views.py:181 .\views.py:222
 msgid "No"
 msgstr ""
 
-#: views.py:179 views.py:218 views.py:231
+#: .\views.py:182 .\views.py:223 .\views.py:236
 msgid "Abstain"
 msgstr ""
 
-#: views.py:332
+#: .\views.py:345
 msgid "Poll is open"
 msgstr ""
 
-#: views.py:406
+#: .\views.py:419
 msgid "Another voting is active."
 msgstr ""
 
-#: views.py:497
+#: .\views.py:511
 msgid "The id has to be an int."
 msgstr ""
 
-#: views.py:501
+#: .\views.py:515
 msgid "The object does not exist."
 msgstr ""
 
-#: views.py:511 views.py:535
+#: .\views.py:525 .\views.py:549
 msgid "The VoteCollector is not enabled."
 msgstr ""
 
-#: views.py:633
+#: .\views.py:657
 msgid "Shares has to be a list."
 msgstr ""
 
-#: views.py:915
+#: .\views.py:941
 msgid "The votecollector is not active"
 msgstr ""
 
-#: votecollector/rpc.py:12
+#: .\votecollector\rpc.py:12
 msgid "Unknown voting mode."
 msgstr ""
 
-#: votecollector/rpc.py:13
+#: .\votecollector\rpc.py:13
 msgid "Invalid keypad range."
 msgstr ""
 
-#: votecollector/rpc.py:14
+#: .\votecollector\rpc.py:14
 msgid "Invalid keypad list."
 msgstr ""
 
-#: votecollector/rpc.py:15
+#: .\votecollector\rpc.py:15
 msgid "No keypads authorized for voting."
 msgstr ""
 
-#: votecollector/rpc.py:16
+#: .\votecollector\rpc.py:16
 msgid "License not sufficient."
 msgstr ""
 
-#: votecollector/rpc.py:17
+#: .\votecollector\rpc.py:17
 msgid "No voting device connected."
 msgstr ""
 
-#: votecollector/rpc.py:18
+#: .\votecollector\rpc.py:18
 msgid "Failed to set up voting device."
 msgstr ""
 
-#: votecollector/rpc.py:19
+#: .\votecollector\rpc.py:19
 msgid "Voting device not ready."
 msgstr ""
 
-#: votecollector/rpc.py:20
+#: .\votecollector\rpc.py:20
 msgid "Voting device not licensed."
 msgstr ""
 
-#: votecollector/rpc.py:50
+#: .\votecollector\rpc.py:50
 msgid "Server not found."
 msgstr ""
 
-#: votecollector/rpc.py:69 votecollector/rpc.py:86 votecollector/rpc.py:95
-#: votecollector/rpc.py:102 votecollector/rpc.py:114 votecollector/rpc.py:126
-#: votecollector/rpc.py:138
+#: .\votecollector\rpc.py:69 .\votecollector\rpc.py:86
+#: .\votecollector\rpc.py:95 .\votecollector\rpc.py:102
+#: .\votecollector\rpc.py:114 .\votecollector\rpc.py:126
+#: .\votecollector\rpc.py:138
 msgid "No connection to VoteCollector."
 msgstr ""
 
-#: votecollector/rpc.py:81
+#: .\votecollector\rpc.py:81
 msgid "No keypads exists for active users."
 msgstr ""
 
-#: votecollector/rpc.py:89
+#: .\votecollector\rpc.py:89
 msgid "VoteCollector does not use a secret key."
 msgstr ""
 
-#: votecollector/views.py:462
+#: .\votecollector\views.py:463
 msgid "No active voting"
 msgstr ""
 
-#: votecollector/views.py:465
+#: .\votecollector\views.py:466
 msgid "Invalid voting  mode or target"
 msgstr ""
 
-#: votecollector/views.py:474
+#: .\votecollector\views.py:475
 msgid "Keypad not      registered"
 msgstr ""
 
-#: votecollector/views.py:483
+#: .\votecollector\views.py:484
 msgid "User unknown"
 msgstr ""
 
-#: votecollector/views.py:489
+#: .\votecollector\views.py:490
 msgid "Invalid agenda  item"
 msgstr ""
 
-#: votecollector/views.py:499
+#: .\votecollector\views.py:500
 msgid "Added to        speakers list"
 msgstr ""
 
-#: votecollector/views.py:505
+#: .\votecollector\views.py:506
 msgid "Removed from    speakers list"
 msgstr ""
 
-#: votecollector/views.py:507
+#: .\votecollector\views.py:508
 msgid "Does not exist  on speakers list"
 msgstr ""
 
-#: votecollector/views.py:509
+#: .\votecollector\views.py:510
 msgid "Invalid entry"
 msgstr ""

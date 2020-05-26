@@ -79,7 +79,7 @@ def get_config_variables():
     )
     yield ConfigVariable(
         name='voting_start_prompt_assignments',
-        default_value=ugettext_noop('Please vote now!'),
+        default_value=ugettext_noop('Please elect now!'),
         label='Projector message for running election',
         weight=640,
         group='Voting',
@@ -146,7 +146,7 @@ def get_config_variables():
         name='voting_show_number',
         default_value=True,
         input_type='boolean',
-        label='Show keypad number',
+        label='Show participant or keypad number',
         weight=684,
         group='Voting',
         subgroup='Delegate board'
@@ -155,8 +155,8 @@ def get_config_variables():
         name='voting_sort_by_number',
         default_value=False,
         input_type='boolean',
-        label='Sort by keypad number',
-        help_text='Sort delegates by keypad number. If not set delegates are sorted by name.',
+        label='Sort by participant or keypad number',
+        help_text='If not set delegates are sorted by name.',
         weight=685,
         group='Voting',
         subgroup='Delegate board'

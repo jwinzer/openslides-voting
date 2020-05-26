@@ -6,6 +6,10 @@
   #content .col1.sidebar-min {
     width: 100%;
   }
+  span.identifier {
+    display: inline !important;
+    color: #9a9898
+  }
   @media only screen and (max-width: 767px) {
     body {
       font-size: 16px;
@@ -44,7 +48,7 @@
 
 <div class="header">
   <div class="title">
-    <h1>{{ identifier}} {{ title }}</h1>
+    <h1><span class="identifier">{{ identifier}} </span>{{ title }}</h1>
   </div>
 </div>
 

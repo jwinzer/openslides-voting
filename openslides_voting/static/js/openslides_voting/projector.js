@@ -102,7 +102,9 @@ angular.module('OpenSlidesApp.openslides_voting.projector', [
             // Get authorized voters.
             var av = AuthorizedVoters.get(1);
             var voters = av.authorized_voters;
-            var showKey = av.type.indexOf('votecollector') === 0 && Config.get('voting_show_number').value;
+            var wantsKeypad = av.type.indexOf('votecollector') === 0;
+            var showNumber = Config.get('voting_show_number').value;
+            var showName = Config.get('voting_delegate_board_name').value !== 'no_name';
             if (_.keys(voters).length > 0 && av.type !== 'secret_electronic' &&
                 av.type !== 'votecollector_anonymous' && av.type !== 'votecollector_secret') {
                 // Create delegate board table cells.
@@ -117,14 +119,12 @@ angular.module('OpenSlidesApp.openslides_voting.projector', [
                             mpb = MotionPollBallot.filter({poll_id: pollId, delegate_id: id}),
                             name = Delegate.getCellName(user),
                             label = '',
-                            number = 0,
+                            number = wantsKeypad ? Delegate.getKeypad(voterId).number : user.number,
                             cls = '';
-                        if (showKey) {
-                            number = Delegate.getKeypad(voterId).number;
-                            label = number;
-                        }
-                        if (Config.get('voting_delegate_board_name').value !== 'no_name') {
-                            label = number !== 0 ? number  + '<br/>' + name : name;
+                        if (showNumber) {
+                            label = showName ? number + '<br/>' + name : number;
+                        } else if (showName) {
+                            label = name;
                         }
                         if (mpb.length === 1) {
                             // Set td class based on vote.
@@ -141,7 +141,7 @@ angular.module('OpenSlidesApp.openslides_voting.projector', [
 
                 // Build table. Cells are ordered by number or name.
                 var table = '<table class="zoomcontent">',
-                    sortKey = (Config.get('voting_sort_by_number').value && showKey) ? 'number' : 'name',
+                    sortKey = Config.get('voting_sort_by_number').value ? 'number' : 'name',
                     i = 0;
                 _.forEach(_.sortBy(cells, sortKey), function (cell) {
                     if (i % colCount === 0) {
@@ -233,7 +233,9 @@ angular.module('OpenSlidesApp.openslides_voting.projector', [
 
             // Get authorized voters.
             var voters = $scope.av.authorized_voters;
-            var showKey = $scope.av.type.indexOf('votecollector') === 0 && Config.get('voting_show_number').value;
+            var wantsKeypad = $scope.av.type.indexOf('votecollector') === 0;
+            var showNumber = Config.get('voting_show_number').value;
+            var showName = Config.get('voting_delegate_board_name').value !== 'no_name';
             if (_.keys(voters).length > 0 && $scope.av.type !== 'secret_electronic' &&
                 $scope.av.type !== 'votecollector_anonymous' && $scope.av.type !== 'votecollector_secret') {
                 // Create delegate board table cells.
@@ -250,15 +252,13 @@ angular.module('OpenSlidesApp.openslides_voting.projector', [
                             apb = AssignmentPollBallot.filter({poll_id: pollId, delegate_id: id}),
                             name = Delegate.getCellName(user),
                             label = '',
-                            number = 0,
+                            number = wantsKeypad ? Delegate.getKeypad(voterId).number : user.number,
                             key = '',
                             cls = '';
-                        if (showKey) {
-                            number = Delegate.getKeypad(voterId).number;
-                            label = number;
-                        }
-                        if (Config.get('voting_delegate_board_name').value !== 'no_name') {
-                            label = number !== 0 ? number  + '<br/>' + name : name;
+                        if (showNumber) {
+                            label = showName ? number + '<br/>' + name : number;
+                        } else if (showName) {
+                            label = name;
                         }
                         if (apb.length > 0) {
                             apb = apb[0];
@@ -298,7 +298,7 @@ angular.module('OpenSlidesApp.openslides_voting.projector', [
 
                 // Build table. Cells are ordered by number or name.
                 var table = '<table class="zoomcontent">',
-                    sortKey = (Config.get('voting_sort_by_number').value && showKey) ? 'number' : 'name',
+                    sortKey = Config.get('voting_sort_by_number').value ? 'number' : 'name',
                     i = 0;
                 _.forEach(_.sortBy(cells, sortKey), function (cell) {
                     if (i % colCount === 0) {
