@@ -106,10 +106,11 @@ class MotionPollBallotAccessPermissions(OSBaseAccessPermissions):
         if has_perm(user, 'openslides_voting.can_manage'):
             return full_data
 
+        restricted_data = []
         for item in full_data:
             if item['delegate_id'] == user.id:
-                return [item]
-        return []
+                restricted_data.append(item)
+        return restricted_data
 
     def get_serializer_class(self, user=None):
         from .serializers import MotionPollBallotSerializer
@@ -140,10 +141,11 @@ class AssignmentPollBallotAccessPermissions(BaseAccessPermissions):
         if has_perm(user, 'openslides_voting.can_manage'):
             return full_data
 
+        restricted_data = []
         for item in full_data:
             if item['delegate_id'] == user.id:
-                return [item]
-        return []
+                restricted_data.append(item)
+        return restricted_data
 
     def get_serializer_class(self, user=None):
         from .serializers import AssignmentPollBallotSerializer

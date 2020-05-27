@@ -3221,7 +3221,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
             } else {
                 $scope.canVote = false;
                 clearSelection();
-                // $scope.vote = null;
+                $scope.vote = null;
             }
         });
 
