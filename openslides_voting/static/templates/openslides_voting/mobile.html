@@ -1,10 +1,16 @@
 <style type="text/css">
+  #header {
+    background-color: {{ config('projector_header_backgroundcolor') }};
+  }
   #nav, #sidebar, #messaging, .title span {
     /* Hide nav, sidebar, messaging, title */
     display: none !important;
   }
   #content .col1.sidebar-min {
     width: 100%;
+  }
+  h1 {
+    color: {{ config('projector_h1_fontcolor') }};
   }
   span.identifier {
     display: inline !important;

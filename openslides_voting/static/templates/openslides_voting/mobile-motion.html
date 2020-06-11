@@ -1,5 +1,9 @@
 <!-- Detail view 1: Motion text. -->
-<div ng-if="!vote && !canVote && (!poll || !poll.has_votes)" ng-bind-html="text | translate"></div>
+<div ng-if="!vote && !canVote && (!poll || !poll.has_votes)">
+  <div ng-repeat="block in text">
+    <div ng-bind-html="block.text | trusted"></div>
+  </div>
+</div>
 
 <!-- Detail view 2: Vote casted. -->
 <div ng-if="vote && poll && !poll.has_votes" class="center-block larger">

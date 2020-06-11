@@ -3043,6 +3043,16 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
         };
         clearSelection();
 
+        var updateMotion = function (motion) {
+            $scope.identifier = motion.identifier;
+            $scope.title = motion.getTitle();
+            // Show agreed text (defaults to original) or changed amendment paragraphs
+            // without linebreaks or line numbers.
+            $scope.text = motion.isParagraphBasedAmendment() ?
+                motion.getAmendmentParagraphsByMode('changed', null, false) :
+                [{ text: motion.getTextByMode('agreed', null, null, false) }];
+        };
+
         var updateVote = function() {
             $scope.vote = null;
             if ($scope.mode === 1) {
@@ -3102,16 +3112,16 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
             }
         });
 
-        // Watch Motion and its polls.
+        // Watch Motions, polls and ballots.
         $scope.$watch(function () {
-            return modelId ? Motion.lastModified(modelId) : void 0;
+            // Watch ALL motions in order to update a parent to 'agreed' if a child (amendment) was
+            // changed to e.g. 'accepted'.
+            return Motion.lastModified();
         }, function () {
             if ($scope.mode === 1) {
                 var model = Motion.get(modelId);
                 if (model) {
-                    $scope.identifier = model.identifier;
-                    $scope.title = model.getTitle();
-                    $scope.text = model.getText();
+                    updateMotion(model);
                     $scope.isStartPage = false;
                 }
             }
@@ -3194,10 +3204,8 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                     model = av.motionPoll.motion;
                     modelId = model.id;
                     agenda_item = model.agenda_item;
+                    updateMotion(model);
                     $scope.mode = 1;
-                    $scope.identifier = model.identifier;
-                    $scope.title = model.getTitle();
-                    $scope.text = model.getText();
                     $scope.isStartPage = false;
                     $scope.poll = av.motionPoll;
                     pollId = av.motionPoll.id;
@@ -3251,10 +3259,8 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                         if (model) {
                             modelId = model.id;
                             agenda_item = model.agenda_item;
+                            updateMotion(model);
                             $scope.mode = 1;
-                            $scope.identifier = model.identifier;
-                            $scope.title = model.getTitle();
-                            $scope.text = model.getText();
                             // Show poll if only one is available.
                             if (model.polls.length === 1) {
                                 $scope.poll = model.polls[0];
@@ -3269,10 +3275,8 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                         if (model) {
                             modelId = model.motion.id;
                             agenda_item = model.motion.agenda_item;
+                            updateMotion(model.motion);
                             $scope.mode = 1;
-                            $scope.identifier = model.motion.identifier;
-                            $scope.title = model.motion.getTitle();
-                            $scope.text = model.motion.getText();
                             $scope.poll = model;
                             pollId = model.id;
                         }
