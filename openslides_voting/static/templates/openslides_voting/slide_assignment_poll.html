@@ -205,26 +205,26 @@
         </button>
         <translate>Abstain</translate>
     </thead>
-    <tr ng-repeat="option in poll.options">
+    <tr ng-repeat="option in poll.getOptionsWithResult() | orderBy:poll.sortOrder" ng-init="votes = option.result">
       <td>{{ option.candidate.short_name }}<br>
 
       <!-- yes -->
-      <td class="bold">{{ option.getVotes()[0].value }}
+      <td class="bold">{{ votes[0].value }}
       <td class="bold-left no-left-padding nobr">
-        <div ng-if="option.getVotes()[0].percentNumber">
-          <span>{{ option.getVotes()[0].percentStr || '&nbsp;' }}</span>
+        <div ng-if="votes[0].percentNumber">
+          <span>{{ votes[0].percentStr || '&nbsp;' }}</span>
         </div>
       <!-- no -->
-      <td class="bold">{{ option.getVotes()[1].value }}
+      <td class="bold">{{ votes[1].value }}
       <td class="bold-left no-left-padding nobr">
-        <div ng-if="option.getVotes()[1].percentNumber">
-          <span>{{ option.getVotes()[1].percentStr || '&nbsp;' }}</span>
+        <div ng-if="votes[1].percentNumber">
+          <span>{{ votes[1].percentStr || '&nbsp;' }}</span>
         </div>
       <!-- abstain -->
-      <td ng-if="poll.pollmethod === 'yna'" class="bold">{{ option.getVotes()[2].value }}
+      <td ng-if="poll.pollmethod === 'yna'" class="bold">{{ votes[2].value }}
       <td ng-if="poll.pollmethod === 'yna'" class="bold-left no-left-padding nobr">
-        <div ng-if="option.getVotes()[2].percentNumber">
-          <span>{{ option.getVotes()[2].percentStr || '&nbsp;' }}</span>
+        <div ng-if="votes[2].percentNumber">
+          <span>{{ votes[2].percentStr || '&nbsp;' }}</span>
         </div>
 
     <!-- valid votes -->
@@ -242,7 +242,7 @@
   <div ng-if="poll.pollmethod === 'votes' && poll.has_votes">
     <!-- total votes -->
     <table class="well table-striped width100" id="resultTable">
-      <tr ng-repeat="option in poll.options" ng-init="votes = option.getVotes()">
+      <tr ng-repeat="option in poll.getOptionsWithResult() | orderBy:poll.sortOrder" ng-init="votes = option.result">
 
         <!-- candidate name -->
         <td>
@@ -258,14 +258,14 @@
           <uib-progressbar ng-if="votes[0].percentNumber" value="votes[0].percentNumber" type="success"></uib-progressbar>
 
       <!-- abstain -->
-      <tr ng-if="poll.pollmethod === 'votes'">
+      <tr>
         <td translate>Abstain
         <td class="text-right">{{ poll.votesabstain | number:votesPrecision }}
         <td>{{ poll.getVote('votesabstain').percentStr }}
         <td>
 
       <!-- no -->
-      <tr  ng-if="poll.pollmethod === 'votes'">
+      <tr>
         <td translate>No
         <td class="text-right">{{ poll.votesno | number:votesPrecision }}
         <td>{{ poll.getVote('votesno').percentStr }}

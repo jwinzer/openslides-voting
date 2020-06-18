@@ -167,7 +167,7 @@
   </style>
 
   <!-- Candidates and their votes. -->
-  <tr ng-repeat="option in poll.options | orderBy:'weight'" ng-init="votes = option.getVotes()">
+  <tr ng-repeat="option in poll.getOptionsWithResult() | orderBy:poll.sortOrder" ng-init="votes = option.result">
     <td class="bold">
       <i ng-if="option.is_elected" class="fa fa-star" title="{{ 'is elected' | translate }}"></i>
       {{ option.candidate.short_name }}
