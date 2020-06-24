@@ -37,7 +37,7 @@
   </div>
 </div>
 
-<div class="details">
+<div class="details" ng-if="!apb">
   <div uib-alert ng-show="alert.show" ng-class="'alert-' + (alert.type || 'warning')" close="alert={}">
     {{ alert.msg }}
   </div>

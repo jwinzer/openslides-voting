@@ -60,6 +60,7 @@ angular.module('OpenSlidesApp.openslides_voting.projector', [
     function ($scope, $timeout, AuthorizedVoters, Config, Motion, MotionPoll,
               MotionPollBallot, MotionPollDecimalPlaces, User, Delegate, VotingController) {
         // Each DS resource used here must be yielded on server side in ProjectElement.get_requirements!
+        VotingController.bindOne(1, $scope, 'vc');
         var pollId = $scope.element.id,
             draw = false; // prevents redundant drawing
 

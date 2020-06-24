@@ -22,6 +22,14 @@ def get_config_variables():
         subgroup='Event'
     )
     yield ConfigVariable(
+        name='projector_enable_vote_counter',
+        default_value=False,
+        input_type='boolean',
+        label='Show vote counter on projector',
+        weight=156,
+        group='Projector'
+    )
+    yield ConfigVariable(
         name='voting_enable_proxies',
         default_value=False,
         input_type='boolean',

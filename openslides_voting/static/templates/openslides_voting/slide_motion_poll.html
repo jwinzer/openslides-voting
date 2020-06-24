@@ -64,6 +64,11 @@
     <h2>
       <span><translate>Motion</translate> {{ motion.identifier }} </span>
       <span ng-if="poll.has_votes"> | <translate>Voting result</translate></span>
+      <span ng-if="config('projector_enable_vote_counter') && vc.is_voting" class="pull-right">
+        <em><translate>Votes received:</translate> {{ vc.votes_received }}
+          <span ng-if="vc.votes_count > 0"> / {{ vc.votes_count }}</span>
+        </em>
+      </span>
     </h2>
   </div>
 

@@ -7,10 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-26 12:44+0200\n"
-"PO-Revision-Date: 2020-05-26 13:30+0200\n"
-"Last-Translator: Emanuel Schütze <emanuel.schuetze@intevation.de>, "
-"2018\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2020-06-24 10:46+0200\n"
+"Last-Translator: Emanuel Schütze <emanuel.schuetze@intevation.de>, 2018\n"
 "Language-Team: German (https://www.transifex.com/openslides/teams/14270/"
 "de/)\n"
 "Language: de\n"
@@ -20,151 +19,1319 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.2\n"
 
-#: .\config_variables.py:74
-msgid "Please vote now!"
-msgstr "Bitte stimmen Sie jetzt ab!"
+#: openslides_voting\keypad-list.html:72
+msgid "--- Select keypad usage ---"
+msgstr ""
 
-#: .\config_variables.py:82
-msgid "Please elect now!"
-msgstr "Bitte wählen Sie jetzt!"
+#: openslides_voting\keypad-list.html:78
+msgid "--- Select status ---"
+msgstr ""
 
-#: .\models.py:189
-#, python-format
-msgid "Keypad %(kp)d (%(user)s)"
-msgstr "Keypad %(kp)d (%(user)s)"
+#: openslides_voting\tokens.html:30
+msgid "A minimum length of 10 characters is required."
+msgstr ""
 
-#: .\models.py:191
-#, python-format
-msgid "Keypad %d"
-msgstr "Keypad %d"
+#: openslides_voting\site.js:2370
+#, fuzzy
+#| msgid "Another voting is active."
+msgid "A motion voting is running."
+msgstr "Eine anderes Voting ist aktiv."
 
-#: .\views.py:180 .\views.py:221
-msgid "Yes"
-msgstr "Ja"
+#: openslides_voting\absentee-vote-list.html:17
+#: openslides_voting\absentee-vote-list.html:54 openslides_voting\site.js:68
+#: openslides_voting\user-list-menu-buttons-hook.html:27
+msgid "Absentee votes"
+msgstr ""
 
-#: .\views.py:181 .\views.py:222
-msgid "No"
-msgstr "Nein"
-
-#: .\views.py:182 .\views.py:223 .\views.py:236
+#: openslides_voting\base.js:228 openslides_voting\base.js:284
+#: openslides_voting\base.js:343 openslides_voting\base.js:384
+#: openslides_voting\mobile-assignment.html:109
+#: openslides_voting\mobile-assignment.html:194
+#: openslides_voting\mobile-assignment.html:63
+#: openslides_voting\mobile-assignment.html:89
+#: openslides_voting\mobile-motion.html:112
+#: openslides_voting\mobile-motion.html:38
+#: openslides_voting\motion-poll-detail.html:61
+#: openslides_voting\slide_assignment_poll.html:165
+#: openslides_voting\slide_assignment_poll.html:206
+#: openslides_voting\slide_assignment_poll.html:262
+#: openslides_voting\slide_motion_poll.html:112
+#: openslides_voting\submit-assignment-poll-buttons.html:107
+#: openslides_voting\submit-assignment-poll-buttons.html:38
+#: openslides_voting\submit-assignment-poll-buttons.html:51
+#: openslides_voting\submit-assignment-poll-buttons.html:93
+#: openslides_voting\submit-assignment-poll.html:27
+#: openslides_voting\submit-motion-poll-buttons.html:23
+#: openslides_voting\submit-motion-poll-buttons.html:35
+#: openslides_voting\submit-motion-poll.html:26
 msgid "Abstain"
 msgstr "Enthaltung"
 
-#: .\views.py:345
-msgid "Poll is open"
-msgstr "Abstimmung läuft"
+#: openslides_voting\mobile-assignment.html:144
+#, fuzzy
+#| msgid "Abstain"
+msgid "Abstn"
+msgstr "Enthaltung"
 
-#: .\views.py:419
-msgid "Another voting is active."
-msgstr "Eine anderes Voting ist aktiv."
+#: openslides_voting\tokens.html:32
+msgid "Activate"
+msgstr ""
 
-#: .\views.py:511
-msgid "The id has to be an int."
-msgstr "Die ID muss ein integer sein."
-
-#: .\views.py:515
-msgid "The object does not exist."
-msgstr "Das Objekt existiert nicht."
-
-#: .\views.py:525 .\views.py:549
-msgid "The VoteCollector is not enabled."
-msgstr "Der VoteCollector ist nicht aktiviert."
-
-#: .\views.py:657
-msgid "Shares has to be a list."
-msgstr "Stimmgewichte müssen eine Liste sein."
-
-#: .\views.py:941
-msgid "The votecollector is not active"
-msgstr "Der VoteCollector ist nicht aktiviert."
-
-#: .\votecollector\rpc.py:12
-msgid "Unknown voting mode."
-msgstr "Unbekannter Voting-Modus."
-
-#: .\votecollector\rpc.py:13
-msgid "Invalid keypad range."
-msgstr "Ungültiger Keypad-Bereich."
-
-#: .\votecollector\rpc.py:14
-msgid "Invalid keypad list."
-msgstr "Ungültige Keypad-Liste."
-
-#: .\votecollector\rpc.py:15
-msgid "No keypads authorized for voting."
-msgstr "Es sind keine Keypads zum Voting zugelassen."
-
-#: .\votecollector\rpc.py:16
-msgid "License not sufficient."
-msgstr "Lizenz nicht ausreichend."
-
-#: .\votecollector\rpc.py:17
-msgid "No voting device connected."
-msgstr "Es ist kein Transponder angeschlossen."
-
-#: .\votecollector\rpc.py:18
-msgid "Failed to set up voting device."
-msgstr "Fehler beim Einrichten des Transponders."
-
-#: .\votecollector\rpc.py:19
-msgid "Voting device not ready."
-msgstr "Transponder nicht betriebsbereit. "
-
-#: .\votecollector\rpc.py:20
-msgid "Voting device not licensed."
-msgstr "Transponder nicht lizensiert."
-
-#: .\votecollector\rpc.py:50
-msgid "Server not found."
-msgstr "Server nicht gefunden."
-
-#: .\votecollector\rpc.py:69 .\votecollector\rpc.py:86
-#: .\votecollector\rpc.py:95 .\votecollector\rpc.py:102
-#: .\votecollector\rpc.py:114 .\votecollector\rpc.py:126
-#: .\votecollector\rpc.py:138
-msgid "No connection to VoteCollector."
-msgstr "Keine Verbindung zum VoteCollector."
-
-#: .\votecollector\rpc.py:81
-msgid "No keypads exists for active users."
-msgstr "Es existieren keine Keypads für die aktiven Nutzer."
-
-#: .\votecollector\rpc.py:89
-msgid "VoteCollector does not use a secret key."
-msgstr "Im VoteCollector wurde kein geheimer Schlüssel konfiguriert."
-
-#: .\votecollector\views.py:463
-msgid "No active voting"
+#: openslides_voting\tokens.html:39
+#, fuzzy
+#| msgid "No active voting"
+msgid "Active voting tokens"
 msgstr "Kein aktives Voting"
 
-#: .\votecollector\views.py:466
-msgid "Invalid voting  mode or target"
-msgstr "Ungültiger Voting-Modus oder Ziel."
-
-#: .\votecollector\views.py:475
-msgid "Keypad not      registered"
-msgstr "Keypad nicht registriert"
-
-#: .\votecollector\views.py:484
-msgid "User unknown"
-msgstr "Nutzer unbekannt"
-
-#: .\votecollector\views.py:490
-msgid "Invalid agenda  item"
-msgstr "Ungültiger Tagesordnungspunkt"
-
-#: .\votecollector\views.py:500
-msgid "Added to        speakers list"
+#: openslides_voting\mobile.html:105 openslides_voting\mobile.html:110
+#, fuzzy
+#| msgid "Added to        speakers list"
+msgid "Add me to speakers"
 msgstr "Zur Redeliste   hinzugefügt"
 
-#: .\votecollector\views.py:506
-msgid "Removed from    speakers list"
+#: openslides_voting\site.js:2367
+msgid "An election is running."
+msgstr ""
+
+#: openslides_voting\site.js:3386
+msgid "Analog voting"
+msgstr ""
+
+#: openslides_voting\assignment-poll-detail.html:20
+#: openslides_voting\motion-poll-detail.html:22
+msgid "Anonymize votes"
+msgstr ""
+
+#: openslides_voting\assignment-poll-detail.html:112
+#: openslides_voting\keypad-import.html:67
+#: openslides_voting\keypad-list.html:171
+#: openslides_voting\motion-poll-detail.html:158 openslides_voting\site.js:1588
+msgid "Anonymous"
+msgstr ""
+
+#: openslides_voting\site.js:2592
+#, fuzzy
+#| msgid "Another voting is active."
+msgid "Another election is running."
+msgstr "Eine anderes Voting ist aktiv."
+
+#: openslides_voting\site.js:2471
+#, fuzzy
+#| msgid "Another voting is active."
+msgid "Another motion voting is running."
+msgstr "Eine anderes Voting ist aktiv."
+
+#: openslides_voting\assignment-poll-detail.html:17
+#: openslides_voting\motion-poll-detail.html:19
+msgid "Are you sure you want to anonymize all votes?"
+msgstr ""
+
+#: openslides_voting\absentee-vote-list.html:44
+msgid "Are you sure you want to delete all selected absentee votes?"
+msgstr ""
+
+#: openslides_voting\keypad-list.html:90
+msgid "Are you sure you want to delete all selected keypads?"
+msgstr ""
+
+#: openslides_voting\attendance.html:65
+#: openslides_voting\delegate-attendance.html:54
+msgid "Are you sure you want to delete the attendance history?"
+msgstr ""
+
+#: openslides_voting\absentee-vote-list.html:112
+#: openslides_voting\keypad-list.html:160
+msgid "Are you sure you want to delete this entry?"
+msgstr ""
+
+#: openslides_voting\shares-list.html:61
+msgid "Are you sure you want to delete this principle?"
+msgstr ""
+
+#: openslides_voting\attendance.html:18
+#: openslides_voting\delegate-attendance.html:18 openslides_voting\site.js:26
+#: openslides_voting\user-list-menu-buttons-hook.html:22
+msgid "Attendance"
+msgstr ""
+
+#: openslides_voting\pdf.js:204 openslides_voting\site.js:1129
+msgid "Attendance history"
+msgstr ""
+
+#: openslides_voting\site.js:3408
+msgid "Auto-start and stop a countdown timer when voting starts and stops."
+msgstr ""
+
+#: openslides_voting\submit-assignment-poll.html:6
+#: openslides_voting\submit-motion-poll.html:6
+msgid "Back"
+msgstr ""
+
+#: openslides_voting\assignment-poll-detail.html:7
+msgid "Back to Election"
+msgstr ""
+
+#: openslides_voting\motion-poll-detail.html:9
+msgid "Back to motion"
+msgstr ""
+
+#: openslides_voting\absentee-vote-import.html:118
+#: openslides_voting\absentee-vote-import.html:6
+#: openslides_voting\absentee-vote-list.html:6
+#: openslides_voting\attendance.html:15
+#: openslides_voting\delegate-attendance.html:15
+#: openslides_voting\keypad-import.html:112
+#: openslides_voting\keypad-import.html:6 openslides_voting\keypad-list.html:7
+#: openslides_voting\shares-import.html:111
+#: openslides_voting\shares-import.html:6 openslides_voting\shares-list.html:6
+#: openslides_voting\tokens.html:6
+msgid "Back to overview"
+msgstr ""
+
+#: openslides_voting\pdf.js:113
+msgid "Ballot"
+msgstr ""
+
+#: openslides_voting\keypad-list.html:139
+msgid "Battery"
+msgstr ""
+
+#: openslides_voting\keypad-list.html:141
+msgid ""
+"Battery state is checked with each voting. Available states: full, medium, "
+"low, empty"
+msgstr ""
+
+#: openslides_voting\site.js:3440
+#, fuzzy
+#| msgid "No active voting"
+msgid "Can manage voting"
+msgstr "Kein aktives Voting"
+
+#: openslides_voting\site.js:3439
+msgid "Can see the token voting interface"
+msgstr ""
+
+#: openslides_voting\site.js:3441
+msgid "Can vote"
+msgstr ""
+
+#: openslides_voting\absentee-vote-form.html:13
+#: openslides_voting\delegate-form.html:13
+#: openslides_voting\keypad-form.html:13
+#: openslides_voting\poll-create-form.html:14
+#: openslides_voting\principle-form.html:13
+msgid "Cancel"
+msgstr ""
+
+#: openslides_voting\mobile-assignment.html:17
+msgid "Candidates"
+msgstr ""
+
+#: openslides_voting\assignment-poll-detail.html:96
+#: openslides_voting\motion-poll-detail.html:139 openslides_voting\pdf.js:135
+#: openslides_voting\pdf.js:42
+msgid "Casted vote"
+msgstr ""
+
+#: openslides_voting\absentee-vote-import.html:108
+#: openslides_voting\keypad-import.html:102
+#: openslides_voting\shares-import.html:101
+msgid "Clear preview"
+msgstr ""
+
+#: openslides_voting\assignment-poll-form-buttons-hook.html:22
+#: openslides_voting\motion-poll-form-buttons-hook.html:22
+#: openslides_voting\site.js:3436
+msgid "Clear votes"
+msgstr ""
+
+#: openslides_voting\submit-token.html:106
+msgid "Closed in"
+msgstr ""
+
+#: openslides_voting\submit-token.html:71
+msgid "Continue"
+msgstr ""
+
+#: openslides_voting\site.js:1193
+msgid "Decimal places"
+msgstr ""
+
+#: openslides_voting\site.js:3385
+msgid "Default voting type"
+msgstr ""
+
+#: openslides_voting\absentee-vote-import.html:38
+#: openslides_voting\absentee-vote-list.html:69
+#: openslides_voting\assignment-poll-detail.html:68
+#: openslides_voting\motion-poll-detail.html:112 openslides_voting\pdf.js:120
+#: openslides_voting\pdf.js:27 openslides_voting\shares-import.html:39
+msgid "Delegate"
+msgstr ""
+
+#: openslides_voting\site.js:3406 openslides_voting\site.js:3409
+msgid "Delegate board"
+msgstr ""
+
+#: openslides_voting\site.js:3413
+msgid "Delegate name format used for delegate board"
+msgstr ""
+
+#: openslides_voting\shares-list.html:44
+msgid "Delegates"
+msgstr ""
+
+#: openslides_voting\absentee-vote-list.html:111
+#: openslides_voting\attendance.html:68
+#: openslides_voting\delegate-attendance.html:57
+#: openslides_voting\keypad-list.html:159
+msgid "Delete"
+msgstr ""
+
+#: openslides_voting\absentee-vote-list.html:48
+msgid "Delete selected absentee votes"
+msgstr ""
+
+#: openslides_voting\keypad-list.html:94
+msgid "Delete selected keypads"
+msgstr ""
+
+#: openslides_voting\absentee-vote-list.html:110
+#: openslides_voting\keypad-list.html:158
+msgid "Edit"
+msgstr ""
+
+#: openslides_voting\absentee-vote-form.html:1
+msgid "Edit absentee vote"
+msgstr ""
+
+#: openslides_voting\keypad-form.html:1
+msgid "Edit keypad"
+msgstr ""
+
+#: openslides_voting\delegate-form.html:2
+msgid "Edit participant"
+msgstr ""
+
+#: openslides_voting\principle-form.html:1
+msgid "Edit voting principle"
+msgstr ""
+
+#: openslides_voting\site.js:91
+#: openslides_voting\slide_assignment_poll.html:115
+msgid "Election"
+msgstr ""
+
+#. ballot of a assignment
+#: openslides_voting\assignment-poll-detail.html:25
+#: openslides_voting\site.js:3434
+#: openslides_voting\slide_assignment_poll.html:112
+msgid "Election result"
+msgstr ""
+
+#: openslides_voting\site.js:2558
+msgid "Election voting has finished."
+msgstr ""
+
+#: openslides_voting\site.js:1214
+msgid "Elections"
+msgstr ""
+
+#: openslides_voting\site.js:3402
+#, fuzzy
+#| msgid "No connection to VoteCollector."
+msgid "Enable VoteCollector"
+msgstr "Keine Verbindung zum VoteCollector."
+
+#: openslides_voting\site.js:3383
+msgid "Enable proxies and absentee votes"
+msgstr ""
+
+#: openslides_voting\site.js:3384
+msgid "Enable voting shares"
+msgstr ""
+
+#: openslides_voting\tokens.html:27
+#, fuzzy
+#| msgid "Unknown voting mode."
+msgid "Enter new voting token:"
+msgstr "Unbekannter Voting-Modus."
+
+#: openslides_voting\site.js:1840
+msgid "Error: Keypad number already exists."
+msgstr ""
+
+#: openslides_voting\site.js:1834
+msgid "Error: Keypad number must be a positive integer value."
+msgstr ""
+
+#: openslides_voting\site.js:2202
+#, fuzzy
+#| msgid "Server not found."
+msgid "Error: Motion not found."
+msgstr "Server nicht gefunden."
+
+#: openslides_voting\site.js:1453
+msgid "Error: Not a valid number."
+msgstr ""
+
+#: openslides_voting\site.js:1445 openslides_voting\site.js:1827
+#: openslides_voting\site.js:2191
+msgid "Error: Participant not found."
+msgstr ""
+
+#: openslides_voting\site.js:2207
+msgid "Error: Vote must be one of Y, N, A."
+msgstr ""
+
+#: openslides_voting\site.js:3404
+msgid "Example: http://localhost:8030"
+msgstr ""
+
+#: openslides_voting\keypad-list.html:61
+msgid "Filter ..."
+msgstr ""
+
+#: openslides_voting\site.js:3416
+msgid "Full name (e.g. \"John Smith\")"
+msgstr ""
+
+#: openslides_voting\tokens.html:12
+msgid "Generate"
+msgstr ""
+
+#: openslides_voting\absentee-vote-import.html:22
+#: openslides_voting\keypad-import.html:21
+#: openslides_voting\shares-import.html:21
+msgid "Given name"
+msgstr ""
+
+#: openslides_voting\attendance.html:29 openslides_voting\attendance.html:80
+#: openslides_voting\delegate-attendance.html:28
+#: openslides_voting\delegate-attendance.html:66 openslides_voting\pdf.js:212
+msgid "Heads"
+msgstr ""
+
+#: openslides_voting\tokens.html:9
+msgid "How much voting tokens should be generated?"
+msgstr ""
+
+#: openslides_voting\site.js:3420
+msgid "If not set delegates are sorted by name."
+msgstr ""
+
+#: openslides_voting\absentee-vote-list.html:14
+#: openslides_voting\keypad-list.html:15
+msgid "Import"
+msgstr ""
+
+#: openslides_voting\absentee-vote-import.html:9
+msgid "Import absentee votes"
+msgstr ""
+
+#: openslides_voting\keypad-import.html:9
+msgid "Import keypads"
+msgstr ""
+
+#: openslides_voting\shares-import.html:9 openslides_voting\shares-list.html:14
+msgid "Import voting shares"
+msgstr ""
+
+#: openslides_voting\keypad-import.html:105
+msgid "Import {{ keypadsWillBeImported }} keypads"
+msgstr ""
+
+#: openslides_voting\shares-import.html:104
+msgid "Import {{ sharesWillBeImported }} voting shares"
+msgstr ""
+
+#: openslides_voting\absentee-vote-import.html:111
+msgid "Import {{ votesWillBeImported }} absentee votes"
+msgstr ""
+
+#: openslides_voting\keypad-list.html:134
+msgid "In range"
+msgstr ""
+
+#: openslides_voting\slide_assignment_poll.html:283
+#, fuzzy
+#| msgid "Invalid entry"
+msgid "Invalid votes"
+msgstr "Ungültiger Eintrag"
+
+#: openslides_voting\site.js:3422
+msgid ""
+"Keep individual voting behaviour secret on delegate board by using a single "
+"colour."
+msgstr ""
+
+#: openslides_voting\keypad-import.html:24
+#: openslides_voting\keypad-import.html:37
+#: openslides_voting\keypad-list.html:119 openslides_voting\site.js:536
+#, fuzzy
+#| msgid "Keypad %d"
+msgid "Keypad"
+msgstr "Keypad %d"
+
+#: openslides_voting\site.js:1576
+#, fuzzy
+#| msgid "Keypad %d"
+msgid "Keypad number"
+msgstr "Keypad %d"
+
+#: openslides_voting\assignment-poll-detail.html:77
+#: openslides_voting\motion-poll-detail.html:121 openslides_voting\pdf.js:128
+#: openslides_voting\pdf.js:35
+msgid "Keypad serial number"
+msgstr ""
+
+#: openslides_voting\keypad-list.html:32 openslides_voting\site.js:55
+#: openslides_voting\user-list-menu-buttons-hook.html:17
+#, fuzzy
+#| msgid "Keypad %d"
+msgid "Keypads"
+msgstr "Keypad %d"
+
+#: openslides_voting\site.js:3415
+msgid "Last name (e.g. \"Smith\")"
+msgstr ""
+
+#: openslides_voting\site.js:132
+msgid "Mobile"
+msgstr ""
+
+#: openslides_voting\site.js:3382
+msgid "Mobile page text"
+msgstr ""
+
+#: openslides_voting\absentee-vote-import.html:39
+#: openslides_voting\absentee-vote-list.html:77
+#: openslides_voting\motion-poll-detail.html:26 openslides_voting\site.js:1936
+#: openslides_voting\site.js:2865 openslides_voting\slide_motion_poll.html:65
+#: openslides_voting\submit-token.html:45
+msgid "Motion"
+msgstr ""
+
+#: openslides_voting\absentee-vote-import.html:25
+msgid "Motion identifier"
+msgstr ""
+
+#: openslides_voting\site.js:80
+#, fuzzy
+#| msgid "No active voting"
+msgid "Motion voting"
+msgstr "Kein aktives Voting"
+
+#: openslides_voting\site.js:2459
+msgid "Motion voting has finished."
+msgstr ""
+
+#: openslides_voting\site.js:1204
+msgid "Motions"
+msgstr ""
+
+#: openslides_voting\site.js:1185
+msgid "Name"
+msgstr ""
+
+#: openslides_voting\site.js:3417
+msgid "Name is not displayed."
+msgstr ""
+
+#: openslides_voting\site.js:3387
+#, fuzzy
+#| msgid "No active voting"
+msgid "Named electronic voting"
+msgstr "Kein aktives Voting"
+
+#: openslides_voting\absentee-vote-list.html:10
+#: openslides_voting\keypad-list.html:11 openslides_voting\shares-list.html:10
+msgid "New"
+msgstr ""
+
+#: openslides_voting\absentee-vote-form.html:2
+msgid "New absentee vote"
+msgstr ""
+
+#: openslides_voting\keypad-form.html:2
+msgid "New keypad"
+msgstr ""
+
+#: openslides_voting\principle-form.html:2
+msgid "New voting principle"
+msgstr ""
+
+#: openslides_voting\base.js:227 openslides_voting\base.js:283
+#: openslides_voting\base.js:342 openslides_voting\base.js:383
+#: openslides_voting\keypad-list.html:176
+#: openslides_voting\mobile-assignment.html:108
+#: openslides_voting\mobile-assignment.html:136
+#: openslides_voting\mobile-assignment.html:199
+#: openslides_voting\mobile-assignment.html:62
+#: openslides_voting\mobile-assignment.html:82
+#: openslides_voting\mobile-motion.html:31
+#: openslides_voting\mobile-motion.html:98
+#: openslides_voting\motion-poll-detail.html:50
+#: openslides_voting\slide_assignment_poll.html:148
+#: openslides_voting\slide_assignment_poll.html:201
+#: openslides_voting\slide_assignment_poll.html:269
+#: openslides_voting\slide_motion_poll.html:95
+#: openslides_voting\submit-assignment-poll-buttons.html:104
+#: openslides_voting\submit-assignment-poll-buttons.html:30
+#: openslides_voting\submit-assignment-poll-buttons.html:48
+#: openslides_voting\submit-assignment-poll-buttons.html:88
+#: openslides_voting\submit-assignment-poll.html:24
+#: openslides_voting\submit-motion-poll-buttons.html:15
+#: openslides_voting\submit-motion-poll-buttons.html:32
+#: openslides_voting\submit-motion-poll.html:23
+msgid "No"
+msgstr "Nein"
+
+#: openslides_voting\tokens.html:43
+#, fuzzy
+#| msgid "No active voting"
+msgid "No active voting tokens"
+msgstr "Kein aktives Voting"
+
+#: openslides_voting\site.js:1217
+msgid "No elections"
+msgstr ""
+
+#: openslides_voting\site.js:1207
+msgid "No motions"
+msgstr ""
+
+#: openslides_voting\site.js:579
+msgid "No principals"
+msgstr ""
+
+#: openslides_voting\site.js:562
+msgid "No proxy"
+msgstr ""
+
+#: openslides_voting\site.js:3395
+msgid "No vote counted as abstention"
+msgstr ""
+
+#: openslides_voting\submit-assignment-poll-buttons.html:14
+#: openslides_voting\submit-assignment-poll-buttons.html:75
+#, fuzzy
+#| msgid "No"
+msgid "No."
+msgstr "Nein"
+
+#: openslides_voting\absentee-vote-list.html:152
+msgid "Note: Absentee votes for elections are not supported yet."
+msgstr ""
+
+#: openslides_voting\site.js:3412
+msgid "Number of columns of delegate board"
+msgstr ""
+
+#: openslides_voting\poll-create-form.html:11
+msgid "OK"
+msgstr ""
+
+#: openslides_voting\site.js:3443
+msgid "Only Mobile View"
+msgstr "Nur Mobile Ansicht zeigen"
+
+#: openslides_voting\absentee-vote-import.html:28
+#: openslides_voting\keypad-import.html:26
+#: openslides_voting\shares-import.html:28
+msgid "Only double quotes are accepted as text delimiter (no single quotes)."
+msgstr ""
+
+#: openslides_voting\assignment-poll-detail.html:53
+#: openslides_voting\motion-poll-detail.html:96
+msgid "Page"
+msgstr ""
+
+#: openslides_voting\keypad-import.html:38
+#: openslides_voting\keypad-list.html:126 openslides_voting\site.js:1585
+#: openslides_voting\site.js:1926
+msgid "Participant"
+msgstr ""
+
+#: openslides_voting\absentee-vote-import.html:24
+#: openslides_voting\keypad-import.html:23
+#: openslides_voting\shares-import.html:23
+msgid "Participant number"
+msgstr ""
+
+#: openslides_voting\site.js:3399
+msgid "Please elect now!"
+msgstr "Bitte wählen Sie jetzt!"
+
+#: openslides_voting\submit-token.html:67
+msgid "Please enter your voting token:"
+msgstr ""
+
+#: openslides_voting\absentee-vote-import.html:18
+#: openslides_voting\keypad-import.html:17
+#: openslides_voting\shares-import.html:17
+#, fuzzy
+#| msgid "Please vote now!"
+msgid "Please note:"
+msgstr "Bitte stimmen Sie jetzt ab!"
+
+#: openslides_voting\site.js:1914
+msgid "Please type Y, N or A for Yes/No/Abstain."
+msgstr ""
+
+#: openslides_voting\site.js:3398
+msgid "Please vote now!"
+msgstr "Bitte stimmen Sie jetzt ab!"
+
+#: openslides_voting\assignment-poll-detail.html:82
+#: openslides_voting\motion-poll-detail.html:126
+msgid "Press 'Fn+6' on keypad to display the serial number."
+msgstr ""
+
+#: openslides_voting\absentee-vote-import.html:32
+#: openslides_voting\keypad-import.html:30
+#: openslides_voting\shares-import.html:32
+msgid "Preview"
+msgstr ""
+
+#: openslides_voting\site.js:576
+msgid "Principals"
+msgstr ""
+
+#: openslides_voting\site.js:2582
+msgid "Project and publish result"
+msgstr ""
+
+#: openslides_voting\site.js:2580 openslides_voting\site.js:3435
+msgid "Project result"
+msgstr ""
+
+#: openslides_voting\site.js:3397
+msgid "Projector message for running election"
+msgstr ""
+
+#: openslides_voting\site.js:3396
+msgid "Projector message for running motion voting"
+msgstr ""
+
+#: openslides_voting\site.js:559
+msgid "Proxy"
+msgstr ""
+
+#: openslides_voting\mobile-motion.html:130
+msgid "Quorum ({{ (poll.yes - quorum) | number:votesPrecision }}) not reached."
+msgstr ""
+
+#: openslides_voting\mobile-motion.html:127
+msgid "Quorum ({{ (poll.yes - quorum) | number:votesPrecision }}) reached."
+msgstr ""
+
+#: openslides_voting\assignment-poll-small-buttons-hook.html:7
+#: openslides_voting\motion-poll-small-buttons-hook.html:10
+#: openslides_voting\site.js:3431
+msgid "Recount votes"
+msgstr ""
+
+#: openslides_voting\mobile.html:115
+#, fuzzy
+#| msgid "Removed from    speakers list"
+msgid "Remove me from speakers"
 msgstr "Von Redeliste   entfernt"
 
-#: .\votecollector\views.py:508
-msgid "Does not exist  on speakers list"
-msgstr "Auf Redeliste   nicht vorhanden"
+#: openslides_voting\absentee-vote-import.html:20
+#: openslides_voting\keypad-import.html:19
+#: openslides_voting\shares-import.html:19
+msgid ""
+"Required comma or semicolon separated values with these column header names "
+"in the first row"
+msgstr ""
 
-#: .\votecollector\views.py:510
-msgid "Invalid entry"
+#: openslides_voting\assignment-poll-detail.html:87
+#: openslides_voting\motion-poll-detail.html:131 openslides_voting\pdf.js:120
+#: openslides_voting\pdf.js:27
+msgid "Result number"
+msgstr ""
+
+#: openslides_voting\absentee-vote-form.html:10
+#: openslides_voting\delegate-form.html:10
+#: openslides_voting\keypad-form.html:10
+#: openslides_voting\principle-form.html:10
+msgid "Save"
+msgstr ""
+
+#: openslides_voting\site.js:2460 openslides_voting\site.js:2559
+msgid "Save this result now!"
+msgstr ""
+
+#: openslides_voting\absentee-vote-list.html:36
+#: openslides_voting\assignment-poll-detail.html:38
+#: openslides_voting\keypad-list.html:55
+#: openslides_voting\motion-poll-detail.html:81
+#: openslides_voting\shares-list.html:29
+msgid "Search"
+msgstr ""
+
+#: openslides_voting\site.js:3389
+msgid "Secret electronic voting - grey seats on delegate board"
+msgstr ""
+
+#: openslides_voting\site.js:3388
+msgid "Secret electronic voting - no delegate board"
+msgstr ""
+
+#: openslides_voting\absentee-vote-list.html:29
+#: openslides_voting\keypad-list.html:44
+msgid "Select ..."
+msgstr ""
+
+#: openslides_voting\absentee-vote-import.html:14
+#: openslides_voting\keypad-import.html:14
+#: openslides_voting\shares-import.html:14
+msgid "Select a CSV file"
+msgstr ""
+
+#: openslides_voting\site.js:672
+msgid "Select the voting type"
+msgstr ""
+
+#: openslides_voting\user-list-extra-content-hook.html:11
+msgid "Set keypad number ..."
+msgstr ""
+
+#: openslides_voting\shares-list.html:87
+msgid "Set share ..."
+msgstr ""
+
+#: openslides_voting\site.js:42
+msgid "Shares"
+msgstr ""
+
+#: openslides_voting\site.js:3414
+msgid "Short name (e.g. \"JoSm\")"
+msgstr ""
+
+#: openslides_voting\attendance.html:57
+#: openslides_voting\delegate-attendance.html:46
+msgid "Show attendance history"
+msgstr ""
+
+#: openslides_voting\site.js:3410
+msgid "Show delegate board"
+msgstr ""
+
+#: openslides_voting\site.js:3411
+msgid "Show incoming votes in a table on projector."
+msgstr ""
+
+#: openslides_voting\site.js:3418
+msgid "Show participant or keypad number"
+msgstr ""
+
+#: openslides_voting\site.js:590
+msgid "Show voting shares"
+msgstr ""
+
+#: openslides_voting\assignment-poll-detail.html:33
+#: openslides_voting\assignment-poll-detail.html:44
+#: openslides_voting\assignment-poll-small-buttons-hook.html:14
+#: openslides_voting\motion-poll-detail.html:76
+#: openslides_voting\motion-poll-detail.html:87
+#: openslides_voting\motion-poll-small-buttons-hook.html:17
+#: openslides_voting\pdf.js:109 openslides_voting\pdf.js:16
+#: openslides_voting\site.js:2871 openslides_voting\site.js:2984
+#: openslides_voting\site.js:3432
+msgid "Single votes"
+msgstr ""
+
+#: openslides_voting\site.js:3419
+msgid "Sort by participant or keypad number"
+msgstr ""
+
+#: openslides_voting\mobile.html:99
+msgid "Speaker"
+msgstr ""
+
+#: openslides_voting\site.js:2363
+msgid "Speakers voting is running for agenda item"
+msgstr ""
+
+#: openslides_voting\site.js:3427
+msgid "Start election"
+msgstr ""
+
+#: openslides_voting\item-detail-list-of-speakers-buttons-hook.html:6
+#: openslides_voting\site.js:3429
+msgid "Start speakers voting"
+msgstr ""
+
+#: openslides_voting\keypad-list.html:20
+msgid "Start system test"
+msgstr ""
+
+#: openslides_voting\assignment-poll-form-buttons-hook.html:7
+#: openslides_voting\motion-poll-form-buttons-hook.html:7
+#: openslides_voting\site.js:3425
+#, fuzzy
+#| msgid "No active voting"
+msgid "Start voting"
+msgstr "Kein aktives Voting"
+
+#: openslides_voting\site.js:3442
+msgid "Start with Mobile View"
+msgstr ""
+
+#: openslides_voting\assignment-poll-form-buttons-hook.html:17
+#: openslides_voting\item-detail-list-of-speakers-buttons-hook.html:16
+#: openslides_voting\motion-poll-form-buttons-hook.html:17
+#, fuzzy
+#| msgid "No active voting"
+msgid "Stop another voting"
+msgstr "Kein aktives Voting"
+
+#: openslides_voting\site.js:3428
+msgid "Stop election"
+msgstr ""
+
+#: openslides_voting\item-detail-list-of-speakers-buttons-hook.html:11
+#: openslides_voting\site.js:3430
+#, fuzzy
+#| msgid "No active voting"
+msgid "Stop speakers voting"
+msgstr "Kein aktives Voting"
+
+#: openslides_voting\keypad-list.html:24
+msgid "Stop system test"
+msgstr ""
+
+#: openslides_voting\assignment-poll-form-buttons-hook.html:12
+#: openslides_voting\motion-poll-form-buttons-hook.html:12
+#: openslides_voting\site.js:3426
+msgid "Stop voting"
+msgstr ""
+
+#: openslides_voting\mobile-assignment.html:148
+#: openslides_voting\mobile-assignment.html:93
+#: openslides_voting\mobile-motion.html:48
+#: openslides_voting\submit-assignment-poll.html:45
+#: openslides_voting\submit-motion-poll.html:40
+msgid "Submit"
+msgstr ""
+
+#: openslides_voting\submit-token.html:81
+#: openslides_voting\submit-token.html:90
+msgid "Submit vote"
+msgstr ""
+
+#: openslides_voting\absentee-vote-import.html:23
+#: openslides_voting\keypad-import.html:22
+#: openslides_voting\shares-import.html:22
+msgid "Surname"
+msgstr ""
+
+#: openslides_voting\site.js:2360
+msgid "System test is running."
+msgstr ""
+
+#: openslides_voting\base.js:52
+#, fuzzy
+#| msgid "The VoteCollector is not enabled."
+msgid "The VoteCollector is not running!"
+msgstr "Der VoteCollector ist nicht aktiviert."
+
+#: openslides_voting\site.js:339
+msgid "The administrator has stopped the election. You vote wasn't submitted."
+msgstr ""
+
+#: openslides_voting\site.js:376
+#, fuzzy
+#| msgid "The VoteCollector is not enabled."
+msgid "The token is not valid."
+msgstr "Der VoteCollector ist nicht aktiviert."
+
+#: openslides_voting\user-list-extra-content-hook.html:22
+msgid "This user is represented by"
+msgstr ""
+
+#: openslides_voting\attendance.html:77
+#: openslides_voting\delegate-attendance.html:65 openslides_voting\pdf.js:211
+msgid "Time"
+msgstr ""
+
+#: openslides_voting\site.js:1063
+msgid "Token"
+msgstr ""
+
+#: openslides_voting\site.js:3390
+msgid "Token-based electronic voting"
+msgstr ""
+
+#: openslides_voting\site.js:1086
+msgid "Tokens"
+msgstr ""
+
+#: openslides_voting\site.js:3407
+msgid "Use countdown timer"
+msgstr ""
+
+#: openslides_voting\mobile-assignment.html:204
+msgid "Valid ballots"
+msgstr ""
+
+#: openslides_voting\mobile-motion.html:122
+#: openslides_voting\motion-poll-detail.html:68
+#: openslides_voting\slide_assignment_poll.html:178
+#: openslides_voting\slide_assignment_poll.html:232
+#: openslides_voting\slide_assignment_poll.html:276
+#: openslides_voting\slide_motion_poll.html:125
+msgid "Valid votes"
+msgstr ""
+
+#: openslides_voting\pdf.js:20 openslides_voting\submit-token.html:45
+msgid "Vote"
+msgstr ""
+
+#: openslides_voting\site.js:3421
+msgid "Vote anonymously"
+msgstr ""
+
+#: openslides_voting\submit-motion-poll.html:10
+msgid "Vote for"
+msgstr ""
+
+#: openslides_voting\assignment-poll-voting-header-hook.html:6
+#: openslides_voting\motion-poll-voting-header-hook.html:6
+#: openslides_voting\site.js:760
+#, fuzzy
+#| msgid "Please vote now!"
+msgid "Vote now!"
+msgstr "Bitte stimmen Sie jetzt ab!"
+
+#: openslides_voting\submit-token.html:98
+msgid "Vote was submitted successfully!"
+msgstr ""
+
+#: openslides_voting\site.js:3401
+msgid "VoteCollector"
+msgstr ""
+
+#: openslides_voting\user-list-extra-content-hook.html:7
+#, fuzzy
+#| msgid "The VoteCollector is not enabled."
+msgid "VoteCollector Keypad"
+msgstr "Der VoteCollector ist nicht aktiviert."
+
+#: openslides_voting\site.js:3403
+msgid "VoteCollector URL"
+msgstr ""
+
+#: openslides_voting\site.js:3394
+msgid ""
+"VoteCollector anonymous (anonymous and personalized keypads, with single "
+"votes, no delegate board)"
+msgstr ""
+
+#: openslides_voting\site.js:3391
+msgid ""
+"VoteCollector default (personalized and active keypads only, with single "
+"votes)"
+msgstr ""
+
+#: openslides_voting\site.js:3393
+msgid "VoteCollector grey (no single votes, only grey seats on delegate board)"
+msgstr ""
+
+#: openslides_voting\site.js:3392
+msgid "VoteCollector secret (no single votes and delegate board)"
+msgstr ""
+
+#: openslides_voting\site.js:2473 openslides_voting\site.js:2594
+msgid "Votes received:"
+msgstr ""
+
+#: openslides_voting\absentee-vote-import.html:26
+#: openslides_voting\absentee-vote-import.html:40
+#: openslides_voting\absentee-vote-list.html:85 openslides_voting\site.js:1912
+#, fuzzy
+#| msgid "Voting device not licensed."
+msgid "Voting intention"
+msgstr "Transponder nicht lizensiert."
+
+#: openslides_voting\submit-token.html:39
+msgid "Voting is not yet running ..."
+msgstr ""
+
+#: openslides_voting\shares-import.html:24
+#: openslides_voting\shares-import.html:25
+msgid "Voting principle"
+msgstr ""
+
+#: openslides_voting\motion-poll-detail.html:27 openslides_voting\site.js:3433
+#: openslides_voting\slide_motion_poll.html:66
+msgid "Voting result"
+msgstr ""
+
+#: openslides_voting\shares-list.html:17 openslides_voting\shares-list.html:37
+#: openslides_voting\user-list-menu-buttons-hook.html:32
+msgid "Voting shares"
+msgstr ""
+
+#: openslides_voting\site.js:34 openslides_voting\tokens.html:15
+#: openslides_voting\user-list-menu-buttons-hook.html:12
+msgid "Voting tokens"
+msgstr ""
+
+#: openslides_voting\base.js:226 openslides_voting\base.js:282
+#: openslides_voting\base.js:341 openslides_voting\base.js:382
+#: openslides_voting\keypad-list.html:175
+#: openslides_voting\mobile-assignment.html:107
+#: openslides_voting\mobile-assignment.html:129
+#: openslides_voting\mobile-motion.html:24
+#: openslides_voting\mobile-motion.html:84
+#: openslides_voting\motion-poll-detail.html:40
+#: openslides_voting\slide_assignment_poll.html:131
+#: openslides_voting\slide_assignment_poll.html:196
+#: openslides_voting\slide_motion_poll.html:78
+#: openslides_voting\submit-assignment-poll-buttons.html:23
+#: openslides_voting\submit-assignment-poll-buttons.html:45
+#: openslides_voting\submit-assignment-poll.html:21
+#: openslides_voting\submit-motion-poll-buttons.html:29
+#: openslides_voting\submit-motion-poll-buttons.html:7
+#: openslides_voting\submit-motion-poll.html:20
+msgid "Yes"
+msgstr "Ja"
+
+#: openslides_voting\motion-poll-voting-header-hook.html:9
+#: openslides_voting\submit-assignment-poll.html:15
+#: openslides_voting\submit-motion-poll.html:19
+msgid "You have already voted for"
+msgstr ""
+
+#: openslides_voting\assignment-poll-voting-header-hook.html:9
+msgid "You have already voted."
+msgstr ""
+
+#: openslides_voting\site.js:432
+msgid "You have to select an option to submit"
+msgstr ""
+
+#: openslides_voting\shares-import.html:27
+msgid "You may provide as many voting principles as you like."
+msgstr ""
+
+#: openslides_voting\mobile-assignment.html:29
+msgid "Your ballot has been registered."
+msgstr ""
+
+#: openslides_voting\mobile-assignment.html:106
+#: openslides_voting\mobile-assignment.html:55
+#: openslides_voting\mobile-motion.html:46
+#: openslides_voting\submit-assignment-poll-buttons.html:44
+#: openslides_voting\submit-assignment-poll-buttons.html:96
+#: openslides_voting\submit-motion-poll-buttons.html:27
+msgid "Your current choice:"
+msgstr ""
+
+#: openslides_voting\site.js:166
+msgid ""
+"Your group permissions are misconfigured. The token voting interface group "
+"may have only 3 permissions: \"Can see motions\", \"Can see elections\" and "
+"\"Can see the token voting interface.sions\""
+msgstr ""
+
+#: openslides_voting\submit-token.html:100
+msgid "Your personal result number to validate your voting:"
+msgstr ""
+
+#: openslides_voting\mobile-motion.html:10
+msgid "Your vote has been counted.<br>You have voted"
+msgstr ""
+
+#: openslides_voting\user-list-table-stats-hook.html:5
+msgid "absent"
+msgstr ""
+
+#: openslides_voting\absentee-vote-import.html:104
+msgid "absentee votes were successfully imported."
+msgstr ""
+
+#: openslides_voting\absentee-vote-import.html:97
+msgid "absentee votes will be imported."
+msgstr ""
+
+#: openslides_voting\absentee-vote-import.html:92
+msgid "absentee votes will not be imported."
+msgstr ""
+
+#: openslides_voting\keypad-list.html:79
+msgid "active"
+msgstr ""
+
+#: openslides_voting\keypad-list.html:73
+#: openslides_voting\motion-poll-detail.html:171 openslides_voting\pdf.js:140
+#: openslides_voting\pdf.js:47
+msgid "anonymous"
+msgstr ""
+
+#: openslides_voting\submit-assignment-poll-buttons.html:101
+msgid "candidates"
+msgstr ""
+
+#: openslides_voting\site.js:1015
+msgid "cannot be proxy and principle at once."
+msgstr ""
+
+#: openslides_voting\base.js:74
+msgid "empty"
+msgstr ""
+
+#: openslides_voting\base.js:74
+msgid "full"
+msgstr ""
+
+#: openslides_voting\keypad-list.html:155 openslides_voting\keypad-list.html:80
+msgid "inactive"
+msgstr ""
+
+#: openslides_voting\base.js:385 openslides_voting\site.js:3446
+#, fuzzy
+#| msgid "Invalid entry"
+msgid "invalid"
 msgstr "Ungültiger Eintrag"
+
+#: openslides_voting\mobile-assignment.html:176
+#: openslides_voting\mobile-assignment.html:21
+msgid "is elected"
+msgstr ""
+
+#: openslides_voting\keypad-list.html:106
+#, fuzzy
+#| msgid "Keypad %d"
+msgid "keypads"
+msgstr "Keypad %d"
+
+#: openslides_voting\keypad-import.html:98
+msgid "keypads were successfully imported."
+msgstr ""
+
+#: openslides_voting\keypad-import.html:91
+msgid "keypads will be imported."
+msgstr ""
+
+#: openslides_voting\keypad-import.html:86
+msgid "keypads will not be imported."
+msgstr ""
+
+#: openslides_voting\base.js:74
+msgid "low"
+msgstr ""
+
+#: openslides_voting\base.js:74
+msgid "medium"
+msgstr ""
+
+#: openslides_voting\keypad-list.html:74
+msgid "personalized"
+msgstr ""
+
+#: openslides_voting\shares-list.html:58
+msgid "places"
+msgstr ""
+
+#: openslides_voting\user-list-table-stats-hook.html:3
+msgid "present"
+msgstr ""
+
+#: openslides_voting\submit-token.html:108
+msgid "seconds"
+msgstr ""
+
+#: openslides_voting\absentee-vote-list.html:56
+#: openslides_voting\keypad-list.html:107
+msgid "selected"
+msgstr ""
+
+#: openslides_voting\shares-import.html:97
+msgid "voting shares were successfully imported."
+msgstr ""
+
+#: openslides_voting\shares-import.html:91
+msgid "voting shares will be imported."
+msgstr ""
+
+#: openslides_voting\shares-import.html:86
+msgid "voting shares will not be imported."
+msgstr ""
+
+#: openslides_voting\site.js:1064
+msgid "was activated successfully"
+msgstr ""
+
+#: openslides_voting\mobile-assignment.html:102
+#: openslides_voting\mobile-assignment.html:51
+msgid "{{ config('voting_start_prompt_assignments') | translate }}"
+msgstr ""
+
+#: openslides_voting\mobile-motion.html:41
+msgid "{{ config('voting_start_prompt_motions') | translate }}"
+msgstr ""
+
+#~ msgid "Keypad %(kp)d (%(user)s)"
+#~ msgstr "Keypad %(kp)d (%(user)s)"
+
+#~ msgid "Poll is open"
+#~ msgstr "Abstimmung läuft"
+
+#~ msgid "The id has to be an int."
+#~ msgstr "Die ID muss ein integer sein."
+
+#~ msgid "The object does not exist."
+#~ msgstr "Das Objekt existiert nicht."
+
+#~ msgid "Shares has to be a list."
+#~ msgstr "Stimmgewichte müssen eine Liste sein."
+
+#~ msgid "The votecollector is not active"
+#~ msgstr "Der VoteCollector ist nicht aktiviert."
+
+#~ msgid "Invalid keypad range."
+#~ msgstr "Ungültiger Keypad-Bereich."
+
+#~ msgid "Invalid keypad list."
+#~ msgstr "Ungültige Keypad-Liste."
+
+#~ msgid "No keypads authorized for voting."
+#~ msgstr "Es sind keine Keypads zum Voting zugelassen."
+
+#~ msgid "License not sufficient."
+#~ msgstr "Lizenz nicht ausreichend."
+
+#~ msgid "No voting device connected."
+#~ msgstr "Es ist kein Transponder angeschlossen."
+
+#~ msgid "Failed to set up voting device."
+#~ msgstr "Fehler beim Einrichten des Transponders."
+
+#~ msgid "Voting device not ready."
+#~ msgstr "Transponder nicht betriebsbereit. "
+
+#~ msgid "No keypads exists for active users."
+#~ msgstr "Es existieren keine Keypads für die aktiven Nutzer."
+
+#~ msgid "VoteCollector does not use a secret key."
+#~ msgstr "Im VoteCollector wurde kein geheimer Schlüssel konfiguriert."
+
+#~ msgid "Invalid voting  mode or target"
+#~ msgstr "Ungültiger Voting-Modus oder Ziel."
+
+#~ msgid "Keypad not      registered"
+#~ msgstr "Keypad nicht registriert"
+
+#~ msgid "User unknown"
+#~ msgstr "Nutzer unbekannt"
+
+#~ msgid "Invalid agenda  item"
+#~ msgstr "Ungültiger Tagesordnungspunkt"
+
+#~ msgid "Does not exist  on speakers list"
+#~ msgstr "Auf Redeliste   nicht vorhanden"

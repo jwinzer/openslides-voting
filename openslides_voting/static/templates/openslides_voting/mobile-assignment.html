@@ -1,5 +1,5 @@
-<!-- Detail view 1: Candidates. -->
-<table ng-if="!vote && !canVote && poll && !poll.has_votes">
+<!-- Detail view 1: Candidates or poll options. -->
+<table ng-if="!vote && !canVote && (!poll || !poll.has_votes)">
   <style type="text/css">
     th {
       text-transform: uppercase;
@@ -15,7 +15,11 @@
   </style>
   <tr>
     <th translate>Candidates
-  <tr ng-repeat="option in poll.options | orderBy:'weight'" ng-init="votes = option.getVotes()">
+  <tr ng-repeat="candidate in text | orderBy:'weight'" ng-if="!poll">
+    <td class="bold">
+      {{ candidate.user.short_name }}
+      <i ng-if="candidate.elected" class="fa fa-star" title="{{ 'is elected' | translate }}"></i>
+  <tr ng-repeat="option in poll.options | orderBy:'weight'" ng-if="poll">
     <td class="bold">
       {{ option.candidate.short_name }}
 </table>
@@ -32,7 +36,7 @@
   <style type="text/css">
     @media only screen and (max-width: 767px) {
       .options {
-        height: calc(100vh - 266px);
+        height: calc(100vh - 286px);
         overflow-y: auto;
       }
       .truncate {

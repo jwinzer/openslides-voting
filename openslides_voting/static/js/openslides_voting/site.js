@@ -3157,7 +3157,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                 if (model) {
                     $scope.identifier = null;
                     $scope.title = model.getTitle();
-                    $scope.text = null;
+                    $scope.text = model.assignment_related_users;
                     $scope.isStartPage = false;
                 }
             }
@@ -3222,7 +3222,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                     $scope.mode = 2;
                     $scope.identifier = null;
                     $scope.title = model.getTitle();
-                    $scope.text = null;
+                    $scope.text = model.assignment_related_users;
                     pollId = av.assignmentPoll.id;
                     $scope.setAssignmentPoll(pollId);
                     $scope.canVote = operator.user &&
@@ -3290,7 +3290,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                             agenda_item = model.agenda_item;
                             $scope.mode = 2;
                             $scope.title = model.getTitle();
-                            $scope.text = null;
+                            $scope.text = model.assignment_related_users;
                             // Show poll if projected.
                             if (element.poll !== undefined) {
                                 pollId = element.poll;
@@ -3307,7 +3307,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
                             agenda_item = model.assignment.agenda_item;
                             $scope.mode = 2;
                             $scope.title = model.assignment.getTitle();
-                            $scope.text = null;
+                            $scope.text = model.assignment_related_users;
                             pollId = model.id;
                             $scope.setAssignmentPoll(pollId);
                         }
@@ -3380,6 +3380,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
     function (gettext) {
         // Config strings
         gettext('Mobile page text');
+        gettext('Show vote counter on projector');
         gettext('Enable proxies and absentee votes');
         gettext('Enable voting shares');
         gettext('Default voting type');
@@ -3440,6 +3441,7 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
         gettext('Can manage voting');
         gettext('Can vote');
         gettext('Start with Mobile View');
+        gettext('Only Mobile View');
 
         // misc
         gettext('invalid');
