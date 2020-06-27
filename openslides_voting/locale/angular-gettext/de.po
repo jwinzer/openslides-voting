@@ -47,9 +47,9 @@ msgstr "Weisungen"
 #: openslides_voting\mobile-motion.html:112
 #: openslides_voting\mobile-motion.html:38
 #: openslides_voting\motion-poll-detail.html:61
-#: openslides_voting\slide_assignment_poll.html:165
-#: openslides_voting\slide_assignment_poll.html:206
-#: openslides_voting\slide_assignment_poll.html:262
+#: openslides_voting\slide_assignment_poll.html:170
+#: openslides_voting\slide_assignment_poll.html:211
+#: openslides_voting\slide_assignment_poll.html:267
 #: openslides_voting\slide_motion_poll.html:117
 #: openslides_voting\submit-assignment-poll-buttons.html:107
 #: openslides_voting\submit-assignment-poll-buttons.html:38
@@ -435,7 +435,7 @@ msgstr "{{ votesWillBeImported }} Weisungen importieren"
 msgid "In range"
 msgstr "In Reichweite"
 
-#: openslides_voting\slide_assignment_poll.html:283
+#: openslides_voting\slide_assignment_poll.html:288
 msgid "Invalid votes"
 msgstr "Ungültige Stimmen"
 
@@ -544,9 +544,9 @@ msgstr "Neues Stimmrechtsprinzip"
 #: openslides_voting\mobile-motion.html:31
 #: openslides_voting\mobile-motion.html:98
 #: openslides_voting\motion-poll-detail.html:50
-#: openslides_voting\slide_assignment_poll.html:148
-#: openslides_voting\slide_assignment_poll.html:201
-#: openslides_voting\slide_assignment_poll.html:269
+#: openslides_voting\slide_assignment_poll.html:153
+#: openslides_voting\slide_assignment_poll.html:206
+#: openslides_voting\slide_assignment_poll.html:274
 #: openslides_voting\slide_motion_poll.html:100
 #: openslides_voting\submit-assignment-poll-buttons.html:104
 #: openslides_voting\submit-assignment-poll-buttons.html:30
@@ -686,14 +686,10 @@ msgstr "Projektor-Mitteilung für laufende Antragsabstimmungen"
 msgid "Proxy"
 msgstr "Vertreten durch"
 
-#: openslides_voting\mobile-motion.html:130
-msgid "Quorum ({{ (poll.yes - quorum) | number:votesPrecision }}) not reached."
+#: openslides_voting\mobile-motion.html:128
+#: openslides_voting\mobile-motion.html:133
+msgid "Quorum"
 msgstr ""
-"Quorum ({{ (poll.yes - quorum) | number:votesPrecision }}) nicht erreicht."
-
-#: openslides_voting\mobile-motion.html:127
-msgid "Quorum ({{ (poll.yes - quorum) | number:votesPrecision }}) reached."
-msgstr "Quorum ({{ (poll.yes - quorum) | number:votesPrecision }}) erreicht."
 
 #: openslides_voting\assignment-poll-small-buttons-hook.html:7
 #: openslides_voting\motion-poll-small-buttons-hook.html:10
@@ -944,9 +940,9 @@ msgstr ""
 
 #: openslides_voting\mobile-motion.html:122
 #: openslides_voting\motion-poll-detail.html:68
-#: openslides_voting\slide_assignment_poll.html:178
-#: openslides_voting\slide_assignment_poll.html:232
-#: openslides_voting\slide_assignment_poll.html:276
+#: openslides_voting\slide_assignment_poll.html:183
+#: openslides_voting\slide_assignment_poll.html:237
+#: openslides_voting\slide_assignment_poll.html:281
 #: openslides_voting\slide_motion_poll.html:130
 msgid "Valid votes"
 msgstr "Gültige Stimmen"
@@ -1012,6 +1008,7 @@ msgid "VoteCollector secret (no single votes and delegate board)"
 msgstr "VoteCollector geheim (keine Einzelstimmen, keine Delegiertentafel)"
 
 #: openslides_voting\site.js:2473 openslides_voting\site.js:2594
+#: openslides_voting\slide_assignment_poll.html:119
 #: openslides_voting\slide_motion_poll.html:68
 msgid "Votes received:"
 msgstr "Empfangene Stimmen:"
@@ -1054,8 +1051,8 @@ msgstr "Voting-Tokens"
 #: openslides_voting\mobile-motion.html:24
 #: openslides_voting\mobile-motion.html:84
 #: openslides_voting\motion-poll-detail.html:40
-#: openslides_voting\slide_assignment_poll.html:131
-#: openslides_voting\slide_assignment_poll.html:196
+#: openslides_voting\slide_assignment_poll.html:136
+#: openslides_voting\slide_assignment_poll.html:201
 #: openslides_voting\slide_motion_poll.html:83
 #: openslides_voting\submit-assignment-poll-buttons.html:23
 #: openslides_voting\submit-assignment-poll-buttons.html:45
@@ -1194,6 +1191,10 @@ msgstr "niedrig"
 msgid "medium"
 msgstr "mittel"
 
+#: openslides_voting\mobile-motion.html:135
+msgid "not reached"
+msgstr ""
+
 #: openslides_voting\keypad-list.html:74
 msgid "personalized"
 msgstr "personalisiert"
@@ -1205,6 +1206,10 @@ msgstr "Stellen"
 #: openslides_voting\user-list-table-stats-hook.html:3
 msgid "present"
 msgstr "anwesend"
+
+#: openslides_voting\mobile-motion.html:130
+msgid "reached"
+msgstr ""
 
 #: openslides_voting\submit-token.html:108
 msgid "seconds"
@@ -1239,6 +1244,3 @@ msgstr ""
 #: openslides_voting\mobile-motion.html:41
 msgid "{{ config('voting_start_prompt_motions') | translate }}"
 msgstr ""
-
-#~ msgid "You have voted."
-#~ msgstr "Sie haben gewählt."

@@ -124,10 +124,14 @@
 
     <tr>
       <td colspan="2">
-        <span class="text-success" ng-if="quorum >= 0" translate>
-          Quorum ({{ (poll.yes - quorum) | number:votesPrecision }}) reached.
+        <span class="text-success" ng-if="quorum >= 0">
+          <translate>Quorum</translate>
+          ({{ (poll.yes - quorum) | number:votesPrecision }})
+          <translate>reached</translate>.
         </span>
-        <span class="text-danger" ng-if="quorum < 0" translate>
-          Quorum ({{ (poll.yes - quorum) | number:votesPrecision }}) not reached.
+        <span class="text-danger" ng-if="quorum < 0">
+          <translate>Quorum</translate>
+          ({{ (poll.yes - quorum) | number:votesPrecision }})
+          <translate>not reached</translate>.
        </span>
   </table>

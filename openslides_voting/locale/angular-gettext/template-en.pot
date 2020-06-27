@@ -38,9 +38,9 @@ msgstr ""
 #: openslides_voting\mobile-motion.html:112
 #: openslides_voting\mobile-motion.html:38
 #: openslides_voting\motion-poll-detail.html:61
-#: openslides_voting\slide_assignment_poll.html:165
-#: openslides_voting\slide_assignment_poll.html:206
-#: openslides_voting\slide_assignment_poll.html:262
+#: openslides_voting\slide_assignment_poll.html:170
+#: openslides_voting\slide_assignment_poll.html:211
+#: openslides_voting\slide_assignment_poll.html:267
 #: openslides_voting\slide_motion_poll.html:117
 #: openslides_voting\submit-assignment-poll-buttons.html:107
 #: openslides_voting\submit-assignment-poll-buttons.html:38
@@ -434,7 +434,7 @@ msgstr ""
 msgid "In range"
 msgstr ""
 
-#: openslides_voting\slide_assignment_poll.html:283
+#: openslides_voting\slide_assignment_poll.html:288
 msgid "Invalid votes"
 msgstr ""
 
@@ -547,9 +547,9 @@ msgstr ""
 #: openslides_voting\mobile-motion.html:31
 #: openslides_voting\mobile-motion.html:98
 #: openslides_voting\motion-poll-detail.html:50
-#: openslides_voting\slide_assignment_poll.html:148
-#: openslides_voting\slide_assignment_poll.html:201
-#: openslides_voting\slide_assignment_poll.html:269
+#: openslides_voting\slide_assignment_poll.html:153
+#: openslides_voting\slide_assignment_poll.html:206
+#: openslides_voting\slide_assignment_poll.html:274
 #: openslides_voting\slide_motion_poll.html:100
 #: openslides_voting\submit-assignment-poll-buttons.html:104
 #: openslides_voting\submit-assignment-poll-buttons.html:30
@@ -689,12 +689,9 @@ msgstr ""
 msgid "Proxy"
 msgstr ""
 
-#: openslides_voting\mobile-motion.html:130
-msgid "Quorum ({{ (poll.yes - quorum) | number:votesPrecision }}) not reached."
-msgstr ""
-
-#: openslides_voting\mobile-motion.html:127
-msgid "Quorum ({{ (poll.yes - quorum) | number:votesPrecision }}) reached."
+#: openslides_voting\mobile-motion.html:128
+#: openslides_voting\mobile-motion.html:133
+msgid "Quorum"
 msgstr ""
 
 #: openslides_voting\assignment-poll-small-buttons-hook.html:7
@@ -945,9 +942,9 @@ msgstr ""
 
 #: openslides_voting\mobile-motion.html:122
 #: openslides_voting\motion-poll-detail.html:68
-#: openslides_voting\slide_assignment_poll.html:178
-#: openslides_voting\slide_assignment_poll.html:232
-#: openslides_voting\slide_assignment_poll.html:276
+#: openslides_voting\slide_assignment_poll.html:183
+#: openslides_voting\slide_assignment_poll.html:237
+#: openslides_voting\slide_assignment_poll.html:281
 #: openslides_voting\slide_motion_poll.html:130
 msgid "Valid votes"
 msgstr ""
@@ -1005,6 +1002,7 @@ msgstr ""
 
 #: openslides_voting\site.js:2473
 #: openslides_voting\site.js:2594
+#: openslides_voting\slide_assignment_poll.html:119
 #: openslides_voting\slide_motion_poll.html:68
 msgid "Votes received:"
 msgstr ""
@@ -1053,8 +1051,8 @@ msgstr ""
 #: openslides_voting\mobile-motion.html:24
 #: openslides_voting\mobile-motion.html:84
 #: openslides_voting\motion-poll-detail.html:40
-#: openslides_voting\slide_assignment_poll.html:131
-#: openslides_voting\slide_assignment_poll.html:196
+#: openslides_voting\slide_assignment_poll.html:136
+#: openslides_voting\slide_assignment_poll.html:201
 #: openslides_voting\slide_motion_poll.html:83
 #: openslides_voting\submit-assignment-poll-buttons.html:23
 #: openslides_voting\submit-assignment-poll-buttons.html:45
@@ -1190,6 +1188,10 @@ msgstr ""
 msgid "medium"
 msgstr ""
 
+#: openslides_voting\mobile-motion.html:135
+msgid "not reached"
+msgstr ""
+
 #: openslides_voting\keypad-list.html:74
 msgid "personalized"
 msgstr ""
@@ -1200,6 +1202,10 @@ msgstr ""
 
 #: openslides_voting\user-list-table-stats-hook.html:3
 msgid "present"
+msgstr ""
+
+#: openslides_voting\mobile-motion.html:130
+msgid "reached"
 msgstr ""
 
 #: openslides_voting\submit-token.html:108
