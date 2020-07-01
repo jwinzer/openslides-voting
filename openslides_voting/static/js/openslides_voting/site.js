@@ -2530,15 +2530,15 @@ angular.module('OpenSlidesApp.openslides_voting.site', [
         $scope.enterResults = function (success) {
             _.forEach(success.data, function (value, key) {
                 if (key === 'casted') {
-                    $scope.poll.votescast = value[0];
+                    $scope.poll.votescast = value[1];
                 } else if (key === 'valid') {
-                    $scope.poll.votesvalid = value[0];
+                    $scope.poll.votesvalid = value[1];
                 } else if (key === 'invalid') {
-                    $scope.poll.votesinvalid = value[0];
+                    $scope.poll.votesinvalid = value[1];
                 } else if (key === 'A') {
-                    $scope.poll.votesabstain = value[0];
+                    $scope.poll.votesabstain = value[1];
                 } else if (key === 'N') {
-                    $scope.poll.votesno = value[0];
+                    $scope.poll.votesno = value[1];
                 } else { // a candidate
                     if ($scope.poll.pollmethod === 'votes') {
                         $scope.poll['vote_' + key] = value[1];
