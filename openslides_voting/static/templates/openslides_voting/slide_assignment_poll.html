@@ -293,6 +293,15 @@
       </table>
   </div>
 
+  <!-- Candidates -->
+  <div ng-if="!poll.has_votes && !config('voting_show_delegate_board')">
+    <table class="well table-striped width100" id="resultTable">
+      <tr ng-repeat="option in poll.getOptionsWithResult() | orderBy:poll.sortOrder">
+        <td>
+          <strong>{{ option.candidate.short_name }}</strong>
+    </table>
+  </div>
+
   <!-- Delegate board -->
   <div id="delegateBoard" ng-if="!poll.has_votes" ng-bind-html="delegateBoardHtml | trusted"></div>
 </div>
