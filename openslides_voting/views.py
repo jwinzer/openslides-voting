@@ -159,7 +159,8 @@ class VotingControllerViewSet(PermissionMixin, ModelViewSet):
         projector_abstain = '<button type="button" class="btn btn-default btn-voting-sm btn-abstain"> \
             <i class="fa fa-circle-o fa-2x"></i></button>'
         if type(poll) == MotionPoll:
-            projector_message = _(config['voting_start_prompt_motions'])
+            # Do not translate message.
+            projector_message = config['voting_start_prompt_motions']
             principle = VotingPrinciple.get(motion=poll.motion)
 
             try:
@@ -187,7 +188,8 @@ class VotingControllerViewSet(PermissionMixin, ModelViewSet):
 
             ballot = MotionBallot(poll, principle)
         elif type(poll) == AssignmentPoll:
-            projector_message = _(config['voting_start_prompt_assignments'])
+            # Do not translate message.
+            projector_message = config['voting_start_prompt_assignments']
             principle = VotingPrinciple.get(assignment=poll.assignment)
 
             try:
